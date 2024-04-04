@@ -8,6 +8,11 @@ const apartmentSchema = new mongoose.Schema({
     overview: {
         type: String
     },
+    type: {
+        type: String,
+        enum: ['office', 'apartment', 'room'],
+        required: true
+    },
     rental_price: {
         type: Number,
         required: true
@@ -28,11 +33,31 @@ const apartmentSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    property: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Property',
+    contact_number: {
+        type: String,
         required: true
+    },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    images: {
+        type: [String],
     }
 });
+
+apartmentSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Apartment', apartmentSchema);

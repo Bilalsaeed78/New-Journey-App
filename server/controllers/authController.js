@@ -7,8 +7,7 @@ exports.register = async (req, res) => {
 
         let user = await User.findOne({ $or: [{ email }, { cnic }] });
         if (user) {
-            res.status(400);
-            throw new Error("User already exists");
+            return res.status(400).json({success: false, message: "User already exists" });
         }
 
         user = new User({
@@ -27,8 +26,7 @@ exports.register = async (req, res) => {
 
         res.status(201).json({ success: true, message: "User registered successfully" });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        return res.status(500).json({success: false, message: "Server Error" });
     }
 };
 
@@ -38,19 +36,16 @@ exports.authenticate = async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            res.status(404);
-            throw new Error( "Invalid credentials");
+            return res.status(400).json({success: false, message: "Invalid credentials" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            res.status(401);
-            throw new Error( "Invalid credentials");
+            return res.status(401).json({success: false, message: "Invalid credentials" });
         }
 
-        res.status(200).json({ success: true, message: "User authenticated successfully", user });
+        res.status(201).json({ success: true, message: "User authenticated successfully", user });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        return res.status(500).json({success: false, message: "Server Error" });
     }
 };

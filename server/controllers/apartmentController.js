@@ -2,7 +2,11 @@ const Apartment = require('../models/apartmentModel');
 
 exports.createApartment = async (req, res) => {
     try {
-        const { apartment_number, overview, rental_price, floor, rooms, max_capacity, liftAvailable, property } = req.body;
+        const { apartment_number, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, location, owner, images } = req.body;
+
+        if (!apartment_number || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
+            return res.status(400).json({ success: false, message: "All required fields must be provided"});
+        }
 
         const apartment = new Apartment({
             apartment_number,
@@ -12,15 +16,17 @@ exports.createApartment = async (req, res) => {
             rooms,
             max_capacity,
             liftAvailable,
-            property
+            contact_number,
+            location,
+            owner,
+            images
         });
 
         await apartment.save();
 
         res.status(201).json({ success: true, message: "Apartment created successfully", apartment });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
 
@@ -29,8 +35,7 @@ exports.getAllApartments = async (req, res) => {
         const apartments = await Apartment.find();
         res.status(200).json({ success: true, count: apartments.length, apartments });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
 
@@ -38,24 +43,27 @@ exports.getApartmentById = async (req, res) => {
     try {
         const apartment = await Apartment.findById(req.params.id);
         if (!apartment) {
-            res.status(404);
-            throw new Error("Apartment not found");
+            res.status(404).json({ success: false, message: "Apartment not found" });
+            return;
         }
         res.status(200).json({ success: true, apartment });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
 
 exports.updateApartment = async (req, res) => {
     try {
-        const { apartment_number, overview, rental_price, floor, rooms, max_capacity, liftAvailable } = req.body;
+        const { apartment_number, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, location, owner, images } = req.body;
+
+        if (!apartment_number || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
+            return res.status(500).json({ success: false, message: "All required fields must be provided"});
+        }
 
         let apartment = await Apartment.findById(req.params.id);
         if (!apartment) {
-            res.status(404);
-            throw new Error("Apartment not found");
+            res.status(404).json({ success: false, message: "Apartment not found" });
+            return;
         }
 
         apartment.apartment_number = apartment_number;
@@ -65,13 +73,17 @@ exports.updateApartment = async (req, res) => {
         apartment.rooms = rooms;
         apartment.max_capacity = max_capacity;
         apartment.liftAvailable = liftAvailable;
+        apartment.contact_number = contact_number;
+        apartment.location = location;
+        apartment.owner = owner;
+        apartment.images = images;
 
         await apartment.save();
 
         res.status(200).json({ success: true, message: "Apartment updated successfully", apartment });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        console.error(error.message);
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
 
@@ -79,15 +91,15 @@ exports.deleteApartment = async (req, res) => {
     try {
         const apartment = await Apartment.findById(req.params.id);
         if (!apartment) {
-            res.status(404);
-            throw new Error("Apartment not found");
+            res.status(404).json({ success: false, message: "Apartment not found" });
+            return;
         }
 
         await apartment.remove();
 
         res.status(200).json({ success: true, message: "Apartment deleted successfully" });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server Error");
+        console.error(error.message);
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 };
