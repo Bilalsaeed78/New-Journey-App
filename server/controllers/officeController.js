@@ -2,25 +2,30 @@ const Office = require('../models/officeModel');
 
 exports.createOffice = async (req, res) => {
     try {
-        const { office_address, overview, type, rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, location, owner, images } = req.body;
+        const { office_address, overview,  rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
+        const location = JSON.parse(req.body.location).coordinates;
 
-        if (!office_address || !type || !rental_price || !cabinsAvailable || !max_capacity || !contact_number || !location || !owner) {
+        if (!office_address || !rental_price || !cabinsAvailable || !max_capacity || !contact_number || !location || !owner) {
             return res.status(400).json({ success: false, message: "All required fields must be provided"});
         }
+
+        const images = req.uploadedImages.map(image => image.url);
 
         const office = new Office({
             office_address,
             overview,
-            type,
             rental_price,
             wifiAvailable,
             acAvailable,
             cabinsAvailable,
             max_capacity,
             contact_number,
-            location,
+            location: { 
+                type: "Point",
+                coordinates: location
+            },
             owner,
-            images
+            images 
         });
 
         await office.save();
@@ -31,6 +36,7 @@ exports.createOffice = async (req, res) => {
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
+
 
 exports.getAllOffices = async (req, res) => {
     try {
@@ -58,7 +64,8 @@ exports.getOfficeById = async (req, res) => {
 
 exports.updateOffice = async (req, res) => {
     try {
-        const { office_address, overview, type, rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, location, owner, images } = req.body;
+        const { office_address, overview,rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
+        const location = JSON.parse(req.body.location).coordinates;
 
         let office = await Office.findById(req.params.id);
         if (!office) {
@@ -68,16 +75,20 @@ exports.updateOffice = async (req, res) => {
 
         office.office_address = office_address || office.office_address;
         office.overview = overview || office.overview;
-        office.type = type || office.type;
         office.rental_price = rental_price || office.rental_price;
         office.wifiAvailable = wifiAvailable || office.wifiAvailable;
         office.acAvailable = acAvailable || office.acAvailable;
         office.cabinsAvailable = cabinsAvailable || office.cabinsAvailable;
         office.max_capacity = max_capacity || office.max_capacity;
         office.contact_number = contact_number || office.contact_number;
-        office.location = location || office.location;
+        office.location = { 
+            type: "Point",
+            coordinates: location
+        };
         office.owner = owner || office.owner;
-        office.images = images || office.images;
+
+        const images = req.uploadedImages.map(image => image.url);
+        office.images = images;
 
         await office.save();
 

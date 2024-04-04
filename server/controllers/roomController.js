@@ -2,29 +2,63 @@ const Room = require('../models/roomModel');
 
 exports.createRoom = async (req, res) => {
     try {
-        const { room_number, overview, type, rental_price, max_capacity, wifiAvailable, contact_number, officeSchemalocation, owner, images } = req.body;
+        const { room_number, overview, rental_price, max_capacity, wifiAvailable, contact_number, owner } = req.body;
+        const location = JSON.parse(req.body.location).coordinates;
 
-        if (!room_number || !type || !rental_price || !max_capacity || !contact_number || !officeSchemalocation || !owner) {
+        if (!room_number || !rental_price || !max_capacity || !contact_number || !location || !owner) {
             res.status(400);
             throw new Error("All required fields must be provided");
         }
 
+        const images = req.uploadedImages.map(image => image.url);
+
         const room = new Room({
             room_number,
             overview,
-            type,
             rental_price,
             max_capacity,
             wifiAvailable,
             contact_number,
-            officeSchemalocation,
+            location: { 
+                type: "Point",
+                coordinates: location
+            },
             owner,
-            images
+            images 
         });
 
         await room.save();
 
         res.status(201).json({ success: true, message: "Room created successfully", room });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+};
+
+exports.updateRoom = async (req, res) => {
+    try {
+        const { room_number, overview, rental_price, max_capacity, wifiAvailable, contact_number, location, owner, images } = req.body;
+
+        let room = await Room.findById(req.params.id);
+        if (!room) {
+            res.status(404).json({ success: false, message: "Room not found" });
+            return;
+        }
+
+        room.room_number = room_number || room.room_number;
+        room.overview = overview || room.overview;
+        room.rental_price = rental_price || room.rental_price;
+        room.max_capacity = max_capacity || room.max_capacity;
+        room.wifiAvailable = wifiAvailable || room.wifiAvailable;
+        room.contact_number = contact_number || room.contact_number;
+        room.location = location || room.location;
+        room.owner = owner || room.owner;
+        room.images = images || room.images;
+
+        await room.save();
+
+        res.status(200).json({ success: true, message: "Room updated successfully", room });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ success: false, message: "Server Error" });
@@ -49,36 +83,6 @@ exports.getRoomById = async (req, res) => {
             return;
         }
         res.status(200).json({ success: true, room });
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ success: false, message: "Server Error" });
-    }
-};
-
-exports.updateRoom = async (req, res) => {
-    try {
-        const { room_number, overview, type, rental_price, max_capacity, wifiAvailable, contact_number, officeSchemalocation, owner, images } = req.body;
-
-        let room = await Room.findById(req.params.id);
-        if (!room) {
-            res.status(404).json({ success: false, message: "Room not found" });
-            return;
-        }
-
-        room.room_number = room_number || room.room_number;
-        room.overview = overview || room.overview;
-        room.type = type || room.type;
-        room.rental_price = rental_price || room.rental_price;
-        room.max_capacity = max_capacity || room.max_capacity;
-        room.wifiAvailable = wifiAvailable || room.wifiAvailable;
-        room.contact_number = contact_number || room.contact_number;
-        room.officeSchemalocation = officeSchemalocation || room.officeSchemalocation;
-        room.owner = owner || room.owner;
-        room.images = images || room.images;
-
-        await room.save();
-
-        res.status(200).json({ success: true, message: "Room updated successfully", room });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ success: false, message: "Server Error" });

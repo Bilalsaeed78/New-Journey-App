@@ -1,0 +1,69 @@
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Define the uploads directory path
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+
+// Ensure the uploads directory exists, create it if it doesn't
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR);
+}
+
+// Configure Multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, UPLOADS_DIR);
+    }
+});
+
+// Configure Multer upload settings
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 }, 
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === "image/jpeg" || file.mimetype === 'image/png') {
+            cb(null, true);
+        } else {
+            cb(new Error("Unsupported file format"), false);
+        }
+    }
+});
+
+// Middleware to upload files to Cloudinary
+const uploadToCloudinary = (req, res, next) => {
+    upload.array('files')(req, res, async (err) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(400).json({ success: false, message: "Failed to upload images" });
+        }
+
+        try {
+            const uploader = async (path) => await cloudinary.uploader.upload(path, { folder: "Images" });
+            const urls = [];
+
+            for (const file of req.files) {
+                const { path } = file;
+                const newPath = await uploader(path);
+                urls.push({ url: newPath.secure_url, id: newPath.public_id });
+                fs.unlinkSync(path);
+            }
+
+            req.uploadedImages = urls;
+            next();
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({ success: false, message: "Server Error" });
+        }
+    });
+};
+
+module.exports = uploadToCloudinary;

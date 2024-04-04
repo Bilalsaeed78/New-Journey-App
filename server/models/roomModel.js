@@ -8,11 +8,6 @@ const roomSchema = new mongoose.Schema({
     overview: {
         type: String
     },
-    type: {
-        type: String,
-        enum: ['office', 'apartment', 'room'],
-        required: true
-    },
     rental_price: {
         type: Number,
         required: true
@@ -29,11 +24,10 @@ const roomSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    officeSchemalocation: {
+    location: {
         type: {
             type: String,
-            enum: ['Point'],
-            required: true
+            default: 'Point',
         },
         coordinates: {
             type: [Number],
