@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cnic: {
+        type: String,
+        required: true,
+        unique: true
+    },
     profilePic: {
         type: String
     },

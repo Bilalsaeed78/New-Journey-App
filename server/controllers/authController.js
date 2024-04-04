@@ -3,11 +3,12 @@ const bcrypt = require('bcrypt');
 
 exports.register = async (req, res) => {
     try {
-        const { email, password, role, fullname, contact_no } = req.body;
+        const { email, password, role, fullname, contact_no, cnic } = req.body;
 
-        let user = await User.findOne({ email });
+        let user = await User.findOne({ $or: [{ email }, { cnic }] });
         if (user) {
-            return res.status(400).json({ success: false, message: "User already exists" });
+            res.status(400);
+            throw new Error("User already exists");
         }
 
         user = new User({
@@ -15,7 +16,8 @@ exports.register = async (req, res) => {
             password,
             role,
             fullname,
-            contact_no
+            contact_no,
+            cnic
         });
 
         const salt = await bcrypt.genSalt(10);
@@ -25,8 +27,8 @@ exports.register = async (req, res) => {
 
         res.status(201).json({ success: true, message: "User registered successfully" });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server Error" });
+        res.status(500);
+        throw new Error("Server Error");
     }
 };
 
@@ -36,17 +38,19 @@ exports.authenticate = async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, message: "Invalid credentials" });
+            res.status(404);
+            throw new Error( "Invalid credentials");
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ success: false, message: "Invalid credentials" });
+            res.status(401);
+            throw new Error( "Invalid credentials");
         }
 
         res.status(200).json({ success: true, message: "User authenticated successfully", user });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server Error" });
+        res.status(500);
+        throw new Error("Server Error");
     }
 };
