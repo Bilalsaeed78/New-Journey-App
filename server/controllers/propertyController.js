@@ -1,8 +1,21 @@
 const Property = require('../models/propertyModel');
+const cloudinary = require('../configs/cloudinary');
 
 exports.createProperty = async (req, res) => {
     try {
-        const { name, description, contact_number, location, owner, images } = req.body;
+        const { name, description, contact_number, location, owner } = req.body;
+
+        const uploader = async (path) => await cloudinary.uploads(path, "Images")
+
+        const urls = []
+        const files = req.files;
+        for (const file of files) {
+            const { path } = file;
+            const newPath = await uploader(path)
+            urls.push(newPath)
+            fs.unlinkSync(path)
+        }
+
 
         const property = new Property({
             name,
@@ -14,8 +27,8 @@ exports.createProperty = async (req, res) => {
         });
 
         await property.save();
+        return res.status(201).json({ success: true, message: "Property created successfully", property });
 
-        res.status(201).json({ success: true, message: "Property created successfully", property });
     } catch (error) {
         res.status(500);
         throw new Error("Server Error");
@@ -48,7 +61,7 @@ exports.getPropertyById = async (req, res) => {
 
 exports.updateProperty = async (req, res) => {
     try {
-        const { name, description, contact_number, location, images } = req.body;
+        const { name, description, contact_number, location } = req.body;
 
         let property = await Property.findById(req.params.id);
         if (!property) {
@@ -56,13 +69,29 @@ exports.updateProperty = async (req, res) => {
             throw new Error("Property not found");
         }
 
-        property.name = name;
-        property.description = description;
-        property.contact_number = contact_number;
-        property.location = location;
-        property.images = images;
+        const uploader = async (path) => await cloudinary.uploads(path, "Images")
+        const urls = []
+        const files = req.files;
+        for (const file of files) {
+            const { path } = file;
+            const newPath = await uploader(path)
+            urls.push(newPath)
+            fs.unlinkSync(path)
+        }
 
-        await property.save();
+        property.updateOne(
+            {
+                $set: {
+                    name: name,
+                    description: description,
+                    contact_number: contact_number,
+                    location: location,
+                    images: urls
+
+                }
+            },
+            {}, { new: true }
+        )
 
         res.status(200).json({ success: true, message: "Property updated successfully", property });
     } catch (error) {
