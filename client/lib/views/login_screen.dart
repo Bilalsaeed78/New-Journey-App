@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_journey_app/utils/themes/app_colors.dart';
 import 'package:new_journey_app/views/signup_screen.dart';
 
 import '../constants/font_manager.dart';
+import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/custom_button.dart';
@@ -117,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                             ? const Center(
                                 child: CircularProgressIndicator(
                                   color: Colors.white,
-                                  backgroundColor: AppColors.background,
+                                  backgroundColor: AppColors.primary,
                                 ),
                               )
                             : null,
@@ -145,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            controller.clearfields();
+                            controller.clearFields();
                             Get.offAll(const SignupScreen());
                           },
                           child: const Txt(

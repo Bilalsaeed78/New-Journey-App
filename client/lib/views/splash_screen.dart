@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/controllers/auth_controller.dart';
 
-import '../utils/themes/app_colors.dart';
+import '../constants/themes/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_journey_app/utils/themes/app_colors.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/value_manager.dart';
+import '../constants/themes/app_colors.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/custom_text_form_field.dart';
+import '../widgets/packages/group_radio_buttons/src/radio_button_field.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -131,6 +132,39 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(
                       height: SizeManager.sizeSemiM,
                     ),
+                    RadioButtonFormField(
+                      labels: const ['Guest', 'Owner'],
+                      icons: const [Icons.person, Icons.home],
+                      onChange: (String label, int index) =>
+                          controller.userTypeController.text = label,
+                      onSelected: (String label) =>
+                          controller.userTypeController.text = label,
+                      decoration: InputDecoration(
+                        labelText: 'User Type',
+                        alignLabelWithHint: true,
+                        contentPadding: const EdgeInsets.all(0.0),
+                        labelStyle: const TextStyle(
+                          color: AppColors.secondary,
+                          fontSize: FontSize.textFontSize,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: FontSize.textFontSize,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: AppColors.secondary,
+                            width: 1,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(RadiusManager.fieldRadius),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: SizeManager.sizeSemiM,
+                    ),
                     Obx(
                       () => CustomTextFormField(
                         controller: controller.passwordController,
@@ -150,6 +184,7 @@ class SignupScreen extends StatelessWidget {
                             password: controller.passwordController.text,
                             phone: controller.phoneController.text,
                             cnic: controller.cnicController.text,
+                            role: controller.userTypeController.text,
                           );
                         },
                         validator: (value) {
@@ -171,7 +206,7 @@ class SignupScreen extends StatelessWidget {
                             ? const Center(
                                 child: CircularProgressIndicator(
                                   color: Colors.white,
-                                  backgroundColor: AppColors.background,
+                                  backgroundColor: AppColors.primary,
                                 ),
                               )
                             : null,
@@ -182,6 +217,7 @@ class SignupScreen extends StatelessWidget {
                             password: controller.passwordController.text,
                             phone: controller.phoneController.text,
                             cnic: controller.cnicController.text,
+                            role: controller.userTypeController.text,
                           );
                         },
                         text: "Register",
@@ -202,7 +238,7 @@ class SignupScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            controller.clearfields();
+                            controller.clearFields();
                             Get.offAll(const LoginScreen());
                           },
                           child: const Txt(

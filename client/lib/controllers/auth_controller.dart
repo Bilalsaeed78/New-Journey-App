@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/constants/string_manager.dart';
 import 'package:new_journey_app/storage/local_storage.dart';
-import 'package:new_journey_app/views/signup_screen.dart';
+import 'package:new_journey_app/views/guest_dashboard.dart';
+import 'package:new_journey_app/views/owner_dashboard.dart';
 
+import '../models/user_model.dart';
 import '../views/login_screen.dart';
+import 'package:http/http.dart' as http;
 
 class AuthController extends GetxController with LocalStorage {
   final loginFormKey = GlobalKey<FormState>();
@@ -14,7 +20,8 @@ class AuthController extends GetxController with LocalStorage {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController cnicController = TextEditingController();
-  late String userTypeController = 'Guest';
+  final TextEditingController userTypeController =
+      TextEditingController(text: 'Guest');
 
   Rx<bool> isObscure = true.obs;
   Rx<bool> isLoading = false.obs;
@@ -33,22 +40,10 @@ class AuthController extends GetxController with LocalStorage {
       Get.off(const LoginScreen());
     } else {
       if (userType == "guest") {
-      } else {}
-    }
-  }
-
-  Future<void> login(String email, String password) async {
-    try {
-      if (loginFormKey.currentState!.validate()) {
-        loginFormKey.currentState!.save();
-        toggleLoading();
+        Get.offAll(GuestDashbaord());
+      } else {
+        Get.offAll(OwnerDashboard());
       }
-    } catch (err) {
-      toggleLoading();
-      Get.snackbar(
-        'Error Logging in',
-        err.toString(),
-      );
     }
   }
 
@@ -58,18 +53,88 @@ class AuthController extends GetxController with LocalStorage {
     required String name,
     required String phone,
     required String cnic,
+    required String role,
   }) async {
     try {
       if (signupFormKey.currentState!.validate()) {
         signupFormKey.currentState!.save();
         toggleLoading();
+        User user = User(
+            email: email,
+            password: password,
+            role: role,
+            fullname: name,
+            contactNo: phone,
+            cnic: cnic);
+        var url = Uri.parse("${AppStrings.BASE_URL}/user/register");
+        final response = await http.post(
+          url,
+          body: user.toJson(),
+        );
+
+        var data = jsonDecode(response.body);
+
+        if (response.statusCode == 201) {
+          clearFields();
+          Get.offAll(const LoginScreen());
+          Get.snackbar(
+            'Success',
+            "Account created successfully.",
+          );
+        } else {
+          Get.snackbar(
+            'Error',
+            data['message'],
+          );
+        }
       }
     } catch (err) {
-      toggleLoading();
       Get.snackbar(
         'Error registering.',
         err.toString(),
       );
+    } finally {
+      toggleLoading();
+    }
+  }
+
+  Future<void> login(String email, String password) async {
+    try {
+      if (loginFormKey.currentState!.validate()) {
+        loginFormKey.currentState!.save();
+        toggleLoading();
+        final url = Uri.parse("${AppStrings.BASE_URL}/user/authenticate");
+        final response = await http.post(
+          url,
+          body: {
+            'email': email,
+            'password': password,
+          },
+        );
+        final res = jsonDecode(response.body);
+        if (response.statusCode == 201) {
+          final user = User.fromJson(res['user']);
+          setUserId(user.uid!);
+          setUserType(user.role);
+          if (user.role == 'owner') {
+            Get.offAll(OwnerDashboard());
+          } else {
+            Get.offAll(GuestDashbaord());
+          }
+        } else {
+          Get.snackbar(
+            'Error',
+            res['message'],
+          );
+        }
+      }
+    } catch (err) {
+      Get.snackbar(
+        'Error Logging in',
+        err.toString(),
+      );
+    } finally {
+      toggleLoading();
     }
   }
 
@@ -78,12 +143,12 @@ class AuthController extends GetxController with LocalStorage {
     Get.offAll(const LoginScreen());
   }
 
-  void clearfields() {
+  void clearFields() {
     nameController.clear();
     emailController.clear();
     passwordController.clear();
     phoneController.clear();
     cnicController.clear();
-    userTypeController = 'Guest';
+    userTypeController.text = 'Guest';
   }
 }
