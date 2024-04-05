@@ -34,16 +34,52 @@ class AuthController extends GetxController with LocalStorage {
     isLoading.value = !isLoading.value;
   }
 
-  void checkLoginStatus() {
+  void checkLoginStatus() async {
     final userType = getUserType();
     if (userType == null || userType.isEmpty) {
       Get.off(const LoginScreen());
     } else {
+      var user = await getCurrentUserInfo();
       if (userType == "guest") {
-        Get.offAll(GuestDashbaord());
+        Get.offAll(GuestDashbaord(
+          user: user!,
+        ));
       } else {
-        Get.offAll(OwnerDashboard());
+        Get.offAll(OwnerDashboard(
+          user: user!,
+        ));
       }
+    }
+  }
+
+  Future<User?>? getCurrentUserInfo() async {
+    try {
+      toggleLoading();
+      final url =
+          Uri.parse("${AppStrings.BASE_URL}/user/current/${getUserId()}");
+      final response = await http.get(
+        url,
+      );
+
+      if (response.statusCode == 201) {
+        final res = jsonDecode(response.body);
+        final user = User.fromJson(res['user']);
+        return user;
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to fetch user information.',
+        );
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+      );
+      return null;
+    } finally {
+      toggleLoading();
     }
   }
 
@@ -117,9 +153,13 @@ class AuthController extends GetxController with LocalStorage {
           setUserId(user.uid!);
           setUserType(user.role);
           if (user.role == 'owner') {
-            Get.offAll(OwnerDashboard());
+            Get.offAll(OwnerDashboard(
+              user: user,
+            ));
           } else {
-            Get.offAll(GuestDashbaord());
+            Get.offAll(GuestDashbaord(
+              user: user,
+            ));
           }
         } else {
           Get.snackbar(

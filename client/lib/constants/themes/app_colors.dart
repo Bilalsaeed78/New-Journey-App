@@ -4,7 +4,8 @@ class AppColors {
   static const Color primary = Color.fromARGB(255, 253, 164, 75);
   static const Color primaryLight = Color.fromARGB(255, 235, 191, 148);
   static const Color secondary = Color(0xFF2f2e41);
-  static const Color secondaryLight = Color.fromARGB(255, 128, 128, 143);
+  static const Color secondaryLight = Color.fromARGB(255, 214, 214, 218);
+  static const Color propertContainer = Color.fromARGB(255, 221, 225, 236);
   static const Color whiteShade = Color(0xFFE4E2E2);
   static const Color background = Color(0xFFFFFFFF);
   static const Color card = Color(0xFFFFFFFF);
