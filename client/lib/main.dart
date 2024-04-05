@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:new_journey_app/views/signup_screen.dart';
 
 import 'utils/themes/themes.dart';
+import 'views/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +21,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Demo',
-        theme: themeLight(context),
-        darkTheme: themeDark(context),
-        themeMode: ThemeMode.light,
-        home: const SplashScreen());
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: themeLight(context),
+      darkTheme: themeDark(context),
+      themeMode: ThemeMode.light,
+      home: const SplashScreen(),
+    );
   }
 }

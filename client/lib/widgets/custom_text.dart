@@ -97,7 +97,7 @@ class _TxtState extends State<Txt> {
         fontSize: widget.fontSize,
         fontWeight: widget.fontWeight,
         fontStyle: widget.fontStyle,
-        fontFamily: widget.fontFamily,
+        fontFamily: widget.fontFamily ?? "Work Sans",
         letterSpacing: widget.letterSpacing,
       ),
     );
