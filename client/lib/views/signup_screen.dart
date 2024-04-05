@@ -20,238 +20,236 @@ class SignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AuthController());
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-              child: Form(
-                key: controller.signupFormKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 150,
-                      width: 150,
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        'assets/icons/logos_png/logo.png',
-                      ),
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            child: Form(
+              key: controller.signupFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 150,
+                    width: 150,
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/icons/logos_png/logo.png',
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: const Txt(
-                        text: "Create your Account",
-                        textAlign: TextAlign.center,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Txt(
+                      text: "Create your Account",
+                      textAlign: TextAlign.center,
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: FontSize.titleFontSize,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Txt(
+                      text: "Sign up now to get started with an account",
+                      textAlign: TextAlign.center,
+                      color: AppColors.secondaryLight,
+                      fontWeight: FontWeight.normal,
+                      fontSize: FontSize.subTitleFontSize,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeXL,
+                  ),
+                  CustomTextFormField(
+                    controller: controller.nameController,
+                    labelText: "Full Name",
+                    autofocus: false,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.person,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Name cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeSemiM,
+                  ),
+                  CustomTextFormField(
+                    controller: controller.emailController,
+                    labelText: "Email",
+                    autofocus: false,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.email,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Email cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeSemiM,
+                  ),
+                  CustomTextFormField(
+                    controller: controller.phoneController,
+                    labelText: "Contact Number",
+                    autofocus: false,
+                    hintText: "033X-XXXXXXX",
+                    keyboardType: TextInputType.phone,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.phone,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Phone cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeSemiM,
+                  ),
+                  CustomTextFormField(
+                    controller: controller.cnicController,
+                    labelText: "CNIC",
+                    autofocus: false,
+                    keyboardType: TextInputType.streetAddress,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.credit_card,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "CNIC cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeSemiM,
+                  ),
+                  RadioButtonFormField(
+                    labels: const ['Guest', 'Owner'],
+                    icons: const [Icons.person, Icons.home],
+                    onChange: (String label, int index) =>
+                        controller.userTypeController.text = label,
+                    onSelected: (String label) =>
+                        controller.userTypeController.text = label,
+                    decoration: InputDecoration(
+                      labelText: 'User Type',
+                      alignLabelWithHint: true,
+                      contentPadding: const EdgeInsets.all(0.0),
+                      labelStyle: const TextStyle(
                         color: AppColors.secondary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: FontSize.titleFontSize,
+                        fontSize: FontSize.textFontSize,
+                        fontWeight: FontWeight.w400,
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: const Txt(
-                        text: "Sign up now to get started with an account",
-                        textAlign: TextAlign.center,
-                        color: AppColors.secondaryLight,
-                        fontWeight: FontWeight.normal,
-                        fontSize: FontSize.subTitleFontSize,
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: FontSize.textFontSize,
                       ),
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeXL,
-                    ),
-                    CustomTextFormField(
-                      controller: controller.nameController,
-                      labelText: "Full Name",
-                      autofocus: false,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.next,
-                      prefixIconData: Icons.person,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Name cannot be empty.";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
-                    ),
-                    CustomTextFormField(
-                      controller: controller.emailController,
-                      labelText: "Email",
-                      autofocus: false,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      prefixIconData: Icons.email,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Email cannot be empty.";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
-                    ),
-                    CustomTextFormField(
-                      controller: controller.phoneController,
-                      labelText: "Contact Number",
-                      autofocus: false,
-                      hintText: "033X-XXXXXXX",
-                      keyboardType: TextInputType.phone,
-                      textInputAction: TextInputAction.next,
-                      prefixIconData: Icons.phone,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Phone cannot be empty.";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
-                    ),
-                    CustomTextFormField(
-                      controller: controller.cnicController,
-                      labelText: "CNIC",
-                      autofocus: false,
-                      keyboardType: TextInputType.streetAddress,
-                      textInputAction: TextInputAction.next,
-                      prefixIconData: Icons.credit_card,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "CNIC cannot be empty.";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
-                    ),
-                    RadioButtonFormField(
-                      labels: const ['Guest', 'Owner'],
-                      icons: const [Icons.person, Icons.home],
-                      onChange: (String label, int index) =>
-                          controller.userTypeController.text = label,
-                      onSelected: (String label) =>
-                          controller.userTypeController.text = label,
-                      decoration: InputDecoration(
-                        labelText: 'User Type',
-                        alignLabelWithHint: true,
-                        contentPadding: const EdgeInsets.all(0.0),
-                        labelStyle: const TextStyle(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
                           color: AppColors.secondary,
-                          fontSize: FontSize.textFontSize,
-                          fontWeight: FontWeight.w400,
+                          width: 1,
                         ),
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: FontSize.textFontSize,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: AppColors.secondary,
-                            width: 1,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(RadiusManager.fieldRadius),
-                        ),
+                        borderRadius:
+                            BorderRadius.circular(RadiusManager.fieldRadius),
                       ),
                     ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeSemiM,
+                  ),
+                  Obx(
+                    () => CustomTextFormField(
+                      controller: controller.passwordController,
+                      autofocus: false,
+                      labelText: "Password",
+                      obscureText: controller.isObscure.value,
+                      prefixIconData: Icons.vpn_key_rounded,
+                      suffixIconData: controller.isObscure.value
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded,
+                      onSuffixTap: controller.toggleVisibility,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmit: (_) async {
+                        await controller.signUpUser(
+                          email: controller.emailController.text,
+                          name: controller.nameController.text,
+                          password: controller.passwordController.text,
+                          phone: controller.phoneController.text,
+                          cnic: controller.cnicController.text,
+                          role: controller.userTypeController.text,
+                        );
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Password cannot be empty.";
+                        }
+                        return null;
+                      },
                     ),
-                    Obx(
-                      () => CustomTextFormField(
-                        controller: controller.passwordController,
-                        autofocus: false,
-                        labelText: "Password",
-                        obscureText: controller.isObscure.value,
-                        prefixIconData: Icons.vpn_key_rounded,
-                        suffixIconData: controller.isObscure.value
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
-                        onSuffixTap: controller.toggleVisibility,
-                        textInputAction: TextInputAction.done,
-                        onFieldSubmit: (_) async {
-                          await controller.signUpUser(
-                            email: controller.emailController.text,
-                            name: controller.nameController.text,
-                            password: controller.passwordController.text,
-                            phone: controller.phoneController.text,
-                            cnic: controller.cnicController.text,
-                            role: controller.userTypeController.text,
-                          );
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Password cannot be empty.";
-                          }
-                          return null;
-                        },
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeXL,
+                  ),
+                  Obx(
+                    () => CustomButton(
+                      color: AppColors.primary,
+                      hasInfiniteWidth: true,
+                      loadingWidget: controller.isLoading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                backgroundColor: AppColors.primary,
+                              ),
+                            )
+                          : null,
+                      onPressed: () async {
+                        await controller.signUpUser(
+                          email: controller.emailController.text,
+                          name: controller.nameController.text,
+                          password: controller.passwordController.text,
+                          phone: controller.phoneController.text,
+                          cnic: controller.cnicController.text,
+                          role: controller.userTypeController.text,
+                        );
+                      },
+                      text: "Register",
+                      textColor: AppColors.background,
+                      buttonType: ButtonType.loading,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeL,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Txt(
+                        text: "Already have an account? ",
+                        fontSize: FontSize.subTitleFontSize,
+                        color: AppColors.secondaryLight,
                       ),
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeXL,
-                    ),
-                    Obx(
-                      () => CustomButton(
-                        color: AppColors.primary,
-                        hasInfiniteWidth: true,
-                        loadingWidget: controller.isLoading.value
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  backgroundColor: AppColors.primary,
-                                ),
-                              )
-                            : null,
-                        onPressed: () async {
-                          await controller.signUpUser(
-                            email: controller.emailController.text,
-                            name: controller.nameController.text,
-                            password: controller.passwordController.text,
-                            phone: controller.phoneController.text,
-                            cnic: controller.cnicController.text,
-                            role: controller.userTypeController.text,
-                          );
+                      InkWell(
+                        onTap: () {
+                          controller.clearFields();
+                          Get.offAll(const LoginScreen());
                         },
-                        text: "Register",
-                        textColor: AppColors.background,
-                        buttonType: ButtonType.loading,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeL,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Txt(
-                          text: "Already have an account? ",
+                        child: const Txt(
+                          text: "Login",
                           fontSize: FontSize.subTitleFontSize,
-                          color: AppColors.secondaryLight,
+                          color: AppColors.secondary,
+                          fontWeight: FontWeightManager.semibold,
                         ),
-                        InkWell(
-                          onTap: () {
-                            controller.clearFields();
-                            Get.offAll(const LoginScreen());
-                          },
-                          child: const Txt(
-                            text: "Login",
-                            fontSize: FontSize.subTitleFontSize,
-                            color: AppColors.secondary,
-                            fontWeight: FontWeightManager.semibold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

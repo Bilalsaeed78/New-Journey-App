@@ -25,24 +25,22 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: SvgPicture.asset(
-                  'assets/icons/logos_svg/full.svg',
-                  height: 300,
-                  width: 300,
-                  fit: BoxFit.scaleDown,
-                ),
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: SvgPicture.asset(
+                'assets/icons/logos_svg/full.svg',
+                height: 300,
+                width: 300,
+                fit: BoxFit.scaleDown,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
