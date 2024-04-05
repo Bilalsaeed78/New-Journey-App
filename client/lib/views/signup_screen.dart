@@ -80,6 +80,23 @@ class SignupScreen extends StatelessWidget {
                       height: SizeManager.sizeSemiM,
                     ),
                     CustomTextFormField(
+                      controller: controller.emailController,
+                      labelText: "Email",
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      prefixIconData: Icons.email,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Email cannot be empty.";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: SizeManager.sizeSemiM,
+                    ),
+                    CustomTextFormField(
                       controller: controller.phoneController,
                       labelText: "Contact Number",
                       autofocus: false,
@@ -98,29 +115,12 @@ class SignupScreen extends StatelessWidget {
                       height: SizeManager.sizeSemiM,
                     ),
                     CustomTextFormField(
-                      controller: controller.emailController,
-                      labelText: "Email",
-                      autofocus: false,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      prefixIconData: Icons.email,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Email cannot be empty.";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: SizeManager.sizeSemiM,
-                    ),
-                    CustomTextFormField(
                       controller: controller.cnicController,
                       labelText: "CNIC",
                       autofocus: false,
                       keyboardType: TextInputType.streetAddress,
                       textInputAction: TextInputAction.next,
-                      prefixIconData: Icons.home,
+                      prefixIconData: Icons.credit_card,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "CNIC cannot be empty.";

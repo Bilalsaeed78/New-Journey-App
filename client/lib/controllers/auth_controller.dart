@@ -30,14 +30,14 @@ class AuthController extends GetxController with LocalStorage {
   void checkLoginStatus() {
     final userType = getUserType();
     if (userType == null || userType.isEmpty) {
-      Get.off(const SignupScreen());
+      Get.off(const LoginScreen());
     } else {
       if (userType == "guest") {
       } else {}
     }
   }
 
-  Future<void> login(String email, String password, String userType) async {
+  Future<void> login(String email, String password) async {
     try {
       if (loginFormKey.currentState!.validate()) {
         loginFormKey.currentState!.save();
