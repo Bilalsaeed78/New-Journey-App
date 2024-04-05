@@ -117,6 +117,7 @@ class SignupScreen extends StatelessWidget {
                   CustomTextFormField(
                     controller: controller.cnicController,
                     labelText: "CNIC",
+                    hintText: "XXXXX-XXXXXXX-X",
                     autofocus: false,
                     keyboardType: TextInputType.streetAddress,
                     textInputAction: TextInputAction.next,

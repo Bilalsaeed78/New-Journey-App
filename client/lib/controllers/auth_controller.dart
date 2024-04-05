@@ -140,6 +140,8 @@ class AuthController extends GetxController with LocalStorage {
 
   void logout() async {
     removeToken();
+    removeUserId();
+    clearFields();
     Get.offAll(const LoginScreen());
   }
 
