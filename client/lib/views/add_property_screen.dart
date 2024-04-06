@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
-import 'package:new_journey_app/widgets/custom_button.dart';
+import 'package:new_journey_app/views/images_viewer_screen.dart';
 import 'package:new_journey_app/widgets/custom_text.dart';
 import 'package:new_journey_app/widgets/custom_text_form_field.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/value_manager.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/packages/group_radio_buttons/grouped_buttons.dart';
 
 class AddPropertyScreen extends StatelessWidget {
@@ -349,21 +350,57 @@ class AddPropertyScreen extends StatelessWidget {
               const SizedBox(
                 height: SizeManager.sizeM,
               ),
-              Container(
-                height: 80,
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(RadiusManager.buttonRadius),
-                  color: AppColors.propertContainer,
-                ),
-                child: Txt(
-                  text: "Add ${type.capitalizeFirst!} Images",
-                  color: AppColors.secondary,
-                  fontWeight: FontWeightManager.semibold,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Get.to(ImageViewerScreen(
+                            propertyController: propertyController));
+                      },
+                      child: Container(
+                        height: 80,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(RadiusManager.buttonRadius),
+                          color: AppColors.propertContainer,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.image,
+                              color: AppColors.secondary,
+                            ),
+                            Txt(
+                              text: "Add ${type.capitalizeFirst!} Images",
+                              color: AppColors.secondary,
+                              fontWeight: FontWeightManager.medium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Obx(() {
+                    return propertyController.isImagePicked.isFalse
+                        ? const Icon(
+                            Icons.close_outlined,
+                            color: AppColors.error,
+                          )
+                        : const Icon(
+                            Icons.check_box,
+                            color: AppColors.success,
+                          );
+                  }),
+                ],
               ),
+              const SizedBox(
+                height: SizeManager.sizeM,
+              ),
+              // Location Picker
               const SizedBox(
                 height: SizeManager.sizeL,
               ),
