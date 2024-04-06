@@ -17,6 +17,9 @@ class PropertyController extends GetxController with LocalStorage {
   var wifiAvailable = false;
   var acAvailable = false;
   RxBool isImagePicked = false.obs;
+  RxBool isLocationPicked = false.obs;
+
+  RxList<double> location = <double>[].obs;
 
   void clearFields() {
     overviewController.clear();
@@ -31,6 +34,7 @@ class PropertyController extends GetxController with LocalStorage {
     wifiAvailable = false;
     acAvailable = false;
     isImagePicked.value = false;
+    isLocationPicked.value = false;
   }
 
   Rx<bool> isLoading = false.obs;

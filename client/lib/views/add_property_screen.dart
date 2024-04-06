@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
 import 'package:new_journey_app/views/images_viewer_screen.dart';
+import 'package:new_journey_app/views/search_location_screen.dart';
 import 'package:new_journey_app/widgets/custom_text.dart';
 import 'package:new_journey_app/widgets/custom_text_form_field.dart';
 
@@ -400,7 +401,44 @@ class AddPropertyScreen extends StatelessWidget {
               const SizedBox(
                 height: SizeManager.sizeM,
               ),
-              // Location Picker
+              InkWell(
+                onTap: () {
+                  Get.to(SearchLocationScreen(
+                    propertyController: propertyController,
+                  ));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: AppColors.propertContainer,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(Icons.map, color: AppColors.secondary),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Txt(
+                        text: propertyController.isLocationPicked.value
+                            ? 'Location Picked'
+                            : 'Pick Location',
+                      ),
+                      const Spacer(),
+                      Obx(() => propertyController.isLocationPicked.value
+                          ? const Icon(Icons.check_box, color: Colors.green)
+                          : const Icon(Icons.dangerous, color: Colors.red)),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: SizeManager.sizeL,
               ),
@@ -421,7 +459,7 @@ class AddPropertyScreen extends StatelessWidget {
                 buttonType: ButtonType.loading,
               ),
               const SizedBox(
-                height: 14,
+                height: SizeManager.sizeXL,
               ),
             ],
           ),
