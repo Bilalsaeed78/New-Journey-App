@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
+import 'package:new_journey_app/controllers/property_controller.dart';
+import 'package:new_journey_app/views/add_property_screen.dart';
 import 'package:new_journey_app/widgets/custom_button.dart';
 
 import '../constants/font_manager.dart';
@@ -7,7 +10,10 @@ import '../constants/value_manager.dart';
 import '../widgets/custom_text.dart';
 
 class PropertyTypeSelectorScreen extends StatelessWidget {
-  const PropertyTypeSelectorScreen({super.key});
+  const PropertyTypeSelectorScreen(
+      {super.key, required this.propertyController});
+
+  final PropertyController propertyController;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +60,10 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                 color: AppColors.primary,
                 textColor: AppColors.secondary,
                 text: "Room",
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(AddPropertyScreen(
+                      propertyController: propertyController, type: "room"));
+                },
                 hasInfiniteWidth: true,
               ),
               const SizedBox(
@@ -64,7 +73,10 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                 color: AppColors.primary,
                 textColor: AppColors.secondary,
                 text: "Office",
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(AddPropertyScreen(
+                      propertyController: propertyController, type: "office"));
+                },
                 hasInfiniteWidth: true,
               ),
               const SizedBox(
@@ -74,7 +86,11 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                 color: AppColors.primary,
                 textColor: AppColors.secondary,
                 text: "Apartment",
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(AddPropertyScreen(
+                      propertyController: propertyController,
+                      type: "apartment"));
+                },
                 hasInfiniteWidth: true,
               ),
             ],

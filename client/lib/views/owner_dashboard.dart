@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
-import 'package:new_journey_app/views/add_property_screen.dart';
 import 'package:new_journey_app/views/property_type_selector_screen.dart';
 
 import '../constants/font_manager.dart';
@@ -220,7 +219,9 @@ class OwnerDashboard extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () {
-          Get.to(PropertyTypeSelectorScreen());
+          Get.to(PropertyTypeSelectorScreen(
+            propertyController: propertyController,
+          ));
         },
         child: const Icon(
           Icons.add,
