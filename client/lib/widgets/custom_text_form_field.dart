@@ -126,7 +126,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         errorStyle: const TextStyle(
           color: Colors.red,
-          fontSize: FontSize.subTitleFontSize,
+          fontSize: 14,
         ),
 
         // contentPadding: maxLines == null

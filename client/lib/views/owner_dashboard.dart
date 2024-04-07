@@ -10,6 +10,7 @@ import '../controllers/auth_controller.dart';
 import '../models/user_model.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/owner_drawer.dart';
+import '../widgets/owner_property_card.dart';
 
 class OwnerDashboard extends StatelessWidget {
   const OwnerDashboard({Key? key, required this.user}) : super(key: key);
@@ -90,123 +91,17 @@ class OwnerDashboard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: SizeManager.sizeXL),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: Get.height * 0.37,
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(
-                            vertical: MarginManager.marginM,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.propertContainer,
-                            borderRadius: BorderRadius.circular(
-                              RadiusManager.buttonRadius,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 180,
-                                width: double.infinity,
-                                child: Image.network(
-                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZYeGcaJ7ynYqcqk8hniNgWCfYU9cQezq8qepHFgWKVTZAIzzHQaRV39MCz6rtJqr5CBA&usqp=CAU',
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: MarginManager.marginM,
-                                ),
-                                child: const Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Txt(
-                                        textAlign: TextAlign.start,
-                                        text: "Blushie's House",
-                                        color: Colors.black,
-                                        fontSize: FontSize.textFontSize,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Txt(
-                                        textAlign: TextAlign.start,
-                                        text: "215 AC Street, NYC, NewYork",
-                                        color: Colors.black,
-                                        fontSize: FontSize.subTitleFontSize,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 12,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundColor:
-                                                  AppColors.primaryLight,
-                                              child: Icon(
-                                                Icons.group,
-                                                color: AppColors.secondary,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Txt(
-                                              text: "5 Person",
-                                              color: AppColors.secondary,
-                                              fontSize:
-                                                  FontSize.subTitleFontSize,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundColor:
-                                                  AppColors.primaryLight,
-                                              child: Icon(
-                                                Icons.attach_money,
-                                                color: AppColors.secondary,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Txt(
-                                              text: "12000 RS / Month",
-                                              color: AppColors.secondary,
-                                              fontSize:
-                                                  FontSize.subTitleFontSize,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
+                  Obx(
+                    () => Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: propertyController.myAddedRooms.length,
+                        itemBuilder: (context, index) {
+                          return OwnerPropertyCard(
+                            room: propertyController.myAddedRooms[index],
+                          );
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: SizeManager.sizeXL),

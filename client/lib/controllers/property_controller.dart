@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,6 +55,36 @@ class PropertyController extends GetxController with LocalStorage {
     isLoading.value = !isLoading.value;
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadAllRooms();
+  }
+
+  Future<void> loadAllRooms() async {
+    try {
+      toggleLoading();
+      final url = Uri.parse("${AppStrings.BASE_URL}/room");
+      final response = await http.get(url);
+
+      final jsonResponse = jsonDecode(response.body);
+      final roomsJson = jsonResponse['rooms'] as List<dynamic>;
+
+      _myAddedRooms.value = roomsJson
+          .map((roomJson) => Room.fromJson(roomJson))
+          .where((room) => room.owner == getUserId())
+          .toList();
+
+      toggleLoading();
+    } catch (e) {
+      toggleLoading();
+      Get.snackbar(
+        'Error!',
+        e.toString(),
+      );
+    }
+  }
+
   // multipart images
 
   var multiImageController =
@@ -86,9 +115,25 @@ class PropertyController extends GetxController with LocalStorage {
     try {
       if (formKey.currentState!.validate()) {
         formKey.currentState!.save();
+
+        if (!isImagePicked.value) {
+          Get.snackbar(
+            'Empty Field',
+            'Please provide images by adding them.',
+          );
+          return;
+        }
+
+        if (!isLocationPicked.value) {
+          Get.snackbar(
+            'Empty Field',
+            'Please pick your property location.',
+          );
+          return;
+        }
+
         toggleLoading();
         final List<ImageFile> images = multiImageController.images.toList();
-
         final formData = {
           'room_number': propertyAddressController.text.trim(),
           'overview': overviewController.text.trim(),
@@ -122,27 +167,24 @@ class PropertyController extends GetxController with LocalStorage {
         final streamedResponse = await request.send();
         final response = await http.Response.fromStream(streamedResponse);
 
-        print(response.body);
-
         if (response.statusCode == 201) {
+          Room room = Room.fromJson(jsonDecode(response.body)['room']);
+          myAddedRooms.add(room);
           clearFields();
+          Get.back();
+          Get.back();
           Get.snackbar(
             'Success',
             'Room created successfully',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
           );
         } else {
           Get.snackbar(
             'Error',
             jsonDecode(response.body)['message'],
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
           );
         }
       }
     } catch (error) {
-      print(error.toString());
       Get.snackbar(
         'Error',
         'Failed to create room',

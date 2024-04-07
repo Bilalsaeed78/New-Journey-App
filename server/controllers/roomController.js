@@ -21,7 +21,7 @@ exports.createRoom = async (req, res) => {
             contact_number,
             location: { 
                 type: "Point",
-                coordinates: coordinates
+                coordinates: [coordinates[1], coordinates[0]]
             },
             owner,
             images 
@@ -31,7 +31,6 @@ exports.createRoom = async (req, res) => {
 
         res.status(201).json({ success: true, message: "Room created successfully", room });
     } catch (error) {
-        console.error(error.message);
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
