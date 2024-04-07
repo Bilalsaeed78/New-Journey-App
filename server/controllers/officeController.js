@@ -2,10 +2,10 @@ const Office = require('../models/officeModel');
 
 exports.createOffice = async (req, res) => {
     try {
-        const { office_address, overview,  rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
+        const { office_address, address, overview,  rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
         const location = JSON.parse(req.body.location).coordinates;
 
-        if (!office_address || !rental_price || !cabinsAvailable || !max_capacity || !contact_number || !location || !owner) {
+        if (!office_address || !address || !rental_price || !cabinsAvailable || !max_capacity || !contact_number || !location || !owner) {
             return res.status(400).json({ success: false, message: "All required fields must be provided"});
         }
 
@@ -13,6 +13,7 @@ exports.createOffice = async (req, res) => {
 
         const office = new Office({
             office_address,
+            address,
             overview,
             rental_price,
             wifiAvailable,
@@ -64,7 +65,7 @@ exports.getOfficeById = async (req, res) => {
 
 exports.updateOffice = async (req, res) => {
     try {
-        const { office_address, overview,rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
+        const { office_address, address, overview,rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
         const location = JSON.parse(req.body.location).coordinates;
 
         let office = await Office.findById(req.params.id);
@@ -73,6 +74,7 @@ exports.updateOffice = async (req, res) => {
             return;
         }
 
+        office.address = address || office.address;
         office.office_address = office_address || office.office_address;
         office.overview = overview || office.overview;
         office.rental_price = rental_price || office.rental_price;

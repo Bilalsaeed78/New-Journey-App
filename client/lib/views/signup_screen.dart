@@ -54,7 +54,7 @@ class SignupScreen extends StatelessWidget {
                     child: const Txt(
                       text: "Sign up now to get started with an account",
                       textAlign: TextAlign.center,
-                      color: AppColors.secondaryLight,
+                      color: AppColors.subtitleColor,
                       fontWeight: FontWeight.normal,
                       fontSize: FontSize.subTitleFontSize,
                     ),
@@ -234,7 +234,7 @@ class SignupScreen extends StatelessWidget {
                       const Txt(
                         text: "Already have an account? ",
                         fontSize: FontSize.subTitleFontSize,
-                        color: AppColors.secondaryLight,
+                        color: AppColors.subtitleColor,
                       ),
                       InkWell(
                         onTap: () {

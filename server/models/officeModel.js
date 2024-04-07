@@ -5,6 +5,10 @@ const officeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    address: {
+        type: String,
+        required: true
+    },
     overview: {
         type: String
     },

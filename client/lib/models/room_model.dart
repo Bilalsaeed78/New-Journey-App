@@ -1,6 +1,7 @@
 class Room {
   String id;
   String roomNumber;
+  String address;
   String overview;
   double rentalPrice;
   int maxCapacity;
@@ -13,6 +14,7 @@ class Room {
   Room({
     required this.id,
     required this.roomNumber,
+    required this.address,
     required this.overview,
     required this.rentalPrice,
     required this.maxCapacity,
@@ -27,6 +29,7 @@ class Room {
     return Room(
       id: json['_id'],
       roomNumber: json['room_number'],
+      address: json['address'],
       overview: json['overview'],
       rentalPrice: json['rental_price'].toDouble(),
       maxCapacity: json['max_capacity'],
@@ -41,6 +44,7 @@ class Room {
   Map<String, dynamic> toJson() {
     return {
       'room_number': roomNumber,
+      'address': address,
       'overview': overview,
       'rental_price': rentalPrice,
       'max_capacity': maxCapacity,

@@ -2,10 +2,10 @@ const Apartment = require('../models/apartmentModel');
 
 exports.createApartment = async (req, res) => {
     try {
-        const { apartment_number, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, owner } = req.body;
+        const { apartment_number, address, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, owner } = req.body;
         const location = JSON.parse(req.body.location).coordinates;
 
-        if (!apartment_number || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
+        if (!apartment_number || !address || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
             return res.status(400).json({ success: false, message: "All required fields must be provided"});
         }
 
@@ -13,6 +13,7 @@ exports.createApartment = async (req, res) => {
 
         const apartment = new Apartment({
             apartment_number,
+            address,
             overview,
             rental_price,
             floor,
@@ -39,9 +40,9 @@ exports.createApartment = async (req, res) => {
 
 exports.updateApartment = async (req, res) => {
     try {
-        const { apartment_number, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, location, owner, images } = req.body;
+        const { apartment_number, address, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, location, owner, images } = req.body;
 
-        if (!apartment_number || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
+        if (!apartment_number || !address || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
             return res.status(400).json({ success: false, message: "All required fields must be provided"});
         }
 
@@ -58,6 +59,7 @@ exports.updateApartment = async (req, res) => {
         apartment.rental_price = rental_price;
         apartment.floor = floor;
         apartment.rooms = rooms;
+        apartment.address = address;
         apartment.max_capacity = max_capacity;
         apartment.liftAvailable = liftAvailable;
         apartment.contact_number = contact_number;

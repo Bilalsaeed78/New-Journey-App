@@ -75,7 +75,7 @@ class ImageViewerScreen extends StatelessWidget {
                 ),
               ],
             ),
-            backgroundColor: AppColors.propertContainer,
+            backgroundColor: AppColors.propertyContainer,
             margin: EdgeInsets.zero,
           ),
           addMoreButton: const DefaultAddMoreWidget(
@@ -83,7 +83,7 @@ class ImageViewerScreen extends StatelessWidget {
                 Icons.add,
                 color: AppColors.secondary,
               ),
-              backgroundColor: AppColors.propertContainer),
+              backgroundColor: AppColors.propertyContainer),
         ),
       ),
     );

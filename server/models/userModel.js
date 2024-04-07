@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     profilePic: {
         type: String
     },
+    properties: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Property'
+    },
     createdAt: {
         type: Date,
         default: Date.now

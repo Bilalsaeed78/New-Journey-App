@@ -44,6 +44,57 @@ class AddPropertyScreen extends StatelessWidget {
                 const SizedBox(
                   height: 14,
                 ),
+                if (type == 'room')
+                  CustomTextFormField(
+                    controller: propertyController.roomNumberController,
+                    labelText: "Room Number",
+                    hintText: "Room 03/B, Flat ABC",
+                    autofocus: false,
+                    keyboardType: TextInputType.streetAddress,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.home,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Room number cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                if (type == 'apartment')
+                  CustomTextFormField(
+                    controller: propertyController.apartmentNumberController,
+                    labelText: "Apartment Number",
+                    hintText: "Flat 03/B, Abc Tower",
+                    autofocus: false,
+                    keyboardType: TextInputType.streetAddress,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.home,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Apartment number cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                if (type == 'office')
+                  CustomTextFormField(
+                    controller: propertyController.roomNumberController,
+                    labelText: "Office Number",
+                    hintText: "Office # 201, ABC Tower",
+                    autofocus: false,
+                    keyboardType: TextInputType.streetAddress,
+                    textInputAction: TextInputAction.next,
+                    prefixIconData: Icons.home,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Office number cannot be empty.";
+                      }
+                      return null;
+                    },
+                  ),
+                const SizedBox(
+                  height: SizeManager.sizeM,
+                ),
                 CustomTextFormField(
                   controller: propertyController.propertyAddressController,
                   labelText: "Property Address",
@@ -51,7 +102,7 @@ class AddPropertyScreen extends StatelessWidget {
                   autofocus: false,
                   keyboardType: TextInputType.streetAddress,
                   textInputAction: TextInputAction.next,
-                  prefixIconData: Icons.home,
+                  prefixIconData: Icons.home_sharp,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Address cannot be empty.";
@@ -368,7 +419,7 @@ class AddPropertyScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(
                                 RadiusManager.buttonRadius),
-                            color: AppColors.propertContainer,
+                            color: AppColors.propertyContainer,
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -413,7 +464,7 @@ class AddPropertyScreen extends StatelessWidget {
                     width: double.infinity,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: AppColors.propertContainer,
+                      color: AppColors.propertyContainer,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Row(
@@ -444,25 +495,27 @@ class AddPropertyScreen extends StatelessWidget {
                 const SizedBox(
                   height: SizeManager.sizeL,
                 ),
-                CustomButton(
-                  color: AppColors.primary,
-                  hasInfiniteWidth: true,
-                  loadingWidget: propertyController.isLoading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            backgroundColor: AppColors.primary,
-                          ),
-                        )
-                      : null,
-                  onPressed: () async {
-                    if (type == 'room') {
-                      await propertyController.addRoom();
-                    }
-                  },
-                  text: "Add",
-                  textColor: AppColors.background,
-                  buttonType: ButtonType.loading,
+                Obx(
+                  () => CustomButton(
+                    color: AppColors.primary,
+                    hasInfiniteWidth: true,
+                    loadingWidget: propertyController.isLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: AppColors.primary,
+                            ),
+                          )
+                        : null,
+                    onPressed: () async {
+                      if (type == 'room') {
+                        await propertyController.addRoom();
+                      }
+                    },
+                    text: "Add",
+                    textColor: AppColors.background,
+                    buttonType: ButtonType.loading,
+                  ),
                 ),
                 const SizedBox(
                   height: SizeManager.sizeXL,

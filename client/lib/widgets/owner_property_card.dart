@@ -24,7 +24,7 @@ class OwnerPropertyCard extends StatelessWidget {
         vertical: MarginManager.marginM,
       ),
       decoration: BoxDecoration(
-        color: AppColors.propertContainer,
+        color: AppColors.propertyContainer,
         borderRadius: BorderRadius.circular(
           RadiusManager.buttonRadius,
         ),

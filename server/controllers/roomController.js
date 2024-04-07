@@ -2,42 +2,51 @@ const Room = require('../models/roomModel');
 
 exports.createRoom = async (req, res) => {
     try {
-        const { room_number, overview, rental_price, max_capacity, wifiAvailable, location, contact_number, owner } = req.body;
+        const { room_number, address, overview, rental_price, max_capacity, wifiAvailable, location, contact_number, owner } = req.body;
         const locationObject = JSON.parse(location);
         const coordinates = locationObject.coordinates;
 
-        if (!room_number || !rental_price || !max_capacity || !contact_number || !location || !owner || !wifiAvailable) {
+        if (!room_number || !address || !rental_price || !max_capacity || !contact_number || !location || !owner || !wifiAvailable) {
             res.status(400);
             throw new Error("All required fields must be provided");
         }
+
+        const user = await User.findById(owner);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Owner not found' });
+        }
+
         const images = req.uploadedImages.map(image => image.url);
 
         const room = new Room({
             room_number,
+            address,
             overview,
             rental_price,
             max_capacity,
             wifiAvailable,
             contact_number,
-            location: { 
+            location: {
                 type: "Point",
                 coordinates: [coordinates[1], coordinates[0]]
             },
             owner,
-            images 
+            images
         });
 
         await room.save();
 
         res.status(201).json({ success: true, message: "Room created successfully", room });
     } catch (error) {
+        console.error(error.message);
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
 
+
 exports.updateRoom = async (req, res) => {
     try {
-        const { room_number, overview, rental_price, max_capacity, wifiAvailable, contact_number, location, owner, images } = req.body;
+        const { room_number, address, overview, rental_price, max_capacity, wifiAvailable, contact_number, location, owner, images } = req.body;
 
         let room = await Room.findById(req.params.id);
         if (!room) {
@@ -45,6 +54,7 @@ exports.updateRoom = async (req, res) => {
             return;
         }
 
+        room.address = address || room.address;
         room.room_number = room_number || room.room_number;
         room.overview = overview || room.overview;
         room.rental_price = rental_price || room.rental_price;
@@ -95,7 +105,7 @@ exports.deleteRoom = async (req, res) => {
             res.status(404).json({ success: false, message: "Room not found" });
             return;
         }
-
+        
         await room.remove();
 
         res.status(200).json({ success: true, message: "Room deleted successfully" });

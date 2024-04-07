@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
@@ -46,70 +47,100 @@ class OwnerDashboard extends StatelessWidget {
           ),
         ],
       ),
-      body: Obx(
-        () {
-          if (authController.isLoading.value) {
-            return const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primary,
+      body: Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: MarginManager.marginL,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Txt(
+                  text: "Welcome, ",
+                  fontSize: FontSize.titleFontSize,
+                  color: AppColors.secondary,
+                  fontWeight: FontWeightManager.medium,
                 ),
+                Txt(
+                  text: "${user.fullname.split(" ").first}.",
+                  fontSize: FontSize.titleFontSize,
+                  color: AppColors.primary,
+                  fontWeight: FontWeightManager.bold,
+                ),
+              ],
+            ),
+            const SizedBox(height: SizeManager.sizeXS),
+            const SizedBox(
+              width: double.infinity,
+              child: Txt(
+                textAlign: TextAlign.start,
+                text: "Find all your added properties here",
+                fontSize: FontSize.subTitleFontSize + 2,
+                color: AppColors.secondary,
+                fontWeight: FontWeightManager.medium,
               ),
-            );
-          } else {
-            return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: MarginManager.marginL,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Txt(
-                        text: "Welcome, ",
-                        fontSize: FontSize.titleFontSize,
-                        color: AppColors.secondary,
-                        fontWeight: FontWeightManager.medium,
-                      ),
-                      Txt(
-                        text: "${user.fullname.split(" ").first}.",
-                        fontSize: FontSize.titleFontSize,
+            ),
+            const SizedBox(height: SizeManager.sizeXL),
+            Obx(
+              () {
+                if (propertyController.isLoading.value) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
                         color: AppColors.primary,
-                        fontWeight: FontWeightManager.bold,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: SizeManager.sizeXS),
-                  const SizedBox(
-                    width: double.infinity,
-                    child: Txt(
-                      textAlign: TextAlign.start,
-                      text: "Find all your added properties here",
-                      fontSize: FontSize.subTitleFontSize + 2,
-                      color: AppColors.secondary,
-                      fontWeight: FontWeightManager.medium,
-                    ),
-                  ),
-                  const SizedBox(height: SizeManager.sizeXL),
-                  Obx(
-                    () => Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: propertyController.myAddedRooms.length,
-                        itemBuilder: (context, index) {
-                          return OwnerPropertyCard(
-                            room: propertyController.myAddedRooms[index],
-                          );
-                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: SizeManager.sizeXL),
-                ],
-              ),
-            );
-          }
-        },
+                  );
+                } else if (propertyController.myAddedRooms.isEmpty) {
+                  return Expanded(
+                    child: Center(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: SizeManager.sizeL),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              "assets/images/no_data.svg",
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.scaleDown,
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            const Center(
+                              child: Txt(
+                                text: "No properties are added yet!",
+                                color: AppColors.secondary,
+                                fontSize: FontSize.subTitleFontSize,
+                              ),
+                            ),
+                            const SizedBox(height: 120),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: propertyController.myAddedRooms.length,
+                      itemBuilder: (context, index) {
+                        return OwnerPropertyCard(
+                          room: propertyController.myAddedRooms[index],
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: SizeManager.sizeXL),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,

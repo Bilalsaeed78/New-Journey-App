@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
+import 'package:new_journey_app/models/property_model.dart';
 import 'package:new_journey_app/storage/local_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +15,9 @@ import '../models/room_model.dart';
 class PropertyController extends GetxController with LocalStorage {
   final formKey = GlobalKey<FormState>();
 
+  final roomNumberController = TextEditingController();
+  final apartmentNumberController = TextEditingController();
+  final officeNumberController = TextEditingController();
   final overviewController = TextEditingController();
   final rentalPriceController = TextEditingController();
   final floorController = TextEditingController();
@@ -32,8 +36,15 @@ class PropertyController extends GetxController with LocalStorage {
   final Rx<List<Room>> _myAddedRooms = Rx<List<Room>>([]);
   List<Room> get myAddedRooms => _myAddedRooms.value;
 
+  final Rx<List<Property>> _myProperties = Rx<List<Property>>([]);
+  List<Property> get myProperties => _myProperties.value;
+
   void clearFields() {
+    propertyAddressController.clear();
     overviewController.clear();
+    roomNumberController.clear();
+    apartmentNumberController.clear();
+    officeNumberController.clear();
     rentalPriceController.clear();
     floorController.clear();
     roomsController.clear();
@@ -69,12 +80,12 @@ class PropertyController extends GetxController with LocalStorage {
 
       final jsonResponse = jsonDecode(response.body);
       final roomsJson = jsonResponse['rooms'] as List<dynamic>;
+      print(roomsJson);
 
       _myAddedRooms.value = roomsJson
           .map((roomJson) => Room.fromJson(roomJson))
           .where((room) => room.owner == getUserId())
           .toList();
-
       toggleLoading();
     } catch (e) {
       toggleLoading();
@@ -135,7 +146,8 @@ class PropertyController extends GetxController with LocalStorage {
         toggleLoading();
         final List<ImageFile> images = multiImageController.images.toList();
         final formData = {
-          'room_number': propertyAddressController.text.trim(),
+          'room_number': roomNumberController.text.trim(),
+          'address': propertyAddressController.text.trim(),
           'overview': overviewController.text.trim(),
           'rental_price': double.parse(rentalPriceController.text),
           'max_capacity': int.parse(maxCapacityController.text),
@@ -168,11 +180,20 @@ class PropertyController extends GetxController with LocalStorage {
         final response = await http.Response.fromStream(streamedResponse);
 
         if (response.statusCode == 201) {
-          Room room = Room.fromJson(jsonDecode(response.body)['room']);
-          myAddedRooms.add(room);
+          var decoded = jsonDecode(response.body)['room'];
+          Property property = Property(
+              propertyId: decoded['_id'],
+              propertyType: 'room',
+              ownerId: getUserId()!);
+          _myProperties.value.add(property);
+          print(property.ownerId);
+          print(property.propertyId);
+          print(property.propertyType);
+          Room room = Room.fromJson(decoded);
+          _myAddedRooms.value.add(room);
           clearFields();
           Get.back();
-          Get.back();
+          print(_myAddedRooms.value.length);
           Get.snackbar(
             'Success',
             'Room created successfully',
@@ -185,6 +206,7 @@ class PropertyController extends GetxController with LocalStorage {
         }
       }
     } catch (error) {
+      print(error);
       Get.snackbar(
         'Error',
         'Failed to create room',

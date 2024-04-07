@@ -38,22 +38,12 @@ class LoginScreen extends StatelessWidget {
                       'assets/icons/logos_png/full.png',
                     ),
                   ),
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   child: const Txt(
-                  //     text: "Create your Account",
-                  //     textAlign: TextAlign.center,
-                  //     color: AppColors.secondary,
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: FontSize.titleFontSize,
-                  //   ),
-                  // ),
                   Container(
                     alignment: Alignment.center,
                     child: const Txt(
                       text: "Welcome back, please enter your details",
                       textAlign: TextAlign.center,
-                      color: AppColors.secondaryLight,
+                      color: AppColors.subtitleColor,
                       fontWeight: FontWeight.normal,
                       fontSize: FontSize.subTitleFontSize + 2,
                     ),
@@ -78,7 +68,6 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: SizeManager.sizeSemiM,
                   ),
-
                   Obx(
                     () => CustomTextFormField(
                       controller: controller.passwordController,
@@ -156,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                       const Txt(
                         text: "Don't have an account? ",
                         fontSize: FontSize.subTitleFontSize,
-                        color: AppColors.secondaryLight,
+                        color: AppColors.subtitleColor,
                       ),
                       InkWell(
                         onTap: () {
