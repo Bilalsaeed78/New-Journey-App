@@ -96,7 +96,7 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(
-                    horizontal: MarginManager.marginM,
+                    horizontal: MarginManager.marginS,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -144,9 +144,11 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
                           ),
                           Chip(
                             backgroundColor: AppColors.primaryLight,
+                            labelPadding: const EdgeInsets.all(0),
                             label: Txt(
                               text: widget.property.type.capitalizeFirst,
                               color: AppColors.secondary,
+                              useOverflow: true,
                               fontSize: FontSize.subTitleFontSize,
                             ),
                           ),

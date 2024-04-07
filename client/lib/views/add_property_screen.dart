@@ -509,6 +509,8 @@ class AddPropertyScreen extends StatelessWidget {
                         await propertyController.addRoom();
                       } else if (type == 'office') {
                         await propertyController.addOffice();
+                      } else {
+                        await propertyController.addApartment();
                       }
                     },
                     text: "Add",
