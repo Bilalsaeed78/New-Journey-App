@@ -10,6 +10,7 @@ import 'package:new_journey_app/storage/local_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants/string_manager.dart';
+import '../models/office_model.dart';
 import '../models/room_model.dart';
 
 class PropertyController extends GetxController with LocalStorage {
@@ -33,8 +34,12 @@ class PropertyController extends GetxController with LocalStorage {
   RxBool isLocationPicked = false.obs;
 
   RxList<double> location = <double>[].obs;
+
   final Rx<List<Room>> _myAddedRooms = Rx<List<Room>>([]);
   List<Room> get myAddedRooms => _myAddedRooms.value;
+
+  final Rx<List<Office>> _myAddedOffices = Rx<List<Office>>([]);
+  List<Office> get myAddedOffices => _myAddedOffices.value;
 
   final Rx<List<Property>> _myProperties = Rx<List<Property>>([]);
   List<Property> get myProperties => _myProperties.value;
@@ -69,10 +74,10 @@ class PropertyController extends GetxController with LocalStorage {
   @override
   void onInit() {
     super.onInit();
-    loadAllRooms();
+    loadData();
   }
 
-  Future<void> loadAllRooms() async {
+  Future<void> loadData() async {
     try {
       toggleLoading();
       final url =
@@ -86,6 +91,8 @@ class PropertyController extends GetxController with LocalStorage {
           .map((propertyJson) => Property.fromJson(propertyJson))
           .toList();
 
+      _myProperties.value.addAll(properties);
+
       for (Property property in properties) {
         if (property.type == 'room') {
           final roomUrl =
@@ -94,6 +101,13 @@ class PropertyController extends GetxController with LocalStorage {
           final roomJson = jsonDecode(roomResp.body)['room'];
           final room = Room.fromJson(roomJson);
           _myAddedRooms.value.add(room);
+        } else if (property.type == 'office') {
+          final officeUrl =
+              Uri.parse("${AppStrings.BASE_URL}/office/${property.propertyId}");
+          final officeResp = await http.get(officeUrl);
+          final officeJson = jsonDecode(officeResp.body)['office'];
+          final office = Office.fromJson(officeJson);
+          _myAddedOffices.value.add(office);
         }
       }
       toggleLoading();
@@ -130,7 +144,21 @@ class PropertyController extends GetxController with LocalStorage {
     return imageFiles;
   }
 
-  // add room
+  // Get Properties
+  Future<Map<String, dynamic>?> getData(String type, String id) async {
+    if (type == 'room') {
+      final url = Uri.parse("${AppStrings.BASE_URL}/room/$id");
+      final response = await http.get(url);
+      return jsonDecode(response.body);
+    } else if (type == 'office') {
+      final url = Uri.parse("${AppStrings.BASE_URL}/office/$id");
+      final response = await http.get(url);
+      return jsonDecode(response.body);
+    }
+    return null;
+  }
+
+  // Add Properties
 
   Future<void> addRoom() async {
     try {
@@ -222,6 +250,105 @@ class PropertyController extends GetxController with LocalStorage {
       Get.snackbar(
         'Error',
         'Failed to create room',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
+
+  Future<void> addOffice() async {
+    try {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+
+        if (!isImagePicked.value) {
+          Get.snackbar(
+            'Empty Field',
+            'Please provide images by adding them.',
+          );
+          return;
+        }
+
+        if (!isLocationPicked.value) {
+          Get.snackbar(
+            'Empty Field',
+            'Please pick your property location.',
+          );
+          return;
+        }
+
+        toggleLoading();
+        final List<ImageFile> images = multiImageController.images.toList();
+        final formData = {
+          'office_address': propertyAddressController.text.trim(),
+          'address': propertyAddressController.text.trim(),
+          'overview': overviewController.text.trim(),
+          'rental_price': double.parse(rentalPriceController.text),
+          'cabinsAvailable': int.parse(maxCapacityController.text),
+          'max_capacity': int.parse(maxCapacityController.text),
+          'wifiAvailable': wifiAvailable,
+          'contact_number': contactController.text.trim(),
+          'owner': getUserId(),
+          'location': jsonEncode({'coordinates': location.toList()}),
+        };
+
+        final url = Uri.parse("${AppStrings.BASE_URL}/office");
+        var request = http.MultipartRequest('POST', url);
+        Map<String, String> headers = {'Content-Type': 'multipart/form-data'};
+
+        request.headers.addAll(headers);
+
+        formData.forEach((key, value) {
+          request.fields[key] = value.toString();
+        });
+
+        // ignore: avoid_function_literals_in_foreach_calls
+        images.forEach((image) async {
+          request.files.add(await http.MultipartFile.fromPath(
+            'files',
+            image.path!,
+            contentType: MediaType('image', image.extension),
+          ));
+        });
+
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        if (response.statusCode == 201) {
+          var decoded = jsonDecode(response.body)['office'];
+          Office office = Office.fromJson(decoded);
+          _myAddedOffices.value.add(office);
+
+          Property property = Property(
+              propertyId: office.id!, type: 'office', ownerId: getUserId()!);
+
+          var url = Uri.parse("${AppStrings.BASE_URL}/property");
+          final propertyResp = await http.post(
+            url,
+            body: property.toJson(),
+          );
+
+          var data = jsonDecode(propertyResp.body);
+          _myProperties.value.add(Property.fromJson(data['property']));
+          clearFields();
+          Get.back();
+          Get.snackbar(
+            'Success',
+            'Office created successfully',
+          );
+        } else {
+          Get.snackbar(
+            'Error',
+            jsonDecode(response.body)['message'],
+          );
+        }
+      }
+    } catch (error) {
+      Get.snackbar(
+        'Error',
+        'Failed to create office',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );

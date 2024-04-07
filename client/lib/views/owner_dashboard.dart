@@ -91,7 +91,7 @@ class OwnerDashboard extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (propertyController.myAddedRooms.isEmpty) {
+                } else if (propertyController.myProperties.isEmpty) {
                   return Expanded(
                     child: Center(
                       child: Container(
@@ -127,10 +127,11 @@ class OwnerDashboard extends StatelessWidget {
                   return Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: propertyController.myAddedRooms.length,
+                      itemCount: propertyController.myProperties.length,
                       itemBuilder: (context, index) {
                         return OwnerPropertyCard(
-                          room: propertyController.myAddedRooms[index],
+                          propertyController: propertyController,
+                          property: propertyController.myProperties[index],
                         );
                       },
                     ),

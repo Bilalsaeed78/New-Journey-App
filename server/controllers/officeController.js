@@ -3,7 +3,8 @@ const Office = require('../models/officeModel');
 exports.createOffice = async (req, res) => {
     try {
         const { office_address, address, overview,  rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
-        const location = JSON.parse(req.body.location).coordinates;
+        const locationObject = JSON.parse(location);
+        const coordinates = locationObject.coordinates;
 
         if (!office_address || !address || !rental_price || !cabinsAvailable || !max_capacity || !contact_number || !location || !owner) {
             return res.status(400).json({ success: false, message: "All required fields must be provided"});
@@ -23,7 +24,7 @@ exports.createOffice = async (req, res) => {
             contact_number,
             location: { 
                 type: "Point",
-                coordinates: location
+                coordinates: [coordinates[1], coordinates[0]]
             },
             owner,
             images 

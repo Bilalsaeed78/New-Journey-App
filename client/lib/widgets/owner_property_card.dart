@@ -1,19 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/controllers/property_controller.dart';
+import 'package:new_journey_app/models/property_model.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
-import '../models/room_model.dart';
 import 'custom_text.dart';
 
-class OwnerPropertyCard extends StatelessWidget {
+class OwnerPropertyCard extends StatefulWidget {
   const OwnerPropertyCard({
     super.key,
-    this.room,
+    required this.propertyController,
+    required this.property,
   });
 
-  final Room? room;
+  final PropertyController propertyController;
+  final Property property;
+
+  @override
+  State<OwnerPropertyCard> createState() => _OwnerPropertyCardState();
+}
+
+class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
+  late Map<String, dynamic> propertyData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    try {
+      if (widget.property.type == 'room') {
+        var data = await widget.propertyController
+            .getData('room', widget.property.propertyId);
+        setState(() {
+          propertyData = data!['room'];
+          isLoading = false;
+        });
+      } else if (widget.property.type == 'office') {
+        var data = await widget.propertyController
+            .getData('office', widget.property.propertyId);
+        setState(() {
+          propertyData = data!['office'];
+          isLoading = false;
+        });
+      }
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,125 +70,133 @@ class OwnerPropertyCard extends StatelessWidget {
           RadiusManager.buttonRadius,
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 180,
-            width: double.infinity,
-            child: Image.network(
-              room!.images[0],
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: MarginManager.marginM,
-            ),
-            child: Column(
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primary,
+              ),
+            )
+          : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 5,
+                SizedBox(
+                  height: 180,
+                  width: double.infinity,
+                  child: Image.network(
+                    propertyData['images'][0],
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: MarginManager.marginM,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: Get.width * 0.5,
-                            child: Txt(
-                              textAlign: TextAlign.start,
-                              text: room!.roomNumber,
-                              useOverflow: true,
-                              color: Colors.black,
-                              fontSize: FontSize.textFontSize,
-                              fontWeight: FontWeight.bold,
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: Get.width * 0.5,
+                                  child: Txt(
+                                    textAlign: TextAlign.start,
+                                    text: widget.property.type == 'room'
+                                        ? propertyData['room_number']
+                                        : propertyData['officeAddress'],
+                                    useOverflow: true,
+                                    color: Colors.black,
+                                    fontSize: FontSize.textFontSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.6,
+                                  child: Txt(
+                                    textAlign: TextAlign.start,
+                                    useOverflow: true,
+                                    text: propertyData['address'],
+                                    color: Colors.black,
+                                    fontSize: FontSize.subTitleFontSize,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            width: Get.width * 0.6,
-                            child: Txt(
-                              textAlign: TextAlign.start,
-                              useOverflow: true,
-                              text: room!.address,
-                              color: Colors.black,
+                          Chip(
+                            backgroundColor: AppColors.primaryLight,
+                            label: Txt(
+                              text: widget.property.type.capitalizeFirst,
+                              color: AppColors.secondary,
                               fontSize: FontSize.subTitleFontSize,
-                              fontWeight: FontWeight.normal,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const Chip(
-                      backgroundColor: AppColors.primaryLight,
-                      label: Txt(
-                        text: 'Room',
-                        color: AppColors.secondary,
-                        fontSize: FontSize.subTitleFontSize,
+                      const SizedBox(
+                        height: 12,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          backgroundColor: AppColors.primaryLight,
-                          child: Icon(
-                            Icons.group,
-                            color: AppColors.secondary,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundColor: AppColors.primaryLight,
+                                child: Icon(
+                                  Icons.group,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Txt(
+                                text: "${propertyData['max_capacity']} Person",
+                                color: AppColors.secondary,
+                                fontSize: FontSize.subTitleFontSize,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Txt(
-                          text: "${room!.maxCapacity} Person",
-                          color: AppColors.secondary,
-                          fontSize: FontSize.subTitleFontSize,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          backgroundColor: AppColors.primaryLight,
-                          child: Icon(
-                            Icons.attach_money,
-                            color: AppColors.secondary,
+                          Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundColor: AppColors.primaryLight,
+                                child: Icon(
+                                  Icons.attach_money,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Txt(
+                                text:
+                                    "${propertyData['rental_price']} RS / Month",
+                                color: AppColors.secondary,
+                                fontSize: FontSize.subTitleFontSize,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Txt(
-                          text:
-                              "${room!.rentalPrice.toStringAsFixed(0)} RS / Month",
-                          color: AppColors.secondary,
-                          fontSize: FontSize.subTitleFontSize,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 }
