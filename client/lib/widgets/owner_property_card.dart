@@ -38,14 +38,21 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
         var data = await widget.propertyController
             .getData('room', widget.property.propertyId);
         setState(() {
-          propertyData = data!['room'];
+          propertyData = data['room'];
           isLoading = false;
         });
       } else if (widget.property.type == 'office') {
         var data = await widget.propertyController
             .getData('office', widget.property.propertyId);
         setState(() {
-          propertyData = data!['office'];
+          propertyData = data['office'];
+          isLoading = false;
+        });
+      } else {
+        var data = await widget.propertyController
+            .getData('apartment', widget.property.propertyId);
+        setState(() {
+          propertyData = data['apartment'];
           isLoading = false;
         });
       }
@@ -112,7 +119,9 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
                                     textAlign: TextAlign.start,
                                     text: widget.property.type == 'room'
                                         ? propertyData['room_number']
-                                        : propertyData['officeAddress'],
+                                        : (widget.property.type == 'apartment'
+                                            ? propertyData['apartment_number']
+                                            : propertyData['office_address']),
                                     useOverflow: true,
                                     color: Colors.black,
                                     fontSize: FontSize.textFontSize,

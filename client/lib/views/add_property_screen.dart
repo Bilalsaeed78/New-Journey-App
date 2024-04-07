@@ -78,7 +78,7 @@ class AddPropertyScreen extends StatelessWidget {
                   ),
                 if (type == 'office')
                   CustomTextFormField(
-                    controller: propertyController.roomNumberController,
+                    controller: propertyController.officeNumberController,
                     labelText: "Office Number",
                     hintText: "Office # 201, ABC Tower",
                     autofocus: false,
@@ -322,9 +322,6 @@ class AddPropertyScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                const SizedBox(
-                  height: SizeManager.sizeM,
-                ),
                 if (type == 'apartment')
                   Column(
                     children: [

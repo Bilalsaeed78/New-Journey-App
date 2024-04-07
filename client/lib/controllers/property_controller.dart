@@ -10,6 +10,7 @@ import 'package:new_journey_app/storage/local_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants/string_manager.dart';
+import '../models/apartment_model.dart';
 import '../models/office_model.dart';
 import '../models/room_model.dart';
 
@@ -40,6 +41,9 @@ class PropertyController extends GetxController with LocalStorage {
 
   final Rx<List<Office>> _myAddedOffices = Rx<List<Office>>([]);
   List<Office> get myAddedOffices => _myAddedOffices.value;
+
+  final Rx<List<Apartment>> _myAddedApartments = Rx<List<Apartment>>([]);
+  List<Apartment> get myAddedApartments => _myAddedApartments.value;
 
   final Rx<List<Property>> _myProperties = Rx<List<Property>>([]);
   List<Property> get myProperties => _myProperties.value;
@@ -108,6 +112,13 @@ class PropertyController extends GetxController with LocalStorage {
           final officeJson = jsonDecode(officeResp.body)['office'];
           final office = Office.fromJson(officeJson);
           _myAddedOffices.value.add(office);
+        } else {
+          final apartmentUrl = Uri.parse(
+              "${AppStrings.BASE_URL}/apartment/${property.propertyId}");
+          final apartmentResp = await http.get(apartmentUrl);
+          final apartmentJson = jsonDecode(apartmentResp.body)['apartment'];
+          final apartment = Apartment.fromJson(apartmentJson);
+          _myAddedApartments.value.add(apartment);
         }
       }
       toggleLoading();
@@ -145,7 +156,7 @@ class PropertyController extends GetxController with LocalStorage {
   }
 
   // Get Properties
-  Future<Map<String, dynamic>?> getData(String type, String id) async {
+  Future<Map<String, dynamic>> getData(String type, String id) async {
     if (type == 'room') {
       final url = Uri.parse("${AppStrings.BASE_URL}/room/$id");
       final response = await http.get(url);
@@ -154,8 +165,11 @@ class PropertyController extends GetxController with LocalStorage {
       final url = Uri.parse("${AppStrings.BASE_URL}/office/$id");
       final response = await http.get(url);
       return jsonDecode(response.body);
+    } else {
+      final url = Uri.parse("${AppStrings.BASE_URL}/apartment/$id");
+      final response = await http.get(url);
+      return jsonDecode(response.body);
     }
-    return null;
   }
 
   // Add Properties
@@ -282,13 +296,14 @@ class PropertyController extends GetxController with LocalStorage {
         toggleLoading();
         final List<ImageFile> images = multiImageController.images.toList();
         final formData = {
-          'office_address': propertyAddressController.text.trim(),
+          'office_address': officeNumberController.text.trim(),
           'address': propertyAddressController.text.trim(),
           'overview': overviewController.text.trim(),
           'rental_price': double.parse(rentalPriceController.text),
-          'cabinsAvailable': int.parse(maxCapacityController.text),
+          'cabinsAvailable': int.parse(cabinsController.text),
           'max_capacity': int.parse(maxCapacityController.text),
           'wifiAvailable': wifiAvailable,
+          'acAvailable': acAvailable,
           'contact_number': contactController.text.trim(),
           'owner': getUserId(),
           'location': jsonEncode({'coordinates': location.toList()}),
@@ -349,6 +364,108 @@ class PropertyController extends GetxController with LocalStorage {
       Get.snackbar(
         'Error',
         'Failed to create office',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
+
+  Future<void> addApartment() async {
+    try {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+
+        if (!isImagePicked.value) {
+          Get.snackbar(
+            'Empty Field',
+            'Please provide images by adding them.',
+          );
+          return;
+        }
+
+        if (!isLocationPicked.value) {
+          Get.snackbar(
+            'Empty Field',
+            'Please pick your property location.',
+          );
+          return;
+        }
+
+        toggleLoading();
+        final List<ImageFile> images = multiImageController.images.toList();
+        final formData = {
+          'apartment_number': apartmentNumberController.text.trim(),
+          'address': propertyAddressController.text.trim(),
+          'overview': overviewController.text.trim(),
+          'rental_price': double.parse(rentalPriceController.text),
+          'floor': int.parse(floorController.text),
+          'rooms': int.parse(roomsController.text),
+          'max_capacity': int.parse(maxCapacityController.text),
+          'liftAvailable': liftAvailable,
+          'contact_number': contactController.text.trim(),
+          'owner': getUserId(),
+          'location': jsonEncode({'coordinates': location.toList()}),
+        };
+
+        final url = Uri.parse("${AppStrings.BASE_URL}/apartment");
+        var request = http.MultipartRequest('POST', url);
+        Map<String, String> headers = {'Content-Type': 'multipart/form-data'};
+
+        request.headers.addAll(headers);
+
+        formData.forEach((key, value) {
+          request.fields[key] = value.toString();
+        });
+
+        // ignore: avoid_function_literals_in_foreach_calls
+        images.forEach((image) async {
+          request.files.add(await http.MultipartFile.fromPath(
+            'files',
+            image.path!,
+            contentType: MediaType('image', image.extension),
+          ));
+        });
+
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        if (response.statusCode == 201) {
+          var decoded = jsonDecode(response.body)['apartment'];
+          Apartment apartment = Apartment.fromJson(decoded);
+          _myAddedApartments.value.add(apartment);
+
+          Property property = Property(
+              propertyId: apartment.id!,
+              type: 'apartment',
+              ownerId: getUserId()!);
+
+          var url = Uri.parse("${AppStrings.BASE_URL}/property");
+          final propertyResp = await http.post(
+            url,
+            body: property.toJson(),
+          );
+
+          var data = jsonDecode(propertyResp.body);
+          _myProperties.value.add(Property.fromJson(data['property']));
+          clearFields();
+          Get.back();
+          Get.snackbar(
+            'Success',
+            'Apartment created successfully',
+          );
+        } else {
+          Get.snackbar(
+            'Error',
+            jsonDecode(response.body)['message'],
+          );
+        }
+      }
+    } catch (error) {
+      Get.snackbar(
+        'Error',
+        'Failed to create apartment',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
