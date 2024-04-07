@@ -42,6 +42,7 @@ dependencies:
   multi_image_picker_view: ^1.0.0
   image_picker: ^1.0.7
   file_picker: ^8.0.0+1
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:

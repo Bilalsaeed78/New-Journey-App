@@ -30,7 +30,8 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 }, 
     fileFilter: (req, file, cb) => {
-        if (file.mimetype === "image/jpeg" || file.mimetype === 'image/png') {
+        const allowedMimes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (allowedMimes.includes(file.mimetype)) {
             cb(null, true);
         } else {
             cb(new Error("Unsupported file format"), false);
@@ -38,22 +39,21 @@ const upload = multer({
     }
 });
 
+
 // Middleware to upload files to Cloudinary
 const uploadToCloudinary = (req, res, next) => {
     upload.array('files')(req, res, async (err) => {
         if (err) {
-            console.error(err.message);
             return res.status(400).json({ success: false, message: "Failed to upload images" });
         }
 
         try {
-            const uploader = async (path) => await cloudinary.uploader.upload(path, { folder: "Images" });
             const urls = [];
 
             for (const file of req.files) {
                 const { path } = file;
-                const newPath = await uploader(path);
-                urls.push({ url: newPath.secure_url, id: newPath.public_id });
+                const result = await cloudinary.uploader.upload(path, { folder: "Images" });
+                urls.push({ url: result.secure_url, id: result.public_id });
                 fs.unlinkSync(path);
             }
 

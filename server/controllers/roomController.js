@@ -2,14 +2,14 @@ const Room = require('../models/roomModel');
 
 exports.createRoom = async (req, res) => {
     try {
-        const { room_number, overview, rental_price, max_capacity, wifiAvailable, contact_number, owner } = req.body;
-        const location = JSON.parse(req.body.location).coordinates;
+        const { room_number, overview, rental_price, max_capacity, wifiAvailable, location, contact_number, owner } = req.body;
+        const locationObject = JSON.parse(location);
+        const coordinates = locationObject.coordinates;
 
-        if (!room_number || !rental_price || !max_capacity || !contact_number || !location || !owner) {
+        if (!room_number || !rental_price || !max_capacity || !contact_number || !location || !owner || !wifiAvailable) {
             res.status(400);
             throw new Error("All required fields must be provided");
         }
-
         const images = req.uploadedImages.map(image => image.url);
 
         const room = new Room({
@@ -21,7 +21,7 @@ exports.createRoom = async (req, res) => {
             contact_number,
             location: { 
                 type: "Point",
-                coordinates: location
+                coordinates: coordinates
             },
             owner,
             images 
