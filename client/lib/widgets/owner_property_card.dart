@@ -45,29 +45,54 @@ class OwnerPropertyCard extends StatelessWidget {
               horizontal: MarginManager.marginM,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 5,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Txt(
-                    textAlign: TextAlign.start,
-                    text: room!.roomNumber.split(' ').first,
-                    color: Colors.black,
-                    fontSize: FontSize.textFontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Txt(
-                    textAlign: TextAlign.start,
-                    text: room!.roomNumber,
-                    color: Colors.black,
-                    fontSize: FontSize.subTitleFontSize,
-                    fontWeight: FontWeight.normal,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: Get.width * 0.5,
+                            child: Txt(
+                              textAlign: TextAlign.start,
+                              text: room!.roomNumber,
+                              useOverflow: true,
+                              color: Colors.black,
+                              fontSize: FontSize.textFontSize,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.6,
+                            child: Txt(
+                              textAlign: TextAlign.start,
+                              useOverflow: true,
+                              text: room!.address,
+                              color: Colors.black,
+                              fontSize: FontSize.subTitleFontSize,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Chip(
+                      backgroundColor: AppColors.primaryLight,
+                      label: Txt(
+                        text: 'Room',
+                        color: AppColors.secondary,
+                        fontSize: FontSize.subTitleFontSize,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 12,

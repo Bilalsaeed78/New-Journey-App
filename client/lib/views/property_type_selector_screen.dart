@@ -73,6 +73,7 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                   textColor: AppColors.secondary,
                   text: "Room",
                   onPressed: () {
+                    propertyController.clearFields();
                     Get.to(AddPropertyScreen(
                         propertyController: propertyController, type: "room"));
                   },
@@ -86,6 +87,7 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                   textColor: AppColors.secondary,
                   text: "Office",
                   onPressed: () {
+                    propertyController.clearFields();
                     Get.to(AddPropertyScreen(
                         propertyController: propertyController,
                         type: "office"));
@@ -100,6 +102,7 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                   textColor: AppColors.secondary,
                   text: "Apartment",
                   onPressed: () {
+                    propertyController.clearFields();
                     Get.to(AddPropertyScreen(
                         propertyController: propertyController,
                         type: "apartment"));

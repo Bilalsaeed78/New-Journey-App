@@ -26,9 +26,9 @@ class PropertyController extends GetxController with LocalStorage {
   final contactController = TextEditingController();
   final cabinsController = TextEditingController();
   final propertyAddressController = TextEditingController();
-  var liftAvailable = false;
-  var wifiAvailable = false;
-  var acAvailable = false;
+  var liftAvailable = true;
+  var wifiAvailable = true;
+  var acAvailable = true;
   RxBool isImagePicked = false.obs;
   RxBool isLocationPicked = false.obs;
 
@@ -52,9 +52,9 @@ class PropertyController extends GetxController with LocalStorage {
     contactController.clear();
     cabinsController.clear();
     multiImageController.clearImages();
-    liftAvailable = false;
-    wifiAvailable = false;
-    acAvailable = false;
+    liftAvailable = true;
+    wifiAvailable = true;
+    acAvailable = true;
     isImagePicked.value = false;
     isLocationPicked.value = false;
     isLoading.value = false;
@@ -75,17 +75,27 @@ class PropertyController extends GetxController with LocalStorage {
   Future<void> loadAllRooms() async {
     try {
       toggleLoading();
-      final url = Uri.parse("${AppStrings.BASE_URL}/room");
-      final response = await http.get(url);
+      final url =
+          Uri.parse("${AppStrings.BASE_URL}/property/owner/${getUserId()}");
+      final resp = await http.get(url);
 
-      final jsonResponse = jsonDecode(response.body);
-      final roomsJson = jsonResponse['rooms'] as List<dynamic>;
-      print(roomsJson);
+      final jsonResponse = jsonDecode(resp.body);
+      final propertiesJson = jsonResponse['properties'] as List<dynamic>;
 
-      _myAddedRooms.value = roomsJson
-          .map((roomJson) => Room.fromJson(roomJson))
-          .where((room) => room.owner == getUserId())
+      List<Property> properties = propertiesJson
+          .map((propertyJson) => Property.fromJson(propertyJson))
           .toList();
+
+      for (Property property in properties) {
+        if (property.type == 'room') {
+          final roomUrl =
+              Uri.parse("${AppStrings.BASE_URL}/room/${property.propertyId}");
+          final roomResp = await http.get(roomUrl);
+          final roomJson = jsonDecode(roomResp.body)['room'];
+          final room = Room.fromJson(roomJson);
+          _myAddedRooms.value.add(room);
+        }
+      }
       toggleLoading();
     } catch (e) {
       toggleLoading();
@@ -181,19 +191,22 @@ class PropertyController extends GetxController with LocalStorage {
 
         if (response.statusCode == 201) {
           var decoded = jsonDecode(response.body)['room'];
-          Property property = Property(
-              propertyId: decoded['_id'],
-              propertyType: 'room',
-              ownerId: getUserId()!);
-          _myProperties.value.add(property);
-          print(property.ownerId);
-          print(property.propertyId);
-          print(property.propertyType);
           Room room = Room.fromJson(decoded);
           _myAddedRooms.value.add(room);
+
+          Property property = Property(
+              propertyId: room.id, type: 'room', ownerId: getUserId()!);
+
+          var url = Uri.parse("${AppStrings.BASE_URL}/property");
+          final propertyResp = await http.post(
+            url,
+            body: property.toJson(),
+          );
+
+          var data = jsonDecode(propertyResp.body);
+          _myProperties.value.add(Property.fromJson(data['property']));
           clearFields();
           Get.back();
-          print(_myAddedRooms.value.length);
           Get.snackbar(
             'Success',
             'Room created successfully',
@@ -206,7 +219,6 @@ class PropertyController extends GetxController with LocalStorage {
         }
       }
     } catch (error) {
-      print(error);
       Get.snackbar(
         'Error',
         'Failed to create room',

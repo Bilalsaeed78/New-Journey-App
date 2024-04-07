@@ -149,7 +149,7 @@ class AddPropertyScreen extends StatelessWidget {
                 ),
                 CustomTextFormField(
                   controller: propertyController.rentalPriceController,
-                  labelText: "Rent per month",
+                  labelText: "Rent per month (PKR)",
                   autofocus: false,
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,

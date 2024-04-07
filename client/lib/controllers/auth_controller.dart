@@ -96,12 +96,13 @@ class AuthController extends GetxController with LocalStorage {
         signupFormKey.currentState!.save();
         toggleLoading();
         User user = User(
-            email: email,
-            password: password,
-            role: role,
-            fullname: name,
-            contactNo: phone,
-            cnic: cnic);
+          email: email,
+          password: password,
+          role: role,
+          fullname: name,
+          contactNo: phone,
+          cnic: cnic,
+        );
         var url = Uri.parse("${AppStrings.BASE_URL}/user/register");
         final response = await http.post(
           url,
@@ -125,6 +126,7 @@ class AuthController extends GetxController with LocalStorage {
         }
       }
     } catch (err) {
+      print(err);
       Get.snackbar(
         'Error registering.',
         err.toString(),

@@ -1,15 +1,18 @@
 const Property = require('../models/propertyModel');
-const User = require('../models/userModel');
 
 exports.createProperty = async (req, res) => {
     try {
         const { ownerId, propertyId, type } = req.body;
 
+        if (!ownerId || !propertyId || !type) {
+            return res.status(400).json({ success: false, message: 'All required fields must be provided' });
+        }
+        
         const existingProperty = await Property.findOne({ propertyId });
         if (existingProperty) {
             return res.status(400).json({ success: false, message: 'Property ID already exists' });
         }
-
+        
         const property = new Property({
             ownerId,
             propertyId,
@@ -17,13 +20,6 @@ exports.createProperty = async (req, res) => {
         });
 
         await property.save();
-
-        const user = await User.findById(ownerId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'Owner not found' });
-        }
-        user.properties.push(property._id);
-        await user.save();
 
         res.status(201).json({ success: true, message: 'Property created successfully', property });
     } catch (error) {
@@ -38,13 +34,6 @@ exports.deleteProperty = async (req, res) => {
         if (!property) {
             return res.status(404).json({ success: false, message: 'Property not found' });
         }
-
-        const user = await User.findOne({ properties: property._id });
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        user.properties.pull(property._id);
-        await user.save();
 
         await property.remove();
         res.status(200).json({ success: true, message: 'Property deleted successfully' });
@@ -92,6 +81,16 @@ exports.updateProperty = async (req, res) => {
 
         await property.save();
         res.status(200).json({ success: true, message: 'Property updated successfully', property });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+exports.getPropertiesByOwnerId = async (req, res) => {
+    try {
+        const properties = await Property.find({ ownerId: req.params.ownerId });
+        res.status(200).json({ success: true, count: properties.length, properties });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ success: false, message: 'Server Error' });

@@ -11,11 +11,6 @@ exports.createRoom = async (req, res) => {
             throw new Error("All required fields must be provided");
         }
 
-        const user = await User.findById(owner);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'Owner not found' });
-        }
-
         const images = req.uploadedImages.map(image => image.url);
 
         const room = new Room({
