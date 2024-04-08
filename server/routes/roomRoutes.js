@@ -6,7 +6,7 @@ const uploadToCloudinary = require('../middlewares/uploadFiles');
 router.post('/', uploadToCloudinary, roomController.createRoom);
 router.get('/', roomController.getAllRooms);
 router.get('/:id', roomController.getRoomById);
-router.put('/:id', uploadToCloudinary, roomController.updateRoom);
+router.put('/:id', roomController.updateRoom);
 router.delete('/:id', roomController.deleteRoom);
 
 module.exports = router;

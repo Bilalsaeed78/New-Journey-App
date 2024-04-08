@@ -41,7 +41,7 @@ exports.createRoom = async (req, res) => {
 
 exports.updateRoom = async (req, res) => {
     try {
-        const { room_number, address, overview, rental_price, max_capacity, wifiAvailable, contact_number, location, owner, images } = req.body;
+        const { room_number, address, overview, rental_price, max_capacity, wifiAvailable, contact_number } = req.body;
 
         let room = await Room.findById(req.params.id);
         if (!room) {
@@ -56,9 +56,6 @@ exports.updateRoom = async (req, res) => {
         room.max_capacity = max_capacity || room.max_capacity;
         room.wifiAvailable = wifiAvailable || room.wifiAvailable;
         room.contact_number = contact_number || room.contact_number;
-        room.location = location || room.location;
-        room.owner = owner || room.owner;
-        room.images = images || room.images;
 
         await room.save();
 

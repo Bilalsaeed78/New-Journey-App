@@ -6,7 +6,7 @@ const uploadToCloudinary = require('../middlewares/uploadFiles');
 router.post('/', uploadToCloudinary, officeController.createOffice);
 router.get('/', officeController.getAllOffices);
 router.get('/:id', officeController.getOfficeById);
-router.put('/:id', uploadToCloudinary, officeController.updateOffice);
+router.put('/:id', officeController.updateOffice);
 router.delete('/:id', officeController.deleteOffice);
 
 module.exports = router;

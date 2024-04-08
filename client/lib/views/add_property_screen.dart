@@ -44,7 +44,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         controller.roomNumberController.text = room.roomNumber;
         controller.propertyAddressController.text = room.address;
         controller.overviewController.text = room.overview;
-        controller.rentalPriceController.text = room.rentalPrice.toString();
+        controller.rentalPriceController.text =
+            room.rentalPrice.toStringAsFixed(0);
         controller.maxCapacityController.text = room.maxCapacity.toString();
         controller.wifiAvailable = room.wifiAvailable;
         controller.contactController.text = room.contactNumber;
@@ -54,7 +55,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         controller.officeNumberController.text = office.officeAddress;
         controller.propertyAddressController.text = office.address;
         controller.overviewController.text = office.overview!;
-        controller.rentalPriceController.text = office.rentalPrice.toString();
+        controller.rentalPriceController.text =
+            office.rentalPrice.toStringAsFixed(0);
         controller.maxCapacityController.text = office.maxCapacity.toString();
         controller.contactController.text = office.contactNumber;
         controller.wifiAvailable = office.wifiAvailable;
@@ -66,7 +68,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         controller.propertyAddressController.text = apartment.address;
         controller.overviewController.text = apartment.overview!;
         controller.rentalPriceController.text =
-            apartment.rentalPrice.toString();
+            apartment.rentalPrice.toStringAsFixed(0);
         controller.maxCapacityController.text =
             apartment.maxCapacity.toString();
         controller.contactController.text = apartment.contactNumber;
@@ -581,6 +583,12 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                         } else {
                           await widget.propertyController.addApartment();
                         }
+                      } else {
+                        if (widget.type == 'room') {
+                          await widget.propertyController
+                              .editRoom(widget.data!['_id']);
+                        } else if (widget.type == 'office') {
+                        } else {}
                       }
                     },
                     text: widget.isEdit ? "Edit" : "Add",

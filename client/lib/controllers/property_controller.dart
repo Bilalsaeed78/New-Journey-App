@@ -514,4 +514,42 @@ class PropertyController extends GetxController with LocalStorage {
       toggleLoading();
     }
   }
+
+  // Edit Property
+  Future<void> editRoom(String id) async {
+    try {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+        toggleLoading();
+
+        var url = Uri.parse("${AppStrings.BASE_URL}/room/$id");
+        await http.put(
+          url,
+          body: {
+            'room_number': roomNumberController.text.trim(),
+            'address': propertyAddressController.text.trim(),
+            'overview': overviewController.text.trim(),
+            'rental_price': rentalPriceController.text.trim(),
+            'max_capacity': maxCapacityController.text.trim(),
+            'wifiAvailable': wifiAvailable.toString(),
+            'contact_number': contactController.text.trim(),
+          },
+        );
+        clearLists();
+        await loadData();
+        Get.back();
+        Get.back();
+      }
+    } catch (e) {
+      print(e.toString());
+      Get.snackbar(
+        'Error',
+        'Failed to edit room.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
 }
