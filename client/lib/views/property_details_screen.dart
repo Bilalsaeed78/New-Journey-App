@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
+import 'package:new_journey_app/views/add_property_screen.dart';
 import 'package:new_journey_app/widgets/carousel_slider.dart';
 import 'package:new_journey_app/widgets/custom_button.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -484,7 +485,30 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                           textColor: AppColors.primary,
                           color: AppColors.primary,
                           text: "Edit",
-                          onPressed: () {},
+                          onPressed: () {
+                            if (widget.type == 'room') {
+                              Get.to(AddPropertyScreen(
+                                propertyController: widget.propertyController,
+                                type: 'room',
+                                data: widget.propertyData,
+                                isEdit: true,
+                              ));
+                            } else if (widget.type == 'office') {
+                              Get.to(AddPropertyScreen(
+                                propertyController: widget.propertyController,
+                                type: 'office',
+                                data: widget.propertyData,
+                                isEdit: true,
+                              ));
+                            } else {
+                              Get.to(AddPropertyScreen(
+                                propertyController: widget.propertyController,
+                                type: 'apartment',
+                                data: widget.propertyData,
+                                isEdit: true,
+                              ));
+                            }
+                          },
                           hasInfiniteWidth: true,
                         ),
                       ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
+import 'package:new_journey_app/models/apartment_model.dart';
+import 'package:new_journey_app/models/office_model.dart';
 import 'package:new_journey_app/views/images_viewer_screen.dart';
 import 'package:new_journey_app/views/search_location_screen.dart';
 import 'package:new_journey_app/widgets/custom_text.dart';
@@ -9,15 +11,71 @@ import 'package:new_journey_app/widgets/custom_text_form_field.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/value_manager.dart';
+import '../models/room_model.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/packages/group_radio_buttons/grouped_buttons.dart';
 
-class AddPropertyScreen extends StatelessWidget {
-  const AddPropertyScreen(
-      {super.key, required this.propertyController, required this.type});
+class AddPropertyScreen extends StatefulWidget {
+  const AddPropertyScreen({
+    super.key,
+    required this.propertyController,
+    required this.type,
+    required this.isEdit,
+    this.data,
+  });
 
   final PropertyController propertyController;
   final String type;
+  final bool isEdit;
+  final Map<String, dynamic>? data;
+
+  @override
+  State<AddPropertyScreen> createState() => _AddPropertyScreenState();
+}
+
+class _AddPropertyScreenState extends State<AddPropertyScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      final controller = widget.propertyController;
+      if (widget.type == 'room') {
+        Room room = Room.fromJson(widget.data!);
+        controller.roomNumberController.text = room.roomNumber;
+        controller.propertyAddressController.text = room.address;
+        controller.overviewController.text = room.overview;
+        controller.rentalPriceController.text = room.rentalPrice.toString();
+        controller.maxCapacityController.text = room.maxCapacity.toString();
+        controller.wifiAvailable = room.wifiAvailable;
+        controller.contactController.text = room.contactNumber;
+        controller.maxCapacityController.text = room.maxCapacity.toString();
+      } else if (widget.type == 'office') {
+        Office office = Office.fromJson(widget.data!);
+        controller.officeNumberController.text = office.officeAddress;
+        controller.propertyAddressController.text = office.address;
+        controller.overviewController.text = office.overview!;
+        controller.rentalPriceController.text = office.rentalPrice.toString();
+        controller.maxCapacityController.text = office.maxCapacity.toString();
+        controller.contactController.text = office.contactNumber;
+        controller.wifiAvailable = office.wifiAvailable;
+        controller.acAvailable = office.acAvailable;
+        controller.cabinsController.text = office.cabinsAvailable.toString();
+      } else {
+        Apartment apartment = Apartment.fromJson(widget.data!);
+        controller.apartmentNumberController.text = apartment.apartmentNumber;
+        controller.propertyAddressController.text = apartment.address;
+        controller.overviewController.text = apartment.overview!;
+        controller.rentalPriceController.text =
+            apartment.rentalPrice.toString();
+        controller.maxCapacityController.text =
+            apartment.maxCapacity.toString();
+        controller.contactController.text = apartment.contactNumber;
+        controller.floorController.text = apartment.floor.toString();
+        controller.roomsController.text = apartment.rooms.toString();
+        controller.liftAvailable = apartment.liftAvailable;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +86,9 @@ class AddPropertyScreen extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         iconTheme: const IconThemeData(color: AppColors.secondary),
         title: Txt(
-          text: "Add ${type.capitalizeFirst!}",
+          text: widget.isEdit
+              ? "Edit ${widget.type.capitalizeFirst!}"
+              : "Add ${widget.type.capitalizeFirst!}",
           color: AppColors.secondary,
         ),
       ),
@@ -38,15 +98,15 @@ class AddPropertyScreen extends StatelessWidget {
             horizontal: MarginManager.marginL,
           ),
           child: Form(
-            key: propertyController.formKey,
+            key: widget.propertyController.formKey,
             child: Column(
               children: [
                 const SizedBox(
                   height: 14,
                 ),
-                if (type == 'room')
+                if (widget.type == 'room')
                   CustomTextFormField(
-                    controller: propertyController.roomNumberController,
+                    controller: widget.propertyController.roomNumberController,
                     labelText: "Room Number",
                     hintText: "Room 03/B, Flat ABC",
                     autofocus: false,
@@ -60,9 +120,10 @@ class AddPropertyScreen extends StatelessWidget {
                       return null;
                     },
                   ),
-                if (type == 'apartment')
+                if (widget.type == 'apartment')
                   CustomTextFormField(
-                    controller: propertyController.apartmentNumberController,
+                    controller:
+                        widget.propertyController.apartmentNumberController,
                     labelText: "Apartment Number",
                     hintText: "Flat 03/B, Abc Tower",
                     autofocus: false,
@@ -76,9 +137,10 @@ class AddPropertyScreen extends StatelessWidget {
                       return null;
                     },
                   ),
-                if (type == 'office')
+                if (widget.type == 'office')
                   CustomTextFormField(
-                    controller: propertyController.officeNumberController,
+                    controller:
+                        widget.propertyController.officeNumberController,
                     labelText: "Office Number",
                     hintText: "Office # 201, ABC Tower",
                     autofocus: false,
@@ -96,7 +158,8 @@ class AddPropertyScreen extends StatelessWidget {
                   height: SizeManager.sizeM,
                 ),
                 CustomTextFormField(
-                  controller: propertyController.propertyAddressController,
+                  controller:
+                      widget.propertyController.propertyAddressController,
                   labelText: "Property Address",
                   hintText: "Complete property address",
                   autofocus: false,
@@ -114,7 +177,7 @@ class AddPropertyScreen extends StatelessWidget {
                   height: SizeManager.sizeM,
                 ),
                 CustomTextFormField(
-                  controller: propertyController.overviewController,
+                  controller: widget.propertyController.overviewController,
                   labelText: "Description",
                   autofocus: false,
                   keyboardType: TextInputType.text,
@@ -131,7 +194,7 @@ class AddPropertyScreen extends StatelessWidget {
                   height: SizeManager.sizeM,
                 ),
                 CustomTextFormField(
-                  controller: propertyController.contactController,
+                  controller: widget.propertyController.contactController,
                   labelText: "Contact Number",
                   autofocus: false,
                   keyboardType: TextInputType.number,
@@ -148,7 +211,7 @@ class AddPropertyScreen extends StatelessWidget {
                   height: SizeManager.sizeM,
                 ),
                 CustomTextFormField(
-                  controller: propertyController.rentalPriceController,
+                  controller: widget.propertyController.rentalPriceController,
                   labelText: "Rent per month (PKR)",
                   autofocus: false,
                   keyboardType: TextInputType.number,
@@ -165,7 +228,7 @@ class AddPropertyScreen extends StatelessWidget {
                   height: SizeManager.sizeM,
                 ),
                 CustomTextFormField(
-                  controller: propertyController.maxCapacityController,
+                  controller: widget.propertyController.maxCapacityController,
                   labelText: "Capacity",
                   autofocus: false,
                   keyboardType: TextInputType.number,
@@ -181,7 +244,7 @@ class AddPropertyScreen extends StatelessWidget {
                 const SizedBox(
                   height: SizeManager.sizeM,
                 ),
-                if (type == 'office')
+                if (widget.type == 'office')
                   Column(
                     children: [
                       const SizedBox(
@@ -192,11 +255,11 @@ class AddPropertyScreen extends StatelessWidget {
                         icons: const [Icons.check, Icons.close],
                         onChange: (String label, int index) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.liftAvailable = v;
+                          widget.propertyController.liftAvailable = v;
                         },
                         onSelected: (String label) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.liftAvailable = v;
+                          widget.propertyController.liftAvailable = v;
                         },
                         decoration: InputDecoration(
                           labelText: 'Lift Available',
@@ -225,7 +288,7 @@ class AddPropertyScreen extends StatelessWidget {
                         height: SizeManager.sizeM,
                       ),
                       CustomTextFormField(
-                        controller: propertyController.cabinsController,
+                        controller: widget.propertyController.cabinsController,
                         labelText: "No. of Cabins",
                         autofocus: false,
                         keyboardType: TextInputType.number,
@@ -246,11 +309,11 @@ class AddPropertyScreen extends StatelessWidget {
                         icons: const [Icons.check, Icons.close],
                         onChange: (String label, int index) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.acAvailable = v;
+                          widget.propertyController.acAvailable = v;
                         },
                         onSelected: (String label) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.acAvailable = v;
+                          widget.propertyController.acAvailable = v;
                         },
                         decoration: InputDecoration(
                           labelText: 'AC Available',
@@ -280,7 +343,7 @@ class AddPropertyScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (type == 'room')
+                if (widget.type == 'room')
                   Column(
                     children: [
                       const SizedBox(
@@ -291,11 +354,11 @@ class AddPropertyScreen extends StatelessWidget {
                         icons: const [Icons.check, Icons.close],
                         onChange: (String label, int index) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.wifiAvailable = v;
+                          widget.propertyController.wifiAvailable = v;
                         },
                         onSelected: (String label) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.wifiAvailable = v;
+                          widget.propertyController.wifiAvailable = v;
                         },
                         decoration: InputDecoration(
                           labelText: 'Wifi Available',
@@ -322,11 +385,11 @@ class AddPropertyScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (type == 'apartment')
+                if (widget.type == 'apartment')
                   Column(
                     children: [
                       CustomTextFormField(
-                        controller: propertyController.floorController,
+                        controller: widget.propertyController.floorController,
                         labelText: "Floors",
                         autofocus: false,
                         keyboardType: TextInputType.number,
@@ -343,7 +406,7 @@ class AddPropertyScreen extends StatelessWidget {
                         height: SizeManager.sizeM,
                       ),
                       CustomTextFormField(
-                        controller: propertyController.roomsController,
+                        controller: widget.propertyController.roomsController,
                         labelText: "No. of Rooms",
                         autofocus: false,
                         keyboardType: TextInputType.number,
@@ -364,11 +427,11 @@ class AddPropertyScreen extends StatelessWidget {
                         icons: const [Icons.check, Icons.close],
                         onChange: (String label, int index) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.liftAvailable = v;
+                          widget.propertyController.liftAvailable = v;
                         },
                         onSelected: (String label) {
                           bool v = label == 'Yes' ? true : false;
-                          propertyController.liftAvailable = v;
+                          widget.propertyController.liftAvailable = v;
                         },
                         decoration: InputDecoration(
                           labelText: 'Lift Available',
@@ -401,94 +464,99 @@ class AddPropertyScreen extends StatelessWidget {
                 const SizedBox(
                   height: SizeManager.sizeM,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(ImageViewerScreen(
-                              propertyController: propertyController));
-                        },
-                        child: Container(
-                          height: 80,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                RadiusManager.buttonRadius),
-                            color: AppColors.propertyContainer,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.image,
-                                color: AppColors.secondary,
-                              ),
-                              Txt(
-                                text: "Add ${type.capitalizeFirst!} Images",
-                                color: AppColors.secondary,
-                                fontWeight: FontWeightManager.medium,
-                              ),
-                            ],
+                if (!widget.isEdit)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(ImageViewerScreen(
+                                propertyController: widget.propertyController));
+                          },
+                          child: Container(
+                            height: 80,
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  RadiusManager.buttonRadius),
+                              color: AppColors.propertyContainer,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.image,
+                                  color: AppColors.secondary,
+                                ),
+                                Txt(
+                                  text:
+                                      "Add ${widget.type.capitalizeFirst!} Images",
+                                  color: AppColors.secondary,
+                                  fontWeight: FontWeightManager.medium,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Obx(() {
-                      return propertyController.isImagePicked.isFalse
-                          ? const Icon(
-                              Icons.close_outlined,
-                              color: AppColors.error,
-                            )
-                          : const Icon(
-                              Icons.check_box,
-                              color: AppColors.success,
-                            );
-                    }),
-                  ],
-                ),
+                      Obx(() {
+                        return widget.propertyController.isImagePicked.isFalse
+                            ? const Icon(
+                                Icons.close_outlined,
+                                color: AppColors.error,
+                              )
+                            : const Icon(
+                                Icons.check_box,
+                                color: AppColors.success,
+                              );
+                      }),
+                    ],
+                  ),
                 const SizedBox(
                   height: SizeManager.sizeM,
                 ),
-                InkWell(
-                  onTap: () {
-                    Get.to(SearchLocationScreen(
-                      propertyController: propertyController,
-                    ));
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: AppColors.propertyContainer,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(Icons.map, color: AppColors.secondary),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Txt(
-                          text: propertyController.isLocationPicked.value
-                              ? 'Location Picked'
-                              : 'Pick Location',
-                        ),
-                        const Spacer(),
-                        Obx(() => propertyController.isLocationPicked.value
-                            ? const Icon(Icons.check_box, color: Colors.green)
-                            : const Icon(Icons.dangerous, color: Colors.red)),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                      ],
+                if (!widget.isEdit)
+                  InkWell(
+                    onTap: () {
+                      Get.to(SearchLocationScreen(
+                        propertyController: widget.propertyController,
+                      ));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppColors.propertyContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.map, color: AppColors.secondary),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Txt(
+                            text:
+                                widget.propertyController.isLocationPicked.value
+                                    ? 'Location Picked'
+                                    : 'Pick Location',
+                          ),
+                          const Spacer(),
+                          Obx(() => widget
+                                  .propertyController.isLocationPicked.value
+                              ? const Icon(Icons.check_box, color: Colors.green)
+                              : const Icon(Icons.dangerous, color: Colors.red)),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 const SizedBox(
                   height: SizeManager.sizeL,
                 ),
@@ -496,7 +564,7 @@ class AddPropertyScreen extends StatelessWidget {
                   () => CustomButton(
                     color: AppColors.primary,
                     hasInfiniteWidth: true,
-                    loadingWidget: propertyController.isLoading.value
+                    loadingWidget: widget.propertyController.isLoading.value
                         ? const Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,
@@ -505,15 +573,17 @@ class AddPropertyScreen extends StatelessWidget {
                           )
                         : null,
                     onPressed: () async {
-                      if (type == 'room') {
-                        await propertyController.addRoom();
-                      } else if (type == 'office') {
-                        await propertyController.addOffice();
-                      } else {
-                        await propertyController.addApartment();
+                      if (!widget.isEdit) {
+                        if (widget.type == 'room') {
+                          await widget.propertyController.addRoom();
+                        } else if (widget.type == 'office') {
+                          await widget.propertyController.addOffice();
+                        } else {
+                          await widget.propertyController.addApartment();
+                        }
                       }
                     },
-                    text: "Add",
+                    text: widget.isEdit ? "Edit" : "Add",
                     textColor: AppColors.background,
                     buttonType: ButtonType.loading,
                   ),

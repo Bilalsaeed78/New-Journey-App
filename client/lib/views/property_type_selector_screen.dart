@@ -75,7 +75,10 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                   onPressed: () {
                     propertyController.clearFields();
                     Get.to(AddPropertyScreen(
-                        propertyController: propertyController, type: "room"));
+                      propertyController: propertyController,
+                      type: "room",
+                      isEdit: false,
+                    ));
                   },
                   hasInfiniteWidth: true,
                 ),
@@ -89,8 +92,10 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                   onPressed: () {
                     propertyController.clearFields();
                     Get.to(AddPropertyScreen(
-                        propertyController: propertyController,
-                        type: "office"));
+                      propertyController: propertyController,
+                      type: "office",
+                      isEdit: false,
+                    ));
                   },
                   hasInfiniteWidth: true,
                 ),
@@ -104,8 +109,10 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
                   onPressed: () {
                     propertyController.clearFields();
                     Get.to(AddPropertyScreen(
-                        propertyController: propertyController,
-                        type: "apartment"));
+                      propertyController: propertyController,
+                      type: "apartment",
+                      isEdit: false,
+                    ));
                   },
                   hasInfiniteWidth: true,
                 ),
