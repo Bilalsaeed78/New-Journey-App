@@ -80,7 +80,7 @@ class OwnerDashboard extends StatelessWidget {
                 fontWeight: FontWeightManager.medium,
               ),
             ),
-            const SizedBox(height: SizeManager.sizeXL),
+            const SizedBox(height: SizeManager.sizeL),
             Obx(
               () {
                 if (propertyController.isLoading.value) {
