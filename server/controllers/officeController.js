@@ -111,7 +111,7 @@ exports.deleteOffice = async (req, res) => {
             return;
         }
 
-        await office.remove();
+        await office.deleteOne();
 
         res.status(200).json({ success: true, message: "Office deleted successfully" });
     } catch (error) {

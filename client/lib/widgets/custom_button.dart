@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/font_manager.dart';
 import '../constants/value_manager.dart';
 
 enum ButtonType {

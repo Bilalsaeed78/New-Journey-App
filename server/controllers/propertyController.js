@@ -35,7 +35,8 @@ exports.deleteProperty = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Property not found' });
         }
 
-        await property.remove();
+        await property.deleteOne();
+        
         res.status(200).json({ success: true, message: 'Property deleted successfully' });
     } catch (error) {
         console.error(error.message);

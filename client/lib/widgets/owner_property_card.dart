@@ -71,6 +71,8 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
         Get.to(PropertyDetailsScreem(
           propertyData: propertyData,
           type: widget.property.type,
+          propertyController: widget.propertyController,
+          propertyId: widget.property.id!,
         ));
       },
       child: Container(

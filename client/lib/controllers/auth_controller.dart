@@ -125,7 +125,6 @@ class AuthController extends GetxController with LocalStorage {
         }
       }
     } catch (err) {
-      print(err);
       Get.snackbar(
         'Error registering.',
         err.toString(),

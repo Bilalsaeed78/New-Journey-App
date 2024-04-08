@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/controllers/property_controller.dart';
 import 'package:new_journey_app/widgets/carousel_slider.dart';
 import 'package:new_journey_app/widgets/custom_button.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -12,10 +13,16 @@ import '../widgets/user_profile_dialog.dart';
 
 class PropertyDetailsScreem extends StatefulWidget {
   const PropertyDetailsScreem(
-      {super.key, required this.propertyData, required this.type});
+      {super.key,
+      required this.propertyData,
+      required this.type,
+      required this.propertyController,
+      required this.propertyId});
 
+  final PropertyController propertyController;
   final Map<String, dynamic> propertyData;
   final String type;
+  final String propertyId;
 
   @override
   State<PropertyDetailsScreem> createState() => _PropertyDetailsScreemState();
@@ -399,7 +406,72 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                           textColor: AppColors.secondary,
                           color: AppColors.divider,
                           text: "Delete",
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.dialog(
+                              AlertDialog(
+                                backgroundColor: AppColors.background,
+                                title: const Txt(
+                                  text: "Confirm Delete Property",
+                                  color: Colors.black,
+                                  fontSize: FontSize.textFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                content: const Txt(
+                                  text: "Are you sure you want to delete?",
+                                  color: Colors.black,
+                                  fontSize: FontSize.subTitleFontSize,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Txt(
+                                      text: "Cancel",
+                                      color: Colors.black,
+                                      fontSize: FontSize.subTitleFontSize,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                      AppColors.primary,
+                                    )),
+                                    onPressed: () async {
+                                      if (widget.type == 'room') {
+                                        await widget.propertyController
+                                            .deleteProperty(
+                                                widget.propertyData['_id'],
+                                                'room',
+                                                widget.propertyId);
+                                      } else if (widget.type == 'office') {
+                                        await widget.propertyController
+                                            .deleteProperty(
+                                                widget.propertyData['_id'],
+                                                'office',
+                                                widget.propertyId);
+                                      } else {
+                                        await widget.propertyController
+                                            .deleteProperty(
+                                                widget.propertyData['_id'],
+                                                'apartment',
+                                                widget.propertyId);
+                                      }
+                                    },
+                                    child: const Txt(
+                                      text: "Delete",
+                                      color: Colors.black,
+                                      fontSize: FontSize.subTitleFontSize,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                           hasInfiniteWidth: true,
                         ),
                       ),

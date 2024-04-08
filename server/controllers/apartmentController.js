@@ -110,7 +110,7 @@ exports.deleteApartment = async (req, res) => {
             return;
         }
 
-        await apartment.remove();
+        await apartment.deleteOne();
 
         res.status(200).json({ success: true, message: "Apartment deleted successfully" });
     } catch (error) {

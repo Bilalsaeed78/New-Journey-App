@@ -100,8 +100,7 @@ exports.deleteRoom = async (req, res) => {
             res.status(404).json({ success: false, message: "Room not found" });
             return;
         }
-        
-        await room.remove();
+        await room.deleteOne();
 
         res.status(200).json({ success: true, message: "Room deleted successfully" });
     } catch (error) {

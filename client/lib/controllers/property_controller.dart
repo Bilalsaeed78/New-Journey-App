@@ -81,6 +81,13 @@ class PropertyController extends GetxController with LocalStorage {
     loadData();
   }
 
+  void clearLists() {
+    _myAddedApartments.value.clear();
+    _myAddedOffices.value.clear();
+    _myAddedRooms.value.clear();
+    _myProperties.value.clear();
+  }
+
   Future<void> loadData() async {
     try {
       toggleLoading();
@@ -127,6 +134,40 @@ class PropertyController extends GetxController with LocalStorage {
       Get.snackbar(
         'Error!',
         e.toString(),
+      );
+    }
+  }
+
+  Future<void> deleteProperty(String id, String type, String propertyId) async {
+    try {
+      if (type == 'room') {
+        final roomUrl = Uri.parse("${AppStrings.BASE_URL}/room/$id");
+        await http.delete(roomUrl);
+      } else if (type == 'office') {
+        final officeUrl = Uri.parse("${AppStrings.BASE_URL}/office/$id");
+        await http.delete(officeUrl);
+      } else {
+        final apartmentUrl = Uri.parse("${AppStrings.BASE_URL}/apartment/$id");
+        await http.delete(apartmentUrl);
+      }
+      final propertyUrl =
+          Uri.parse("${AppStrings.BASE_URL}/property/$propertyId");
+      await http.delete(propertyUrl);
+      clearLists();
+      await loadData();
+      Get.back();
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Property deleted successfully.',
+      );
+    } catch (e) {
+      Get.back();
+      Get.snackbar(
+        'Error',
+        'Failed to delete property.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
       );
     }
   }

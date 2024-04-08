@@ -3,29 +3,24 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-// Configure Cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Define the uploads directory path
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
-// Ensure the uploads directory exists, create it if it doesn't
 if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR);
 }
 
-// Configure Multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, UPLOADS_DIR);
     }
 });
 
-// Configure Multer upload settings
 const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 }, 
@@ -39,8 +34,6 @@ const upload = multer({
     }
 });
 
-
-// Middleware to upload files to Cloudinary
 const uploadToCloudinary = (req, res, next) => {
     upload.array('files')(req, res, async (err) => {
         if (err) {

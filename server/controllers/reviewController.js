@@ -60,7 +60,7 @@ exports.deleteReview = async (req, res) => {
             res.status(404).json({ success: false, message: "Review not found" });
             return;
         }
-        await review.remove();
+        await review.deleteOne();
         res.status(200).json({ success: true, message: "Review deleted successfully" });
     } catch (error) {
         console.error(error.message);

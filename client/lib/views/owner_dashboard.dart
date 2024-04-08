@@ -124,16 +124,18 @@ class OwnerDashboard extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: propertyController.myProperties.length,
-                      itemBuilder: (context, index) {
-                        return OwnerPropertyCard(
-                          propertyController: propertyController,
-                          property: propertyController.myProperties[index],
-                        );
-                      },
+                  return Obx(
+                    () => Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: propertyController.myProperties.length,
+                        itemBuilder: (context, index) {
+                          return OwnerPropertyCard(
+                            propertyController: propertyController,
+                            property: propertyController.myProperties[index],
+                          );
+                        },
+                      ),
                     ),
                   );
                 }
