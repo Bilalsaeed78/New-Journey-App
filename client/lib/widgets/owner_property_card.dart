@@ -70,6 +70,7 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
       onTap: () {
         Get.to(PropertyDetailsScreem(
           propertyData: propertyData,
+          type: widget.property.type,
         ));
       },
       child: Container(
@@ -181,7 +182,7 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
                                 ),
                                 Txt(
                                   text:
-                                      "${propertyData['max_capacity']} Person",
+                                      "${propertyData['max_capacity']} Persons",
                                   color: AppColors.secondary,
                                   fontSize: FontSize.subTitleFontSize,
                                   fontWeight: FontWeight.normal,

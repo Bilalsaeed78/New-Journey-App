@@ -40,7 +40,6 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
             carouselController: _controller,
             options: CarouselOptions(
                 enlargeCenterPage: true,
-                aspectRatio: 1.5,
                 enableInfiniteScroll: false,
                 onPageChanged: (index, reason) {
                   setState(() {

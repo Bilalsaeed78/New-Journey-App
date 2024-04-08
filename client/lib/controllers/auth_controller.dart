@@ -60,7 +60,6 @@ class AuthController extends GetxController with LocalStorage {
       final response = await http.get(
         url,
       );
-
       if (response.statusCode == 201) {
         final res = jsonDecode(response.body);
         final user = User.fromJson(res['user']);
