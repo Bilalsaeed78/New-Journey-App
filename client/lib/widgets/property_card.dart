@@ -9,21 +9,23 @@ import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
 import 'custom_text.dart';
 
-class OwnerPropertyCard extends StatefulWidget {
-  const OwnerPropertyCard({
+class PropertyCard extends StatefulWidget {
+  const PropertyCard({
     super.key,
     required this.propertyController,
     required this.property,
+    required this.isGuest,
   });
 
   final PropertyController propertyController;
   final Property property;
+  final bool isGuest;
 
   @override
-  State<OwnerPropertyCard> createState() => _OwnerPropertyCardState();
+  State<PropertyCard> createState() => _PropertyCardState();
 }
 
-class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
+class _PropertyCardState extends State<PropertyCard> {
   late Map<String, dynamic> propertyData;
   bool isLoading = true;
 
@@ -73,6 +75,7 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
           type: widget.property.type,
           propertyController: widget.propertyController,
           propertyId: widget.property.id!,
+          isGuest: widget.isGuest,
         ));
       },
       child: Container(

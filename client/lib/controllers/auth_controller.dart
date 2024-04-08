@@ -39,7 +39,7 @@ class AuthController extends GetxController with LocalStorage {
     if (userType == null || userType.isEmpty) {
       Get.off(const LoginScreen());
     } else {
-      var user = await getCurrentUserInfo();
+      var user = await getCurrentUserInfo(getUserId()!);
       if (userType == "guest") {
         Get.offAll(GuestDashbaord(
           user: user!,
@@ -52,11 +52,10 @@ class AuthController extends GetxController with LocalStorage {
     }
   }
 
-  Future<User?>? getCurrentUserInfo() async {
+  Future<User?>? getCurrentUserInfo(String id) async {
     try {
       toggleLoading();
-      final url =
-          Uri.parse("${AppStrings.BASE_URL}/user/current/${getUserId()}");
+      final url = Uri.parse("${AppStrings.BASE_URL}/user/current/$id");
       final response = await http.get(
         url,
       );

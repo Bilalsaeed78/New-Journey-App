@@ -1,21 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:new_journey_app/models/user_model.dart';
-import 'package:new_journey_app/controllers/auth_controller.dart';
-import 'package:get/get.dart';
-
+import 'package:http/http.dart' as http;
 import '../constants/font_manager.dart';
+import '../constants/string_manager.dart';
 import '../constants/themes/app_colors.dart';
 import 'custom_text.dart';
 
 class UserProfileDialog extends StatelessWidget {
-  UserProfileDialog({Key? key}) : super(key: key);
+  const UserProfileDialog({Key? key, required this.ownerId}) : super(key: key);
 
-  final authController = Get.find<AuthController>();
+  final String ownerId;
+
+  Future<User?>? getCurrentUserInfo(String id) async {
+    final url = Uri.parse("${AppStrings.BASE_URL}/user/current/$id");
+    final response = await http.get(
+      url,
+    );
+    if (response.statusCode == 201) {
+      final res = jsonDecode(response.body);
+      final user = User.fromJson(res['user']);
+      return user;
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User?>(
-      future: authController.getCurrentUserInfo(),
+      future: getCurrentUserInfo(ownerId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

@@ -15,11 +15,9 @@ import '../widgets/guest_drawer.dart';
 import '../widgets/property_card.dart';
 
 class GuestDashbaord extends StatelessWidget {
-  GuestDashbaord({super.key, required this.user});
+  const GuestDashbaord({super.key, required this.user});
 
   final User user;
-
-  final controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +137,11 @@ class GuestDashbaord extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: propertyController.allProperties.length,
                             itemBuilder: (context, index) {
-                              return OwnerPropertyCard(
+                              return PropertyCard(
                                 propertyController: propertyController,
                                 property:
                                     propertyController.allProperties[index],
+                                isGuest: true,
                               );
                             },
                           ),

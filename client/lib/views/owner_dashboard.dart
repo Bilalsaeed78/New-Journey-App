@@ -130,9 +130,10 @@ class OwnerDashboard extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: propertyController.myProperties.length,
                         itemBuilder: (context, index) {
-                          return OwnerPropertyCard(
+                          return PropertyCard(
                             propertyController: propertyController,
                             property: propertyController.myProperties[index],
+                            isGuest: false,
                           );
                         },
                       ),

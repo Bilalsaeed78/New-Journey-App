@@ -18,12 +18,14 @@ class PropertyDetailsScreem extends StatefulWidget {
       required this.propertyData,
       required this.type,
       required this.propertyController,
-      required this.propertyId});
+      required this.propertyId,
+      required this.isGuest});
 
   final PropertyController propertyController;
   final Map<String, dynamic> propertyData;
   final String type;
   final String propertyId;
+  final bool isGuest;
 
   @override
   State<PropertyDetailsScreem> createState() => _PropertyDetailsScreemState();
@@ -133,7 +135,13 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return UserProfileDialog();
+                          String i = widget.isGuest
+                              ? widget.propertyData['owner']
+                              : widget.propertyController.getUserId();
+
+                          return UserProfileDialog(
+                            ownerId: i,
+                          );
                         },
                       );
                     },
@@ -399,121 +407,131 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                   const SizedBox(
                     height: SizeManager.sizeL,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomButton(
-                          buttonType: ButtonType.outline,
-                          textColor: AppColors.secondary,
-                          color: AppColors.divider,
-                          text: "Delete",
-                          onPressed: () {
-                            Get.dialog(
-                              AlertDialog(
-                                backgroundColor: AppColors.background,
-                                title: const Txt(
-                                  text: "Confirm Delete Property",
-                                  color: Colors.black,
-                                  fontSize: FontSize.textFontSize,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                content: const Txt(
-                                  text: "Are you sure you want to delete?",
-                                  color: Colors.black,
-                                  fontSize: FontSize.subTitleFontSize,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    child: const Txt(
-                                      text: "Cancel",
-                                      color: Colors.black,
-                                      fontSize: FontSize.subTitleFontSize,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                  if (!widget.isGuest)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            buttonType: ButtonType.outline,
+                            textColor: AppColors.secondary,
+                            color: AppColors.divider,
+                            text: "Delete",
+                            onPressed: () {
+                              Get.dialog(
+                                AlertDialog(
+                                  backgroundColor: AppColors.background,
+                                  title: const Txt(
+                                    text: "Confirm Delete Property",
+                                    color: Colors.black,
+                                    fontSize: FontSize.textFontSize,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                      AppColors.primary,
-                                    )),
-                                    onPressed: () async {
-                                      if (widget.type == 'room') {
-                                        await widget.propertyController
-                                            .deleteProperty(
-                                                widget.propertyData['_id'],
-                                                'room',
-                                                widget.propertyId);
-                                      } else if (widget.type == 'office') {
-                                        await widget.propertyController
-                                            .deleteProperty(
-                                                widget.propertyData['_id'],
-                                                'office',
-                                                widget.propertyId);
-                                      } else {
-                                        await widget.propertyController
-                                            .deleteProperty(
-                                                widget.propertyData['_id'],
-                                                'apartment',
-                                                widget.propertyId);
-                                      }
-                                    },
-                                    child: const Txt(
-                                      text: "Delete",
-                                      color: Colors.black,
-                                      fontSize: FontSize.subTitleFontSize,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                  content: const Txt(
+                                    text: "Are you sure you want to delete?",
+                                    color: Colors.black,
+                                    fontSize: FontSize.subTitleFontSize,
+                                    fontWeight: FontWeight.normal,
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                          hasInfiniteWidth: true,
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      child: const Txt(
+                                        text: "Cancel",
+                                        color: Colors.black,
+                                        fontSize: FontSize.subTitleFontSize,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                        AppColors.primary,
+                                      )),
+                                      onPressed: () async {
+                                        if (widget.type == 'room') {
+                                          await widget.propertyController
+                                              .deleteProperty(
+                                                  widget.propertyData['_id'],
+                                                  'room',
+                                                  widget.propertyId);
+                                        } else if (widget.type == 'office') {
+                                          await widget.propertyController
+                                              .deleteProperty(
+                                                  widget.propertyData['_id'],
+                                                  'office',
+                                                  widget.propertyId);
+                                        } else {
+                                          await widget.propertyController
+                                              .deleteProperty(
+                                                  widget.propertyData['_id'],
+                                                  'apartment',
+                                                  widget.propertyId);
+                                        }
+                                      },
+                                      child: const Txt(
+                                        text: "Delete",
+                                        color: Colors.black,
+                                        fontSize: FontSize.subTitleFontSize,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            hasInfiniteWidth: true,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: SizeManager.sizeL,
-                      ),
-                      Expanded(
-                        child: CustomButton(
-                          buttonType: ButtonType.outline,
-                          textColor: AppColors.primary,
-                          color: AppColors.primary,
-                          text: "Edit",
-                          onPressed: () {
-                            if (widget.type == 'room') {
-                              Get.to(AddPropertyScreen(
-                                propertyController: widget.propertyController,
-                                type: 'room',
-                                data: widget.propertyData,
-                                isEdit: true,
-                              ));
-                            } else if (widget.type == 'office') {
-                              Get.to(AddPropertyScreen(
-                                propertyController: widget.propertyController,
-                                type: 'office',
-                                data: widget.propertyData,
-                                isEdit: true,
-                              ));
-                            } else {
-                              Get.to(AddPropertyScreen(
-                                propertyController: widget.propertyController,
-                                type: 'apartment',
-                                data: widget.propertyData,
-                                isEdit: true,
-                              ));
-                            }
-                          },
-                          hasInfiniteWidth: true,
+                        const SizedBox(
+                          width: SizeManager.sizeL,
                         ),
-                      ),
-                    ],
-                  ),
+                        Expanded(
+                          child: CustomButton(
+                            buttonType: ButtonType.outline,
+                            textColor: AppColors.primary,
+                            color: AppColors.primary,
+                            text: "Edit",
+                            onPressed: () {
+                              if (widget.type == 'room') {
+                                Get.to(AddPropertyScreen(
+                                  propertyController: widget.propertyController,
+                                  type: 'room',
+                                  data: widget.propertyData,
+                                  isEdit: true,
+                                ));
+                              } else if (widget.type == 'office') {
+                                Get.to(AddPropertyScreen(
+                                  propertyController: widget.propertyController,
+                                  type: 'office',
+                                  data: widget.propertyData,
+                                  isEdit: true,
+                                ));
+                              } else {
+                                Get.to(AddPropertyScreen(
+                                  propertyController: widget.propertyController,
+                                  type: 'apartment',
+                                  data: widget.propertyData,
+                                  isEdit: true,
+                                ));
+                              }
+                            },
+                            hasInfiniteWidth: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (widget.isGuest)
+                    CustomButton(
+                      buttonType: ButtonType.text,
+                      textColor: AppColors.secondary,
+                      color: AppColors.primary,
+                      text: "Request for accomodation",
+                      onPressed: () {},
+                      hasInfiniteWidth: true,
+                    ),
                   const SizedBox(
                     height: SizeManager.sizeL,
                   ),
