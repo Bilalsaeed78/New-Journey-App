@@ -151,6 +151,7 @@ class _OwnerPropertyCardState extends State<OwnerPropertyCard> {
                               ),
                             ),
                             Chip(
+                              side: BorderSide.none,
                               backgroundColor: AppColors.primaryLight,
                               labelPadding: const EdgeInsets.all(0),
                               label: Txt(

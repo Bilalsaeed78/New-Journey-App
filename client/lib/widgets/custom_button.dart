@@ -48,8 +48,8 @@ class CustomButton extends StatelessWidget {
     TextStyle textStyle = Theme.of(context).textTheme.subtitle1!.copyWith(
           color: textColor,
           fontWeight: FontWeight.w600,
-          letterSpacing: 1.5,
-          fontSize: FontSize.textFontSize,
+          letterSpacing: 1,
+          fontSize: 14,
           fontFamily: "Work Sans",
         );
     switch (buttonType) {

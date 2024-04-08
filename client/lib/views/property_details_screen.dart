@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/widgets/carousel_slider.dart';
 import 'package:new_journey_app/widgets/custom_button.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
@@ -111,6 +112,24 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       fontSize: FontSize.subTitleFontSize - 2,
                       fontWeight: FontWeight.normal,
                     ),
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeM,
+                  ),
+                  CustomButton(
+                    buttonType: ButtonType.outline,
+                    textColor: AppColors.secondary,
+                    color: AppColors.background,
+                    text: "See Owner Details",
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return UserProfileDialog();
+                        },
+                      );
+                    },
+                    hasInfiniteWidth: true,
                   ),
                   const SizedBox(
                     height: SizeManager.sizeM,
@@ -347,22 +366,60 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                     ],
                   ),
                   const SizedBox(
-                    height: SizeManager.sizeM,
+                    height: SizeManager.sizeL,
                   ),
                   CustomButton(
-                    buttonType: ButtonType.outline,
+                    buttonType: ButtonType.textWithImage,
                     textColor: AppColors.secondary,
-                    color: AppColors.background,
-                    text: "See Owner Details",
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return UserProfileDialog();
-                        },
+                    color: AppColors.divider,
+                    text: "Show location on map",
+                    image: const Icon(
+                      Icons.pin_drop,
+                      color: AppColors.secondary,
+                    ),
+                    onPressed: () async {
+                      final availableMaps = await MapLauncher.installedMaps;
+                      var coords =
+                          widget.propertyData['location']['coordinates'];
+                      await availableMaps.first.showMarker(
+                        coords: Coords(coords[1], coords[0]),
+                        title: widget.propertyData['address'],
                       );
                     },
                     hasInfiniteWidth: true,
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeL,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          buttonType: ButtonType.outline,
+                          textColor: AppColors.secondary,
+                          color: AppColors.divider,
+                          text: "Delete",
+                          onPressed: () {},
+                          hasInfiniteWidth: true,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: SizeManager.sizeL,
+                      ),
+                      Expanded(
+                        child: CustomButton(
+                          buttonType: ButtonType.outline,
+                          textColor: AppColors.primary,
+                          color: AppColors.primary,
+                          text: "Edit",
+                          onPressed: () {},
+                          hasInfiniteWidth: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: SizeManager.sizeL,
                   ),
                 ],
               ),
