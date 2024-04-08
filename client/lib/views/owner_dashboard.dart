@@ -11,7 +11,7 @@ import '../controllers/auth_controller.dart';
 import '../models/user_model.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/owner_drawer.dart';
-import '../widgets/owner_property_card.dart';
+import '../widgets/property_card.dart';
 
 class OwnerDashboard extends StatelessWidget {
   const OwnerDashboard({Key? key, required this.user}) : super(key: key);

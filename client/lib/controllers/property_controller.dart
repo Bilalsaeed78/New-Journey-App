@@ -45,6 +45,9 @@ class PropertyController extends GetxController with LocalStorage {
   final Rx<List<Apartment>> _myAddedApartments = Rx<List<Apartment>>([]);
   List<Apartment> get myAddedApartments => _myAddedApartments.value;
 
+  final Rx<List<Property>> _allProperties = Rx<List<Property>>([]);
+  List<Property> get allProperties => _allProperties.value;
+
   final Rx<List<Property>> _myProperties = Rx<List<Property>>([]);
   List<Property> get myProperties => _myProperties.value;
 
@@ -86,13 +89,13 @@ class PropertyController extends GetxController with LocalStorage {
     _myAddedOffices.value.clear();
     _myAddedRooms.value.clear();
     _myProperties.value.clear();
+    _allProperties.value.clear();
   }
 
   Future<void> loadData() async {
     try {
       toggleLoading();
-      final url =
-          Uri.parse("${AppStrings.BASE_URL}/property/owner/${getUserId()}");
+      final url = Uri.parse("${AppStrings.BASE_URL}/property");
       final resp = await http.get(url);
 
       final jsonResponse = jsonDecode(resp.body);
@@ -102,7 +105,12 @@ class PropertyController extends GetxController with LocalStorage {
           .map((propertyJson) => Property.fromJson(propertyJson))
           .toList();
 
-      _myProperties.value.addAll(properties);
+      _allProperties.value.addAll(properties);
+      for (int i = 0; i < properties.length; i++) {
+        if (properties[i].ownerId == getUserId()) {
+          _myProperties.value.add(properties[i]);
+        }
+      }
 
       for (Property property in properties) {
         if (property.type == 'room') {
@@ -128,13 +136,14 @@ class PropertyController extends GetxController with LocalStorage {
           _myAddedApartments.value.add(apartment);
         }
       }
-      toggleLoading();
     } catch (e) {
-      toggleLoading();
+      print(e.toString());
       Get.snackbar(
         'Error!',
         e.toString(),
       );
+    } finally {
+      toggleLoading();
     }
   }
 
