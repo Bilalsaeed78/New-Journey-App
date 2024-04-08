@@ -48,7 +48,51 @@ class OwnerDrawer extends StatelessWidget {
             }),
             buildDrawerTile("History", Icons.history, () {}),
             buildDrawerTile("Logout", Icons.logout, () {
-              controller.logout();
+              Get.dialog(
+                AlertDialog(
+                  backgroundColor: AppColors.background,
+                  title: const Txt(
+                    text: "Confirm Logout",
+                    color: Colors.black,
+                    fontSize: FontSize.textFontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  content: const Txt(
+                    text: "Are you sure you want to logout?",
+                    color: Colors.black,
+                    fontSize: FontSize.subTitleFontSize,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Txt(
+                        text: "No",
+                        color: Colors.black,
+                        fontSize: FontSize.subTitleFontSize,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                        AppColors.primary,
+                      )),
+                      onPressed: () {
+                        controller.logout();
+                      },
+                      child: const Txt(
+                        text: "Yes",
+                        color: Colors.black,
+                        fontSize: FontSize.subTitleFontSize,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              );
             }),
           ],
         ),
