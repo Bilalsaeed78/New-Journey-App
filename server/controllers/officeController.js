@@ -67,8 +67,7 @@ exports.getOfficeById = async (req, res) => {
 
 exports.updateOffice = async (req, res) => {
     try {
-        const { office_address, address, overview,rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number, owner } = req.body;
-        const location = JSON.parse(req.body.location).coordinates;
+        const { office_address, address, overview,rental_price, wifiAvailable, acAvailable, cabinsAvailable, max_capacity, contact_number } = req.body;
 
         let office = await Office.findById(req.params.id);
         if (!office) {
@@ -85,14 +84,6 @@ exports.updateOffice = async (req, res) => {
         office.cabinsAvailable = cabinsAvailable || office.cabinsAvailable;
         office.max_capacity = max_capacity || office.max_capacity;
         office.contact_number = contact_number || office.contact_number;
-        office.location = { 
-            type: "Point",
-            coordinates: location
-        };
-        office.owner = owner || office.owner;
-
-        const images = req.uploadedImages.map(image => image.url);
-        office.images = images;
 
         await office.save();
 

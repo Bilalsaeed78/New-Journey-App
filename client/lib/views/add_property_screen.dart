@@ -588,7 +588,12 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           await widget.propertyController
                               .editRoom(widget.data!['_id']);
                         } else if (widget.type == 'office') {
-                        } else {}
+                          await widget.propertyController
+                              .editOFfice(widget.data!['_id']);
+                        } else {
+                          await widget.propertyController
+                              .editApartment(widget.data!['_id']);
+                        }
                       }
                     },
                     text: widget.isEdit ? "Edit" : "Add",

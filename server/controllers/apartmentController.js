@@ -41,9 +41,9 @@ exports.createApartment = async (req, res) => {
 
 exports.updateApartment = async (req, res) => {
     try {
-        const { apartment_number, address, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, location, owner, images } = req.body;
+        const { apartment_number, address, overview, rental_price, floor, rooms, max_capacity, liftAvailable, contact_number, images } = req.body;
 
-        if (!apartment_number || !address || !rental_price || !floor || !rooms || !max_capacity || !contact_number || !location || !owner) {
+        if (!apartment_number || !address || !rental_price || !floor || !rooms || !max_capacity || !contact_number ) {
             return res.status(400).json({ success: false, message: "All required fields must be provided"});
         }
 
@@ -53,7 +53,6 @@ exports.updateApartment = async (req, res) => {
             return;
         }
 
-        const newLocation = JSON.parse(location).coordinates;
 
         apartment.apartment_number = apartment_number;
         apartment.overview = overview;
@@ -64,12 +63,6 @@ exports.updateApartment = async (req, res) => {
         apartment.max_capacity = max_capacity;
         apartment.liftAvailable = liftAvailable;
         apartment.contact_number = contact_number;
-        apartment.location = { 
-            type: "Point",
-            coordinates: newLocation
-        };
-        apartment.owner = owner;
-        apartment.images = images;
 
         await apartment.save();
 

@@ -541,10 +541,85 @@ class PropertyController extends GetxController with LocalStorage {
         Get.back();
       }
     } catch (e) {
-      print(e.toString());
       Get.snackbar(
         'Error',
         'Failed to edit room.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
+
+  Future<void> editOFfice(String id) async {
+    try {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+        toggleLoading();
+
+        var url = Uri.parse("${AppStrings.BASE_URL}/office/$id");
+        await http.put(
+          url,
+          body: {
+            'office_address': officeNumberController.text.trim(),
+            'address': propertyAddressController.text.trim(),
+            'overview': overviewController.text.trim(),
+            'rental_price': rentalPriceController.text.trim(),
+            'cabinsAvailable': cabinsController.text.trim(),
+            'max_capacity': maxCapacityController.text.trim(),
+            'wifiAvailable': wifiAvailable.toString(),
+            'acAvailable': acAvailable.toString(),
+            'contact_number': contactController.text.trim(),
+          },
+        );
+        clearLists();
+        await loadData();
+        Get.back();
+        Get.back();
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to edit office.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
+
+  Future<void> editApartment(String id) async {
+    try {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+        toggleLoading();
+
+        var url = Uri.parse("${AppStrings.BASE_URL}/apartment/$id");
+        await http.put(
+          url,
+          body: {
+            'apartment_number': apartmentNumberController.text.trim(),
+            'address': propertyAddressController.text.trim(),
+            'overview': overviewController.text.trim(),
+            'rental_price': rentalPriceController.text.trim(),
+            'floor': floorController.text.trim(),
+            'rooms': roomsController.text.trim(),
+            'max_capacity': maxCapacityController.text.trim(),
+            'liftAvailable': liftAvailable.toString(),
+            'contact_number': contactController.text.trim(),
+          },
+        );
+        clearLists();
+        await loadData();
+        Get.back();
+        Get.back();
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to edit apartment.',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
