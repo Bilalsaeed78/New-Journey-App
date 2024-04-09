@@ -7,6 +7,7 @@ const apartmentRoutes = require('../routes/apartmentRoutes');
 const roomRoutes = require('../routes/roomRoutes');
 const bookingRoutes = require('../routes/bookingRoutes');
 const reviewRoutes = require('../routes/reviewRoutes');
+const locationFilterRoutes = require('../routes/locationFilterRoutes');
 
 module.exports = function (app){
     app.use(express.json());
@@ -17,4 +18,5 @@ module.exports = function (app){
     app.use("/api/room", roomRoutes);
     app.use("/api/booking", bookingRoutes);
     app.use("/api/review", reviewRoutes);
+    app.use("/api/filter", locationFilterRoutes);
 }

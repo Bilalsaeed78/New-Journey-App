@@ -1,0 +1,84 @@
+const Property = require('../models/propertyModel');
+const Room = require('../models/roomModel');
+const Apartment = require('../models/apartmentModel');
+const Office = require('../models/officeModel');
+const Geopoint = require('geopoint');
+
+const categorizeProperties = (properties) => {
+    const roomList = [];
+    const officeList = [];
+    const apartmentList = [];
+
+    properties.forEach(property => {
+        switch (property.type) {
+            case 'room':
+                roomList.push(property);
+                break;
+            case 'office':
+                officeList.push(property);
+                break;
+            case 'apartment':
+                apartmentList.push(property);
+                break;
+            default:
+                break;
+        }
+    });
+
+    return { roomList, officeList, apartmentList };
+};
+
+const filterPropertiesByDistance = async (req, res) => {
+    try {
+        const { location } = req.body;
+        if (!location) {
+            return res.status(400).json({ success: false, message: "Location must be provided"});
+        }
+
+        const coordinates = location.coordinates;
+        
+        const propertyList = [];
+
+        const maxDistance = 30; 
+        const properties = await Property.find();
+
+        for (const property of properties) {
+            let propertyDetails;
+
+            switch (property.type) {
+                case 'room':
+                    propertyDetails = await Room.findById(property.propertyId);
+                    break;
+                case 'office':
+                    propertyDetails = await Office.findById(property.propertyId);
+                    break;
+                case 'apartment':
+                    propertyDetails = await Apartment.findById(property.propertyId);
+                    break;
+                default:
+                    break;
+            }
+
+            if (propertyDetails) {
+                const point1 = new Geopoint(propertyDetails.location.coordinates[1], propertyDetails.location.coordinates[0]);
+                const point2 = new Geopoint(coordinates[1], coordinates[0]);
+                const distance = point1.distanceTo(point2, true);
+                
+                if (distance <= maxDistance) {
+                    propertyList.push(property);
+                }
+            }
+        }
+        
+        const categorizedProperties = categorizeProperties(propertyList);
+
+        return res.status(200).json({ success: true, categorizedProperties, propertyList });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Failed to filter properties by distance' });
+    }
+};
+
+module.exports = {
+    filterPropertiesByDistance
+};

@@ -305,7 +305,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                             ),
                             Txt(
                               text: widget.propertyData['acAvailable']
-                                  ? "ACAvailable"
+                                  ? "AC Available"
                                   : "AC Not Available",
                               color: AppColors.secondary,
                               fontSize: FontSize.subTitleFontSize,
