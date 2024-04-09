@@ -52,7 +52,8 @@ class GuestDashbaord extends StatelessWidget {
         ],
       ),
       body: Obx(() {
-        if (authController.isLoading.value) {
+        if (authController.isLoading.value ||
+            searchController.isLoading.value) {
           return const Expanded(
             child: Center(
               child: CircularProgressIndicator(
@@ -196,27 +197,20 @@ class GuestDashbaord extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                         ),
-                                        child: Row(
+                                        child: const Row(
                                           children: [
-                                            const SizedBox(
+                                            SizedBox(
                                               width: 10,
                                             ),
-                                            const Icon(Icons.map,
+                                            Icon(Icons.map,
                                                 color: AppColors.secondary),
-                                            const SizedBox(
+                                            SizedBox(
                                               width: 12,
                                             ),
-                                            const Txt(
+                                            Txt(
                                               text: 'Pick Location',
                                             ),
-                                            const Spacer(),
-                                            Obx(() => searchController
-                                                    .isLocationPicked.value
-                                                ? const Icon(Icons.check_box,
-                                                    color: Colors.green)
-                                                : const Icon(Icons.dangerous,
-                                                    color: Colors.red)),
-                                            const SizedBox(
+                                            SizedBox(
                                               width: 6,
                                             ),
                                           ],
@@ -234,8 +228,12 @@ class GuestDashbaord extends StatelessWidget {
                                             textColor: AppColors.secondary,
                                             color: AppColors.divider,
                                             text: "Clear",
-                                            onPressed: () {
+                                            onPressed: () async {
                                               searchController.clearFields();
+                                              propertyController.clearFields();
+                                              propertyController.clearLists();
+                                              await propertyController
+                                                  .loadData();
                                               Get.back();
                                             },
                                             hasInfiniteWidth: true,
@@ -250,11 +248,11 @@ class GuestDashbaord extends StatelessWidget {
                                             textColor: AppColors.primary,
                                             color: AppColors.primary,
                                             text: "Apply",
-                                            onPressed: () {
-                                              searchController.searchOnFilters(
-                                                  propertyController.location,
-                                                  propertyController
-                                                      .allProperties);
+                                            onPressed: () async {
+                                              await searchController
+                                                  .searchOnFilters(
+                                                propertyController,
+                                              );
                                             },
                                             hasInfiniteWidth: true,
                                           ),
@@ -273,7 +271,8 @@ class GuestDashbaord extends StatelessWidget {
                 ),
                 Obx(
                   () {
-                    if (propertyController.isLoading.value) {
+                    if (propertyController.isLoading.value ||
+                        searchController.isLoading.value) {
                       return const Expanded(
                         child: Center(
                           child: CircularProgressIndicator(
@@ -311,6 +310,21 @@ class GuestDashbaord extends StatelessWidget {
                               ],
                             ),
                           ),
+                        ),
+                      );
+                    } else if (searchController.isFilterApplied.value) {
+                      return Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: searchController.searchedProperties.length,
+                          itemBuilder: (context, index) {
+                            return PropertyCard(
+                              propertyController: propertyController,
+                              property:
+                                  searchController.searchedProperties[index],
+                              isGuest: true,
+                            );
+                          },
                         ),
                       );
                     } else {

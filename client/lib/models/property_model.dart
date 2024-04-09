@@ -13,7 +13,7 @@ class Property {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': '',
+      'id': id!.isEmpty ? '' : "",
       'propertyId': propertyId,
       'type': type,
       'ownerId': ownerId,

@@ -61,7 +61,7 @@ const filterPropertiesByDistance = async (req, res) => {
 
             if (propertyDetails) {
                 const point1 = new Geopoint(propertyDetails.location.coordinates[1], propertyDetails.location.coordinates[0]);
-                const point2 = new Geopoint(coordinates[1], coordinates[0]);
+                const point2 = new Geopoint(coordinates[0], coordinates[1]);
                 const distance = point1.distanceTo(point2, true);
                 
                 if (distance <= maxDistance) {
