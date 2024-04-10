@@ -20,12 +20,14 @@ class SearchFilterController extends GetxController {
   final searchTextController = TextEditingController();
   final maxRent = TextEditingController();
 
+  RxBool isLocationFilterApplied = false.obs;
   RxBool isRentFilterApplied = false.obs;
   RxBool isFilterApplied = false.obs;
 
   void clearFields() {
     searchTextController.clear();
     isFilterApplied.value = false;
+    isLocationFilterApplied.value = false;
     isRentFilterApplied.value = false;
     maxRent.clear();
     _searchedProperties.value = [];
@@ -48,6 +50,7 @@ class SearchFilterController extends GetxController {
       isFilterApplied.value = true;
       _searchedProperties.value.clear();
       if (controller.location.isNotEmpty && maxRent.text.isEmpty) {
+        isLocationFilterApplied.value = true;
         final url = Uri.parse("${AppStrings.BASE_URL}/filter/location");
         final response = await http.post(
           url,
@@ -113,6 +116,7 @@ class SearchFilterController extends GetxController {
       }
 
       if (controller.location.isNotEmpty && maxRent.text.isNotEmpty) {
+        isLocationFilterApplied.value = true;
         final url = Uri.parse("${AppStrings.BASE_URL}/filter/location");
         final response = await http.post(
           url,
@@ -164,9 +168,10 @@ class SearchFilterController extends GetxController {
           }
         }
       }
-
+      _searchedProperties.refresh();
       Get.back();
     } catch (e) {
+      isLocationFilterApplied.value = false;
       isFilterApplied.value = false;
       Get.snackbar(
         'Error!',

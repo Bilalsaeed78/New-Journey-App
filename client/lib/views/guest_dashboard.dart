@@ -320,6 +320,10 @@ class GuestDashbaord extends StatelessWidget {
                               property:
                                   searchController.searchedProperties[index],
                               isGuest: true,
+                              isLocationFilterApplied: searchController
+                                      .isLocationFilterApplied.isTrue
+                                  ? true
+                                  : false,
                             );
                           },
                         ),
@@ -336,6 +340,7 @@ class GuestDashbaord extends StatelessWidget {
                                 property:
                                     propertyController.allProperties[index],
                                 isGuest: true,
+                                isLocationFilterApplied: false,
                               );
                             },
                           ),

@@ -15,11 +15,13 @@ class PropertyCard extends StatefulWidget {
     required this.propertyController,
     required this.property,
     required this.isGuest,
+    this.isLocationFilterApplied,
   });
 
   final PropertyController propertyController;
   final Property property;
   final bool isGuest;
+  final bool? isLocationFilterApplied;
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -99,13 +101,34 @@ class _PropertyCardState extends State<PropertyCard> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 180,
-                    width: double.infinity,
-                    child: Image.network(
-                      propertyData['images'][0],
-                      fit: BoxFit.fitWidth,
-                    ),
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 180,
+                        width: double.infinity,
+                        child: Image.network(
+                          propertyData['images'][0],
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                      if (widget.isLocationFilterApplied!)
+                        Positioned(
+                          right: 5,
+                          top: 5,
+                          child: Chip(
+                            side: BorderSide.none,
+                            backgroundColor: AppColors.background,
+                            labelPadding: const EdgeInsets.all(0),
+                            label: Txt(
+                              text:
+                                  "${widget.property.distance!.toStringAsFixed(2)} KM Away",
+                              color: AppColors.secondary,
+                              useOverflow: true,
+                              fontSize: FontSize.subTitleFontSize,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(
