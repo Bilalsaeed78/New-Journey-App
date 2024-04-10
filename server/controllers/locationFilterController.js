@@ -39,7 +39,7 @@ const filterPropertiesByDistance = async (req, res) => {
         
         const propertyList = [];
 
-        const maxDistance = 30; 
+        const maxDistance = 10; 
         const properties = await Property.find();
 
         for (const property of properties) {
@@ -65,13 +65,11 @@ const filterPropertiesByDistance = async (req, res) => {
                 const distance = point1.distanceTo(point2, true);
                 
                 if (distance <= maxDistance) {
-                    propertyList.push(property);
+                    propertyList.push({ property: property, distance: distance });
                 }
             }
         }
         
-        // const categorizedProperties = categorizeProperties(propertyList);
-
         return res.status(200).json({ success: true, propertyList });
     } catch (error) {
         console.error(error);

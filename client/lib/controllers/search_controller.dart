@@ -56,14 +56,16 @@ class SearchFilterController extends GetxController {
             "location": {"coordinates": controller.location}
           }),
         );
-
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
-          List<Property> filteredProperties =
-              (responseData['propertyList'] as List)
-                  .map((propertyJson) => Property.fromJson(propertyJson))
-                  .toList();
-          _searchedProperties.value.addAll(filteredProperties);
+          final propertyList = responseData['propertyList'];
+
+          for (var propertyData in propertyList) {
+            final distance = propertyData['distance'];
+            Property property = Property.fromJson(propertyData['property']);
+            property.distance = distance;
+            _searchedProperties.value.add(property);
+          }
         }
       }
 
@@ -122,13 +124,13 @@ class SearchFilterController extends GetxController {
 
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
-          List<Property> filteredProperties =
-              (responseData['propertyList'] as List)
-                  .map((propertyJson) => Property.fromJson(propertyJson))
-                  .toList();
+          final propertyList = responseData['propertyList'];
 
           double maxRentValue = double.parse(maxRent.text);
-          for (var property in filteredProperties) {
+          for (var propertyData in propertyList) {
+            final distance = propertyData['distance'];
+            Property property = Property.fromJson(propertyData['property']);
+            property.distance = distance;
             if (property.type == 'room') {
               final roomUrl = Uri.parse(
                   "${AppStrings.BASE_URL}/room/${property.propertyId}");
@@ -152,7 +154,9 @@ class SearchFilterController extends GetxController {
                   "${AppStrings.BASE_URL}/apartment/${property.propertyId}");
               final apartmentResp = await http.get(apartmentUrl);
               final apartmentJson = jsonDecode(apartmentResp.body)['apartment'];
-              final apartment = Apartment.fromJson(apartmentJson);
+              final apartment = Apartment.fromJson(
+                apartmentJson,
+              );
               if (apartment.rentalPrice <= maxRentValue) {
                 _searchedProperties.value.add(property);
               }
@@ -160,6 +164,7 @@ class SearchFilterController extends GetxController {
           }
         }
       }
+
       Get.back();
     } catch (e) {
       isFilterApplied.value = false;
