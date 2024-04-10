@@ -137,7 +137,6 @@ class PropertyController extends GetxController with LocalStorage {
         }
       }
     } catch (e) {
-      print(e.toString());
       Get.snackbar(
         'Error!',
         e.toString(),

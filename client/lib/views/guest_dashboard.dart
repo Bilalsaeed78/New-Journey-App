@@ -12,6 +12,7 @@ import '../models/user_model.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_search_filter.dart';
 import '../widgets/custom_text.dart';
+import '../widgets/custom_text_form_field.dart';
 import '../widgets/guest_drawer.dart';
 import '../widgets/property_card.dart';
 import 'search_location_screen.dart';
@@ -52,8 +53,7 @@ class GuestDashbaord extends StatelessWidget {
         ],
       ),
       body: Obx(() {
-        if (authController.isLoading.value ||
-            searchController.isLoading.value) {
+        if (authController.isLoading.value) {
           return const Expanded(
             child: Center(
               child: CircularProgressIndicator(
@@ -143,41 +143,24 @@ class GuestDashbaord extends StatelessWidget {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    const SizedBox(
-                                      width: double.infinity,
-                                      child: Txt(
-                                        text: "Rent Price",
-                                        fontSize: FontSize.subTitleFontSize,
-                                        color: Colors.black,
-                                        fontWeight: FontWeightManager.medium,
-                                      ),
-                                    ),
-                                    Obx(
-                                      () => RangeSlider(
-                                        activeColor: AppColors.primary,
-                                        inactiveColor:
-                                            AppColors.propertyContainer,
-                                        values: RangeValues(
-                                          searchController.min.value.clamp(
-                                              0.0, searchController.max.value),
-                                          searchController.max.value.clamp(
-                                              searchController.min.value,
-                                              500000.0),
-                                        ),
-                                        min: 0,
-                                        max: 500000,
-                                        onChanged: (RangeValues values) {
-                                          searchController.min.value =
-                                              values.start;
-                                          searchController.max.value =
-                                              values.end;
-                                        },
-                                        labels: RangeLabels(
-                                          '${searchController.min.value.toStringAsFixed(0)} PKR',
-                                          '${searchController.max.value.toStringAsFixed(0)} PKR',
-                                        ),
-                                        divisions: 100,
-                                      ),
+                                    CustomTextFormField(
+                                      controller: searchController.maxRent,
+                                      labelText: "Max Rent (PKR)",
+                                      hintText:
+                                          "Input max rent you can go for.",
+                                      autofocus: false,
+                                      keyboardType: TextInputType.number,
+                                      textInputAction: TextInputAction.next,
+                                      prefixIconData: Icons.attach_money,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return "Please enter a value for max rent.";
+                                        }
+                                        if (double.parse(value) < 500.0) {
+                                          return "Max rent must be greater or equal to 500 PKR.";
+                                        }
+                                        return null;
+                                      },
                                     ),
                                     const SizedBox(
                                       height: SizeManager.sizeL,
@@ -197,20 +180,30 @@ class GuestDashbaord extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(4),
                                         ),
-                                        child: const Row(
+                                        child: Row(
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
-                                            Icon(Icons.map,
+                                            const Icon(Icons.map,
                                                 color: AppColors.secondary),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 12,
                                             ),
-                                            Txt(
+                                            const Txt(
                                               text: 'Pick Location',
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
+                                              width: 6,
+                                            ),
+                                            const Spacer(),
+                                            Obx(() => propertyController
+                                                    .isLocationPicked.value
+                                                ? const Icon(Icons.check_box,
+                                                    color: Colors.green)
+                                                : const Icon(Icons.dangerous,
+                                                    color: Colors.red)),
+                                            const SizedBox(
                                               width: 6,
                                             ),
                                           ],
@@ -234,6 +227,11 @@ class GuestDashbaord extends StatelessWidget {
                                               propertyController.clearLists();
                                               await propertyController
                                                   .loadData();
+                                              propertyController
+                                                  .isLocationPicked
+                                                  .value = false;
+                                              propertyController.location
+                                                  .clear();
                                               Get.back();
                                             },
                                             hasInfiniteWidth: true,
@@ -271,8 +269,7 @@ class GuestDashbaord extends StatelessWidget {
                 ),
                 Obx(
                   () {
-                    if (propertyController.isLoading.value ||
-                        searchController.isLoading.value) {
+                    if (propertyController.isLoading.value) {
                       return const Expanded(
                         child: Center(
                           child: CircularProgressIndicator(

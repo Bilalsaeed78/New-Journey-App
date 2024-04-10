@@ -4,29 +4,29 @@ const Apartment = require('../models/apartmentModel');
 const Office = require('../models/officeModel');
 const Geopoint = require('geopoint');
 
-const categorizeProperties = (properties) => {
-    const roomList = [];
-    const officeList = [];
-    const apartmentList = [];
+// const categorizeProperties = (properties) => {
+//     const roomList = [];
+//     const officeList = [];
+//     const apartmentList = [];
 
-    properties.forEach(property => {
-        switch (property.type) {
-            case 'room':
-                roomList.push(property);
-                break;
-            case 'office':
-                officeList.push(property);
-                break;
-            case 'apartment':
-                apartmentList.push(property);
-                break;
-            default:
-                break;
-        }
-    });
+//     properties.forEach(property => {
+//         switch (property.type) {
+//             case 'room':
+//                 roomList.push(property);
+//                 break;
+//             case 'office':
+//                 officeList.push(property);
+//                 break;
+//             case 'apartment':
+//                 apartmentList.push(property);
+//                 break;
+//             default:
+//                 break;
+//         }
+//     });
 
-    return { roomList, officeList, apartmentList };
-};
+//     return { roomList, officeList, apartmentList };
+// };
 
 const filterPropertiesByDistance = async (req, res) => {
     try {
@@ -70,9 +70,9 @@ const filterPropertiesByDistance = async (req, res) => {
             }
         }
         
-        const categorizedProperties = categorizeProperties(propertyList);
+        // const categorizedProperties = categorizeProperties(propertyList);
 
-        return res.status(200).json({ success: true, categorizedProperties, propertyList });
+        return res.status(200).json({ success: true, propertyList });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Failed to filter properties by distance' });
