@@ -15,13 +15,13 @@ class PropertyCard extends StatefulWidget {
     required this.propertyController,
     required this.property,
     required this.isGuest,
-    this.isLocationFilterApplied,
+    required this.isLocationFilterApplied,
   });
 
   final PropertyController propertyController;
   final Property property;
   final bool isGuest;
-  final bool? isLocationFilterApplied;
+  final bool isLocationFilterApplied;
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -111,7 +111,7 @@ class _PropertyCardState extends State<PropertyCard> {
                           fit: BoxFit.fitWidth,
                         ),
                       ),
-                      if (widget.isLocationFilterApplied!)
+                      if (widget.isLocationFilterApplied)
                         Positioned(
                           right: 5,
                           top: 5,

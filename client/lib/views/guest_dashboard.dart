@@ -96,7 +96,10 @@ class GuestDashbaord extends StatelessWidget {
                 const SizedBox(height: SizeManager.sizeM),
                 CustomSearchBar(
                   controller: searchController.searchTextController,
-                  onChanged: (value) {},
+                  onChanged: (value) async {
+                    await searchController.searchOnText(
+                        value, propertyController);
+                  },
                   onFilterPressed: () {
                     showModalBottomSheet(
                       context: context,
@@ -269,7 +272,8 @@ class GuestDashbaord extends StatelessWidget {
                 ),
                 Obx(
                   () {
-                    if (propertyController.isLoading.value) {
+                    if (propertyController.isLoading.value ||
+                        searchController.isLoading.value) {
                       return const Expanded(
                         child: Center(
                           child: CircularProgressIndicator(

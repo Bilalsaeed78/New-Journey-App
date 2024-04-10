@@ -134,6 +134,7 @@ class OwnerDashboard extends StatelessWidget {
                             propertyController: propertyController,
                             property: propertyController.myProperties[index],
                             isGuest: false,
+                            isLocationFilterApplied: false,
                           );
                         },
                       ),

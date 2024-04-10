@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -37,6 +38,72 @@ class SearchFilterController extends GetxController {
 
   void toggleLoading() {
     isLoading.value = !isLoading.value;
+  }
+
+  Timer? _debounceTimer;
+
+  Future<void> searchOnText(String query, PropertyController controller) async {
+    try {
+      _debounceTimer?.cancel();
+
+      _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+        try {
+          toggleLoading();
+          isFilterApplied.value = true;
+          List<Property> retVal = [];
+          List<Property> propertyCopy = List.from(controller.allProperties);
+          for (var property in propertyCopy) {
+            if (property.type == 'room') {
+              final roomUrl = Uri.parse(
+                  "${AppStrings.BASE_URL}/room/${property.propertyId}");
+              final roomResp = await http.get(roomUrl);
+              final roomJson = jsonDecode(roomResp.body)['room'];
+              final room = Room.fromJson(roomJson);
+              if (room.address.toLowerCase().contains(query.toLowerCase())) {
+                retVal.add(property);
+              }
+            } else if (property.type == 'office') {
+              final officeUrl = Uri.parse(
+                  "${AppStrings.BASE_URL}/office/${property.propertyId}");
+              final officeResp = await http.get(officeUrl);
+              final officeJson = jsonDecode(officeResp.body)['office'];
+              final office = Office.fromJson(officeJson);
+              if (office.address.toLowerCase().contains(query.toLowerCase())) {
+                retVal.add(property);
+              }
+            } else {
+              final apartmentUrl = Uri.parse(
+                  "${AppStrings.BASE_URL}/apartment/${property.propertyId}");
+              final apartmentResp = await http.get(apartmentUrl);
+              final apartmentJson = jsonDecode(apartmentResp.body)['apartment'];
+              final apartment = Apartment.fromJson(apartmentJson);
+              if (apartment.address
+                  .toLowerCase()
+                  .contains(query.toLowerCase())) {
+                retVal.add(property);
+              }
+            }
+          }
+          print(retVal.length);
+          _searchedProperties.value = retVal;
+          _searchedProperties.refresh();
+        } catch (e) {
+          isFilterApplied.value = false;
+          Get.snackbar(
+            'Error!',
+            e.toString(),
+          );
+        } finally {
+          toggleLoading();
+        }
+      });
+    } catch (e) {
+      isFilterApplied.value = false;
+      Get.snackbar(
+        'Error!',
+        e.toString(),
+      );
+    }
   }
 
   Future<void> searchOnFilters(PropertyController controller) async {
