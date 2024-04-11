@@ -106,39 +106,12 @@ class PropertyController extends GetxController with LocalStorage {
           .toList();
 
       _allProperties.value.addAll(properties);
-      print(_allProperties.value.length);
       for (int i = 0; i < properties.length; i++) {
         if (properties[i].ownerId == getUserId()) {
           _myProperties.value.add(properties[i]);
         }
       }
-
-      // for (Property property in properties) {
-      //   if (property.type == 'room') {
-      //     final roomUrl =
-      //         Uri.parse("${AppStrings.BASE_URL}/room/${property.propertyId}");
-      //     final roomResp = await http.get(roomUrl);
-      //     final roomJson = jsonDecode(roomResp.body)['room'];
-      //     final room = Room.fromJson(roomJson);
-      //     _myAddedRooms.value.add(room);
-      //   } else if (property.type == 'office') {
-      //     final officeUrl =
-      //         Uri.parse("${AppStrings.BASE_URL}/office/${property.propertyId}");
-      //     final officeResp = await http.get(officeUrl);
-      //     final officeJson = jsonDecode(officeResp.body)['office'];
-      //     final office = Office.fromJson(officeJson);
-      //     _myAddedOffices.value.add(office);
-      //   } else {
-      //     final apartmentUrl = Uri.parse(
-      //         "${AppStrings.BASE_URL}/apartment/${property.propertyId}");
-      //     final apartmentResp = await http.get(apartmentUrl);
-      //     final apartmentJson = jsonDecode(apartmentResp.body)['apartment'];
-      //     final apartment = Apartment.fromJson(apartmentJson);
-      //     _myAddedApartments.value.add(apartment);
-      //   }
-      // }
     } catch (e) {
-      print(e.toString());
       Get.snackbar(
         'Error!',
         e.toString(),

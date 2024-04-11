@@ -5,10 +5,12 @@ const {
   getAllRequestByOwnerId,
   getAllRequestByGuestId,
   updateStatus,
-  createRequest
+  createRequest,
+  getAllRequestsByPropertyIdAndGuestId
 } = require('../controllers/requestController');
 
 router.get('/byProperty/:propertyId', getAllRequestByPropertyId);
+router.get('/checkStatus', getAllRequestsByPropertyIdAndGuestId);
 router.get('/byOwner/:ownerId', getAllRequestByOwnerId);
 router.get('/byGuest/:guestId', getAllRequestByGuestId);
 router.put('/updateStatus/:requestId', updateStatus);

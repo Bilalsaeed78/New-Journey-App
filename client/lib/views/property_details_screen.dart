@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
-import 'package:new_journey_app/views/add_property_screen.dart';
+import 'package:new_journey_app/controllers/request_controller.dart';
+import 'package:new_journey_app/models/request_model.dart';
 import 'package:new_journey_app/widgets/carousel_slider.dart';
 import 'package:new_journey_app/widgets/custom_button.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -32,6 +33,8 @@ class PropertyDetailsScreem extends StatefulWidget {
 }
 
 class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
+  final requestController = Get.put(RequestController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -488,49 +491,35 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                         const SizedBox(
                           width: SizeManager.sizeL,
                         ),
-                        Expanded(
-                          child: CustomButton(
-                            buttonType: ButtonType.outline,
-                            textColor: AppColors.primary,
-                            color: AppColors.primary,
-                            text: "Edit",
-                            onPressed: () {
-                              if (widget.type == 'room') {
-                                Get.to(AddPropertyScreen(
-                                  propertyController: widget.propertyController,
-                                  type: 'room',
-                                  data: widget.propertyData,
-                                  isEdit: true,
-                                ));
-                              } else if (widget.type == 'office') {
-                                Get.to(AddPropertyScreen(
-                                  propertyController: widget.propertyController,
-                                  type: 'office',
-                                  data: widget.propertyData,
-                                  isEdit: true,
-                                ));
-                              } else {
-                                Get.to(AddPropertyScreen(
-                                  propertyController: widget.propertyController,
-                                  type: 'apartment',
-                                  data: widget.propertyData,
-                                  isEdit: true,
-                                ));
-                              }
-                            },
-                            hasInfiniteWidth: true,
-                          ),
-                        ),
                       ],
                     ),
                   if (widget.isGuest)
-                    CustomButton(
-                      buttonType: ButtonType.text,
-                      textColor: AppColors.secondary,
-                      color: AppColors.primary,
-                      text: "Request for accomodation",
-                      onPressed: () {},
-                      hasInfiniteWidth: true,
+                    Obx(
+                      () => CustomButton(
+                        color: AppColors.primary,
+                        hasInfiniteWidth: true,
+                        loadingWidget: requestController.isLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  backgroundColor: AppColors.primary,
+                                ),
+                              )
+                            : null,
+                        onPressed: () async {
+                          final request = RequestModel(
+                            ownerId: widget.propertyData['owner'],
+                            propertyId: widget.propertyId,
+                            guestId: widget.propertyController.getUserId()!,
+                            status: "pending",
+                          );
+                          await requestController
+                              .sendAccommodationRequest(request);
+                        },
+                        text: "Request for accomodation",
+                        textColor: AppColors.secondary,
+                        buttonType: ButtonType.loading,
+                      ),
                     ),
                   const SizedBox(
                     height: SizeManager.sizeL,
