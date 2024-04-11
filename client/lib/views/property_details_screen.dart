@@ -555,7 +555,10 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       color: AppColors.primary,
                       hasInfiniteWidth: true,
                       onPressed: () {
-                        Get.to(RequestScreen());
+                        Get.to(RequestScreen(
+                          requestController: requestController,
+                          propertyId: widget.propertyId,
+                        ));
                       },
                       text: "See Requests",
                       textColor: AppColors.secondary,

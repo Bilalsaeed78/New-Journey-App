@@ -1,12 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/controllers/request_controller.dart';
 
+import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
 import '../widgets/custom_text.dart';
+import '../widgets/request_tile.dart';
 
-class RequestScreen extends StatelessWidget {
-  const RequestScreen({super.key});
+class RequestScreen extends StatefulWidget {
+  const RequestScreen(
+      {super.key, required this.requestController, required this.propertyId});
+
+  final RequestController requestController;
+  final String propertyId;
+
+  @override
+  State<RequestScreen> createState() => _RequestScreenState();
+}
+
+class _RequestScreenState extends State<RequestScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    try {
+      await widget.requestController.getPropertyRequests(widget.propertyId);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        "Failed to load data.",
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,53 +51,64 @@ class RequestScreen extends StatelessWidget {
           color: AppColors.secondary,
         ),
       ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(
-            horizontal: MarginManager.marginM, vertical: MarginManager.marginS),
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                iconColor: AppColors.primary,
-                tileColor: AppColors.whiteShade,
-                leading: const CircleAvatar(
-                    backgroundColor: AppColors.secondary,
-                    child: Icon(
-                      Icons.person,
-                      color: AppColors.primary,
-                    )),
-                title: const Txt(text: "Ali"),
-                subtitle: const Txt(text: "Pending"),
-                trailing: SizedBox(
-                  width: Get.width * 0.25,
-                  child: Row(children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.check,
-                        color: AppColors.success,
-                      ),
+      body: Obx(() {
+        if (widget.requestController.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.primary,
+            ),
+          );
+        } else if (widget.requestController.myPropertyRequests.isEmpty) {
+          return Expanded(
+            child: Center(
+              child: Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: SizeManager.sizeL),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/no_data.svg",
+                      height: 200,
+                      width: 200,
+                      fit: BoxFit.scaleDown,
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 30,
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.close,
-                        color: AppColors.error,
+                    const Center(
+                      child: Txt(
+                        text: "No request available.",
+                        color: AppColors.secondary,
+                        fontSize: FontSize.subTitleFontSize,
                       ),
                     ),
-                  ]),
+                    const SizedBox(height: 120),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          );
+        } else {
+          return Container(
+            margin: const EdgeInsets.symmetric(
+                horizontal: MarginManager.marginM,
+                vertical: MarginManager.marginS),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.requestController.myPropertyRequests.length,
+              itemBuilder: (context, index) {
+                var data = widget.requestController.myPropertyRequests[index];
+                return RequestTile(
+                  requestController: widget.requestController,
+                  requestModel: data,
+                );
+              },
+            ),
+          );
+        }
+      }),
     );
   }
 }
