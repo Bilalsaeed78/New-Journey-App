@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:new_journey_app/controllers/property_controller.dart';
 import 'package:new_journey_app/controllers/request_controller.dart';
 import 'package:new_journey_app/models/request_model.dart';
+import 'package:new_journey_app/views/add_property_screen.dart';
 import 'package:new_journey_app/widgets/carousel_slider.dart';
 import 'package:new_journey_app/widgets/custom_button.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -12,6 +13,7 @@ import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/user_profile_dialog.dart';
+import 'requests_screen.dart';
 
 class PropertyDetailsScreem extends StatefulWidget {
   const PropertyDetailsScreem(
@@ -509,7 +511,55 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                         const SizedBox(
                           width: SizeManager.sizeL,
                         ),
+                        Expanded(
+                          child: CustomButton(
+                            buttonType: ButtonType.outline,
+                            textColor: AppColors.primary,
+                            color: AppColors.divider,
+                            text: "Edit",
+                            onPressed: () {
+                              if (widget.type == 'room') {
+                                Get.to(AddPropertyScreen(
+                                  propertyController: widget.propertyController,
+                                  type: 'room',
+                                  data: widget.propertyData,
+                                  isEdit: true,
+                                ));
+                              } else if (widget.type == 'office') {
+                                Get.to(AddPropertyScreen(
+                                  propertyController: widget.propertyController,
+                                  type: 'office',
+                                  data: widget.propertyData,
+                                  isEdit: true,
+                                ));
+                              } else {
+                                Get.to(AddPropertyScreen(
+                                  propertyController: widget.propertyController,
+                                  type: 'apartment',
+                                  data: widget.propertyData,
+                                  isEdit: true,
+                                ));
+                              }
+                              ;
+                            },
+                            hasInfiniteWidth: true,
+                          ),
+                        ),
                       ],
+                    ),
+                  const SizedBox(
+                    height: SizeManager.sizeM,
+                  ),
+                  if (!widget.isGuest)
+                    CustomButton(
+                      color: AppColors.primary,
+                      hasInfiniteWidth: true,
+                      onPressed: () {
+                        Get.to(RequestScreen());
+                      },
+                      text: "See Requests",
+                      textColor: AppColors.secondary,
+                      buttonType: ButtonType.loading,
                     ),
                   if (widget.isGuest)
                     Obx(
