@@ -14,13 +14,21 @@ class Property {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id!.isEmpty ? '' : "",
-      'distance': distance,
+    Map<String, dynamic> json = {
       'propertyId': propertyId,
       'type': type,
       'ownerId': ownerId,
     };
+
+    if (id != null && id!.isNotEmpty) {
+      json['id'] = id;
+    }
+
+    if (distance != null) {
+      json['distance'] = distance;
+    }
+
+    return json;
   }
 
   factory Property.fromJson(Map<String, dynamic> json) {
@@ -29,7 +37,7 @@ class Property {
       // ignore: prefer_null_aware_operators
       distance: json['distance'] != null ? json['distance'].toDouble() : null,
       propertyId: json['propertyId'],
-      type: json['type'],
+      type: json['type'] ?? '',
       ownerId: json['ownerId'],
     );
   }
