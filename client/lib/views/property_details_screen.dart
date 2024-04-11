@@ -568,7 +568,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                     ),
                   if (widget.isGuest)
                     widget.isHistoryRoutes
-                        ? SizedBox.shrink()
+                        ? const SizedBox.shrink()
                         : Obx(
                             () => requestController.isLoading.value
                                 ? const Center(
@@ -608,7 +608,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                         }
                                       },
                                       text: isRequested
-                                          ? "Waiting for response..."
+                                          ? "Status is ${status!.capitalizeFirst!}"
                                           : "Request for accomodation",
                                       textColor: AppColors.secondary,
                                       buttonType: ButtonType.loading,
