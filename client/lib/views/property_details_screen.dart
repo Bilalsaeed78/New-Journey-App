@@ -48,7 +48,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
   Future<void> checkStatus() async {
     status = (await requestController
         .getPropertyAccomodationStatus(widget.propertyId));
-    if (status == 'pending' || status == 'rejected' || status == 'accepted') {
+    if (status == 'pending' || status == 'declined' || status == 'accepted') {
       isRequested = true;
     } else {
       isRequested = false;

@@ -18,6 +18,52 @@ class RequestController extends GetxController with LocalStorage {
   final Rx<List<RequestModel>> _myPropertyRequests = Rx<List<RequestModel>>([]);
   List<RequestModel> get myPropertyRequests => _myPropertyRequests.value;
 
+  Future<void> updateRequestStatus(String requestId, String newStatus) async {
+    try {
+      toggleLoading();
+
+      final url =
+          Uri.parse('${AppStrings.BASE_URL}/request/updateStatus/$requestId');
+      final response = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({'status': newStatus}),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+
+        if (jsonResponse['success']) {
+          final updatedRequest = RequestModel.fromJson(jsonResponse['request']);
+
+          final index = myPropertyRequests.indexWhere((r) => r.id == requestId);
+
+          if (index != -1) {
+            myPropertyRequests[index] = updatedRequest;
+            _myPropertyRequests.refresh();
+          }
+        } else {
+          Get.snackbar(
+            'Error',
+            jsonResponse['message'] ?? 'Failed to update status.',
+          );
+        }
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to update status.',
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to update status. Error: $e',
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
+
   Future<User?>? getCurrentUserInfo(String id) async {
     try {
       final url = Uri.parse("${AppStrings.BASE_URL}/user/current/$id");

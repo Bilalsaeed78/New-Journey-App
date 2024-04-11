@@ -50,7 +50,7 @@ class UserProfileDialog extends StatelessWidget {
               width: double.infinity,
               child: Txt(
                 textAlign: TextAlign.center,
-                text: "Owner Details",
+                text: "Personal Details",
                 color: Colors.black,
                 fontSize: FontSize.textFontSize,
                 fontWeight: FontWeightManager.semibold,

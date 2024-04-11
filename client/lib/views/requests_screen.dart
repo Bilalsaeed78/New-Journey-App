@@ -59,34 +59,31 @@ class _RequestScreenState extends State<RequestScreen> {
             ),
           );
         } else if (widget.requestController.myPropertyRequests.isEmpty) {
-          return Expanded(
-            child: Center(
-              child: Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: SizeManager.sizeL),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/no_data.svg",
-                      height: 200,
-                      width: 200,
-                      fit: BoxFit.scaleDown,
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: SizeManager.sizeL),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/images/no_data.svg",
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.scaleDown,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Center(
+                    child: Txt(
+                      text: "No request available.",
+                      color: AppColors.secondary,
+                      fontSize: FontSize.subTitleFontSize,
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Center(
-                      child: Txt(
-                        text: "No request available.",
-                        color: AppColors.secondary,
-                        fontSize: FontSize.subTitleFontSize,
-                      ),
-                    ),
-                    const SizedBox(height: 120),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 120),
+                ],
               ),
             ),
           );

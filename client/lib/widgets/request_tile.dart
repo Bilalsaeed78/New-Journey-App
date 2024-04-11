@@ -7,6 +7,7 @@ import 'package:new_journey_app/models/user_model.dart';
 
 import '../constants/themes/app_colors.dart';
 import 'custom_text.dart';
+import 'user_profile_dialog.dart';
 
 class RequestTile extends StatefulWidget {
   const RequestTile({
@@ -35,7 +36,7 @@ class _RequestTileState extends State<RequestTile> {
   Future<void> loadData() async {
     try {
       isLoading = true;
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       user = (await widget.requestController
           .getCurrentUserInfo(widget.requestModel.guestId))!;
       isLoading = false;
@@ -72,19 +73,37 @@ class _RequestTileState extends State<RequestTile> {
       child: ListTile(
         iconColor: AppColors.primary,
         tileColor: AppColors.whiteShade,
-        leading: const CircleAvatar(
-            backgroundColor: AppColors.secondary,
-            child: Icon(
-              Icons.person,
-              color: AppColors.primary,
-            )),
-        title: Txt(text: user.fullname.split(" ").first.capitalizeFirst),
+        leading: InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return UserProfileDialog(
+                  ownerId: user.uid!,
+                );
+              },
+            );
+          },
+          child: const CircleAvatar(
+              backgroundColor: AppColors.secondary,
+              child: Icon(
+                Icons.person,
+                color: AppColors.primary,
+              )),
+        ),
+        title: Txt(
+          text: user.fullname,
+          useOverflow: true,
+        ),
         subtitle: Txt(text: widget.requestModel.status.capitalizeFirst),
         trailing: SizedBox(
           width: Get.width * 0.27,
           child: Row(children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await widget.requestController
+                    .updateRequestStatus(widget.requestModel.id!, 'accepted');
+              },
               icon: const Icon(
                 Icons.check_box,
                 color: AppColors.success,
@@ -93,7 +112,10 @@ class _RequestTileState extends State<RequestTile> {
             ),
             const Spacer(),
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                await widget.requestController
+                    .updateRequestStatus(widget.requestModel.id!, 'rejected');
+              },
               icon: const Icon(
                 Icons.disabled_by_default,
                 color: AppColors.error,
