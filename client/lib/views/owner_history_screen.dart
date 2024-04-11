@@ -76,7 +76,7 @@ class OwnerHistoryScreen extends StatelessWidget {
                       ),
                       const Center(
                         child: Txt(
-                          text: "No properties are added yet!",
+                          text: "No requests available!",
                           color: AppColors.secondary,
                           fontSize: FontSize.subTitleFontSize,
                         ),
@@ -95,6 +95,7 @@ class OwnerHistoryScreen extends StatelessWidget {
                 return HistoryCard(
                   property: historyController.myProperties[index],
                   propertyController: propertyController,
+                  isGuestRoutes: false,
                 );
               },
             );

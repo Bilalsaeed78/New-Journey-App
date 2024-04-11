@@ -98,6 +98,7 @@ class _RentersListingScreenState extends State<RentersListingScreen> {
                 return RequestTile(
                   requestController: requestController,
                   requestModel: data,
+                  isHistoryRoute: true,
                 );
               },
             ),

@@ -343,7 +343,7 @@ class GuestDashbaord extends StatelessWidget {
                             itemCount: propertyController.allProperties.length,
                             itemBuilder: (context, index) {
                               var data =
-                                  searchController.searchedProperties[index];
+                                  propertyController.allProperties[index];
                               return data.isOccupied
                                   ? const SizedBox.shrink()
                                   : PropertyCard(

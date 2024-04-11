@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/views/guest_dashboard.dart';
+import 'package:new_journey_app/views/guest_history_screen.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
@@ -42,7 +43,12 @@ class GuestDrawer extends StatelessWidget {
                 user: user,
               ));
             }),
-            buildDrawerTile("History", Icons.history, () {}),
+            buildDrawerTile("History", Icons.history, () {
+              Get.offAll(GuestHistoryScreen(
+                user: user,
+                authController: controller,
+              ));
+            }),
             buildDrawerTile("Logout", Icons.logout, () {
               Get.dialog(
                 AlertDialog(

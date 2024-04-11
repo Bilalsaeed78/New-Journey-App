@@ -78,6 +78,7 @@ class _PropertyCardState extends State<PropertyCard> {
           propertyController: widget.propertyController,
           propertyId: widget.property.id!,
           isGuest: widget.isGuest,
+          isHistoryRoutes: false,
         ));
       },
       child: Container(

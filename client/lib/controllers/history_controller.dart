@@ -21,10 +21,56 @@ class HistoryController extends GetxController with LocalStorage {
   final Rx<List<Property>> _myProperties = Rx<List<Property>>([]);
   List<Property> get myProperties => _myProperties.value;
 
+  final Rx<List<Property>> _guestAppliedProperties = Rx<List<Property>>([]);
+  List<Property> get guestAppliedProperties => _guestAppliedProperties.value;
+
   @override
   void onInit() {
     super.onInit();
     loadData();
+  }
+
+  Future<void> getGuestProperties() async {
+    try {
+      final url = Uri.parse(
+          "${AppStrings.BASE_URL}/request/byGuestApplication/${getUserId()}");
+      final resp = await http.get(url);
+
+      final jsonResponse = jsonDecode(resp.body);
+      final propertiesJson = jsonResponse['properties'] as List<dynamic>;
+      List<Property> properties = propertiesJson
+          .map((propertyJson) => Property.fromJson(propertyJson))
+          .toList();
+
+      _guestAppliedProperties.value.addAll(properties);
+    } catch (e) {
+      Get.snackbar(
+        'Error!',
+        e.toString(),
+      );
+    }
+  }
+
+  Future<String?>? getPropertyAccomodationStatus(String propertyId) async {
+    try {
+      final userId = getUserId();
+      final url = Uri.parse(
+          '${AppStrings.BASE_URL}/request/checkStatus?propertyId=$propertyId&guestId=$userId');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        final resp = jsonResponse['request'];
+        return resp['status'];
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        "Failed to load data.",
+      );
+      return null;
+    }
   }
 
   Future<void> loadData() async {
@@ -45,6 +91,7 @@ class HistoryController extends GetxController with LocalStorage {
           _myProperties.value.add(properties[i]);
         }
       }
+      await getGuestProperties();
     } catch (e) {
       Get.snackbar(
         'Error!',

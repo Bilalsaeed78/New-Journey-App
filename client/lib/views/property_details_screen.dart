@@ -22,13 +22,15 @@ class PropertyDetailsScreem extends StatefulWidget {
       required this.type,
       required this.propertyController,
       required this.propertyId,
-      required this.isGuest});
+      required this.isGuest,
+      required this.isHistoryRoutes});
 
   final PropertyController propertyController;
   final Map<String, dynamic> propertyData;
   final String type;
   final String propertyId;
   final bool isGuest;
+  final bool isHistoryRoutes;
 
   @override
   State<PropertyDetailsScreem> createState() => _PropertyDetailsScreemState();
@@ -565,48 +567,54 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       buttonType: ButtonType.loading,
                     ),
                   if (widget.isGuest)
-                    Obx(
-                      () => requestController.isLoading.value
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.primary,
-                              ),
-                            )
-                          : Obx(
-                              () => CustomButton(
-                                color: AppColors.primary,
-                                hasInfiniteWidth: true,
-                                loadingWidget: requestController.isLoading.value
-                                    ? const Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                          backgroundColor: AppColors.primary,
-                                        ),
-                                      )
-                                    : null,
-                                onPressed: () async {
-                                  if (!isRequested) {
-                                    final request = RequestModel(
-                                      ownerId: widget.propertyData['owner'],
-                                      propertyId: widget.propertyId,
-                                      guestId: widget.propertyController
-                                          .getUserId()!,
-                                      status: "pending",
-                                    );
-                                    await requestController
-                                        .sendAccommodationRequest(request);
-                                  } else {
-                                    null;
-                                  }
-                                },
-                                text: isRequested
-                                    ? "Waiting for response..."
-                                    : "Request for accomodation",
-                                textColor: AppColors.secondary,
-                                buttonType: ButtonType.loading,
-                              ),
-                            ),
-                    ),
+                    widget.isHistoryRoutes
+                        ? SizedBox.shrink()
+                        : Obx(
+                            () => requestController.isLoading.value
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: AppColors.primary,
+                                    ),
+                                  )
+                                : Obx(
+                                    () => CustomButton(
+                                      color: AppColors.primary,
+                                      hasInfiniteWidth: true,
+                                      loadingWidget: requestController
+                                              .isLoading.value
+                                          ? const Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                                backgroundColor:
+                                                    AppColors.primary,
+                                              ),
+                                            )
+                                          : null,
+                                      onPressed: () async {
+                                        if (!isRequested) {
+                                          final request = RequestModel(
+                                            ownerId:
+                                                widget.propertyData['owner'],
+                                            propertyId: widget.propertyId,
+                                            guestId: widget.propertyController
+                                                .getUserId()!,
+                                            status: "pending",
+                                          );
+                                          await requestController
+                                              .sendAccommodationRequest(
+                                                  request);
+                                        } else {
+                                          null;
+                                        }
+                                      },
+                                      text: isRequested
+                                          ? "Waiting for response..."
+                                          : "Request for accomodation",
+                                      textColor: AppColors.secondary,
+                                      buttonType: ButtonType.loading,
+                                    ),
+                                  ),
+                          ),
                   const SizedBox(
                     height: SizeManager.sizeL,
                   ),

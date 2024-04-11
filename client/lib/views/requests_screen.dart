@@ -117,6 +117,7 @@ class _RequestScreenState extends State<RequestScreen> {
                 return RequestTile(
                   requestController: widget.requestController,
                   requestModel: data,
+                  isHistoryRoute: false,
                 );
               },
             ),

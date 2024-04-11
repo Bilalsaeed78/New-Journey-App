@@ -14,12 +14,12 @@ class RequestTile extends StatefulWidget {
     super.key,
     required this.requestModel,
     required this.requestController,
-    this.isHistoryRoute,
+    required this.isHistoryRoute,
   });
 
   final RequestModel requestModel;
   final RequestController requestController;
-  final bool? isHistoryRoute;
+  final bool isHistoryRoute;
 
   @override
   State<RequestTile> createState() => _RequestTileState();
@@ -98,16 +98,47 @@ class _RequestTileState extends State<RequestTile> {
           useOverflow: true,
         ),
         subtitle: Txt(text: widget.requestModel.status.capitalizeFirst),
-        trailing: widget.requestModel.status != 'accepted'
-            ? const Icon(
-                Icons.disabled_by_default,
-                color: AppColors.error,
-                size: 30,
-              )
-            : const Icon(
-                Icons.check_box,
-                color: AppColors.success,
-                size: 30,
+        trailing: widget.isHistoryRoute
+            ? (widget.requestModel.status != 'accepted'
+                ? const Icon(
+                    Icons.disabled_by_default,
+                    color: AppColors.error,
+                    size: 30,
+                  )
+                : const Icon(
+                    Icons.check_box,
+                    color: AppColors.success,
+                    size: 30,
+                  ))
+            : SizedBox(
+                width: Get.width * 0.27,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        await widget.requestController.updateRequestStatus(
+                            widget.requestModel.id!, 'accepted');
+                      },
+                      icon: const Icon(
+                        Icons.check_box,
+                        color: AppColors.success,
+                        size: 30,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () async {
+                        await widget.requestController.updateRequestStatus(
+                            widget.requestModel.id!, 'rejected');
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: AppColors.error,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                ),
               ),
       ),
     );

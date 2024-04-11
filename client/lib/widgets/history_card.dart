@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/controllers/history_controller.dart';
+import 'package:new_journey_app/views/property_details_screen.dart';
 import 'package:new_journey_app/views/renters_history_listing_screen.dart';
 
 import '../constants/font_manager.dart';
@@ -14,10 +16,14 @@ class HistoryCard extends StatefulWidget {
     super.key,
     required this.propertyController,
     required this.property,
+    required this.isGuestRoutes,
+    this.historyController,
   });
 
   final PropertyController propertyController;
+  final HistoryController? historyController;
   final Property property;
+  final bool isGuestRoutes;
 
   @override
   State<HistoryCard> createState() => _HistoryCardState();
@@ -26,6 +32,7 @@ class HistoryCard extends StatefulWidget {
 class _HistoryCardState extends State<HistoryCard> {
   late Map<String, dynamic> propertyData;
   bool isLoading = true;
+  var status = "";
 
   @override
   void initState() {
@@ -38,6 +45,10 @@ class _HistoryCardState extends State<HistoryCard> {
       if (widget.property.type == 'room') {
         var data = await widget.propertyController
             .getData('room', widget.property.propertyId);
+        if (widget.historyController != null) {
+          status = (await widget.historyController!
+              .getPropertyAccomodationStatus(widget.property.id!))!;
+        }
         setState(() {
           propertyData = data['room'];
           isLoading = false;
@@ -45,6 +56,10 @@ class _HistoryCardState extends State<HistoryCard> {
       } else if (widget.property.type == 'office') {
         var data = await widget.propertyController
             .getData('office', widget.property.propertyId);
+        if (widget.historyController != null) {
+          status = (await widget.historyController!
+              .getPropertyAccomodationStatus(widget.property.id!))!;
+        }
         setState(() {
           propertyData = data['office'];
           isLoading = false;
@@ -52,6 +67,10 @@ class _HistoryCardState extends State<HistoryCard> {
       } else {
         var data = await widget.propertyController
             .getData('apartment', widget.property.propertyId);
+        if (widget.historyController != null) {
+          status = (await widget.historyController!
+              .getPropertyAccomodationStatus(widget.property.id!))!;
+        }
         setState(() {
           propertyData = data['apartment'];
           isLoading = false;
@@ -78,9 +97,18 @@ class _HistoryCardState extends State<HistoryCard> {
           )
         : GestureDetector(
             onTap: () {
-              Get.to(RentersListingScreen(
-                propertyId: widget.property.id!,
-              ));
+              widget.isGuestRoutes
+                  ? Get.to(PropertyDetailsScreem(
+                      propertyData: propertyData,
+                      type: widget.property.type,
+                      propertyController: widget.propertyController,
+                      propertyId: widget.property.id!,
+                      isGuest: true,
+                      isHistoryRoutes: true,
+                    ))
+                  : Get.to(RentersListingScreen(
+                      propertyId: widget.property.id!,
+                    ));
             },
             child: Container(
               height: Get.height * 0.32,
@@ -150,19 +178,32 @@ class _HistoryCardState extends State<HistoryCard> {
                           ],
                         ),
                         const Spacer(),
-                        Chip(
-                          side: BorderSide.none,
-                          backgroundColor: AppColors.primaryLight,
-                          labelPadding: const EdgeInsets.all(0),
-                          label: Txt(
-                            text: widget.property.isOccupied
-                                ? "Occupied"
-                                : "Vacant",
-                            color: AppColors.secondary,
-                            useOverflow: true,
-                            fontSize: FontSize.subTitleFontSize,
+                        if (widget.isGuestRoutes && status != "")
+                          Chip(
+                            side: BorderSide.none,
+                            backgroundColor: AppColors.primaryLight,
+                            labelPadding: const EdgeInsets.all(0),
+                            label: Txt(
+                              text: status.capitalizeFirst,
+                              color: AppColors.secondary,
+                              useOverflow: true,
+                              fontSize: FontSize.subTitleFontSize,
+                            ),
                           ),
-                        ),
+                        if (!widget.isGuestRoutes)
+                          Chip(
+                            side: BorderSide.none,
+                            backgroundColor: AppColors.primaryLight,
+                            labelPadding: const EdgeInsets.all(0),
+                            label: Txt(
+                              text: widget.property.isOccupied
+                                  ? "Occupied"
+                                  : "Vacant",
+                              color: AppColors.secondary,
+                              useOverflow: true,
+                              fontSize: FontSize.subTitleFontSize,
+                            ),
+                          ),
                       ],
                     ),
                   ),

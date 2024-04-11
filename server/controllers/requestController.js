@@ -72,3 +72,24 @@ exports.createRequest = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+exports.getPropertiesByGuestId = async (req, res) => {
+  const { guestId } = req.params;
+
+  try {
+    if (!guestId) {
+      return res.status(400).json({ success: false, message: "Guest ID is required." });
+    }
+    const requests = await Request.find({ guestId: guestId }).populate('propertyId');
+
+    if (requests.length === 0) {
+      return res.status(404).json({ success: false, message: 'No requests found for the provided guest ID.' });
+    }
+    const properties = requests.map(request => request.propertyId);
+
+    res.status(200).json({ success: true, properties });
+  } catch (error) {
+    console.error("Failed to retrieve properties by guest ID:", error);
+    res.status(500).json({ success: false, message: "Failed to retrieve properties due to an internal error." });
+  }
+};
