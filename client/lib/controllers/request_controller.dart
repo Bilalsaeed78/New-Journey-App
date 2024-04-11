@@ -39,6 +39,17 @@ class RequestController extends GetxController with LocalStorage {
           final index = myPropertyRequests.indexWhere((r) => r.id == requestId);
 
           if (index != -1) {
+            final url2 = Uri.parse(
+                '${AppStrings.BASE_URL}/property/occupied/${updatedRequest.propertyId}');
+            var isOccupied = false;
+            if (newStatus == 'accepted') {
+              isOccupied = true;
+            }
+            await http.put(
+              url2,
+              headers: {"Content-Type": "application/json"},
+              body: json.encode({'isOccupied': isOccupied}),
+            );
             myPropertyRequests[index] = updatedRequest;
             _myPropertyRequests.refresh();
           }

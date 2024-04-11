@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/controllers/property_controller.dart';
 import 'package:new_journey_app/controllers/request_controller.dart';
 
 import '../constants/font_manager.dart';
@@ -11,10 +12,14 @@ import '../widgets/request_tile.dart';
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen(
-      {super.key, required this.requestController, required this.propertyId});
+      {super.key,
+      required this.requestController,
+      required this.propertyId,
+      required this.propertyController});
 
   final RequestController requestController;
   final String propertyId;
+  final PropertyController propertyController;
 
   @override
   State<RequestScreen> createState() => _RequestScreenState();
@@ -46,6 +51,18 @@ class _RequestScreenState extends State<RequestScreen> {
         backgroundColor: AppColors.background,
         surfaceTintColor: Colors.transparent,
         iconTheme: const IconThemeData(color: AppColors.secondary),
+        leading: IconButton(
+          onPressed: () async {
+            widget.propertyController.clearFields();
+            widget.propertyController.clearLists();
+            await widget.propertyController.loadData();
+            Get.back();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+          color: AppColors.secondary,
+        ),
         title: const Txt(
           text: "Renters Request",
           color: AppColors.secondary,

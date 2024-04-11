@@ -319,16 +319,19 @@ class GuestDashbaord extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: searchController.searchedProperties.length,
                           itemBuilder: (context, index) {
-                            return PropertyCard(
-                              propertyController: propertyController,
-                              property:
-                                  searchController.searchedProperties[index],
-                              isGuest: true,
-                              isLocationFilterApplied: searchController
-                                      .isLocationFilterApplied.isTrue
-                                  ? true
-                                  : false,
-                            );
+                            var data =
+                                searchController.searchedProperties[index];
+                            return data.isOccupied
+                                ? const SizedBox.shrink()
+                                : PropertyCard(
+                                    propertyController: propertyController,
+                                    property: data,
+                                    isGuest: true,
+                                    isLocationFilterApplied: searchController
+                                            .isLocationFilterApplied.isTrue
+                                        ? true
+                                        : false,
+                                  );
                           },
                         ),
                       );
@@ -339,13 +342,17 @@ class GuestDashbaord extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: propertyController.allProperties.length,
                             itemBuilder: (context, index) {
-                              return PropertyCard(
-                                propertyController: propertyController,
-                                property:
-                                    propertyController.allProperties[index],
-                                isGuest: true,
-                                isLocationFilterApplied: false,
-                              );
+                              var data =
+                                  searchController.searchedProperties[index];
+                              return data.isOccupied
+                                  ? const SizedBox.shrink()
+                                  : PropertyCard(
+                                      propertyController: propertyController,
+                                      property: propertyController
+                                          .allProperties[index],
+                                      isGuest: true,
+                                      isLocationFilterApplied: false,
+                                    );
                             },
                           ),
                         ),

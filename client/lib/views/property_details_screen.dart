@@ -540,7 +540,6 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                   isEdit: true,
                                 ));
                               }
-                              ;
                             },
                             hasInfiniteWidth: true,
                           ),
@@ -558,6 +557,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                         Get.to(RequestScreen(
                           requestController: requestController,
                           propertyId: widget.propertyId,
+                          propertyController: widget.propertyController,
                         ));
                       },
                       text: "See Requests",

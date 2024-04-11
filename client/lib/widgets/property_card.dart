@@ -111,6 +111,24 @@ class _PropertyCardState extends State<PropertyCard> {
                           fit: BoxFit.fitWidth,
                         ),
                       ),
+                      if (!widget.isGuest)
+                        Positioned(
+                          right: 5,
+                          top: 5,
+                          child: Chip(
+                            side: BorderSide.none,
+                            backgroundColor: AppColors.background,
+                            labelPadding: const EdgeInsets.all(0),
+                            label: Txt(
+                              text: widget.property.isOccupied
+                                  ? "Occupied"
+                                  : "Vacant",
+                              color: AppColors.secondary,
+                              useOverflow: true,
+                              fontSize: FontSize.subTitleFontSize,
+                            ),
+                          ),
+                        ),
                       if (widget.isLocationFilterApplied)
                         Positioned(
                           right: 5,
@@ -121,7 +139,7 @@ class _PropertyCardState extends State<PropertyCard> {
                             labelPadding: const EdgeInsets.all(0),
                             label: Txt(
                               text:
-                                  "${widget.property.distance!.toStringAsFixed(2)} KM Away",
+                                  "${widget.property.distance!.toStringAsFixed(2)} KMs away",
                               color: AppColors.secondary,
                               useOverflow: true,
                               fontSize: FontSize.subTitleFontSize,
