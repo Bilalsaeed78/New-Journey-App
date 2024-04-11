@@ -1,4 +1,4 @@
-const RequestModel = require('../models/requestModel');
+const Request = require('../models/requestModel');
 
 exports.getAllRequestsByPropertyIdAndGuestId = async (req, res) => {
   const { propertyId, guestId } = req.query;
@@ -8,16 +8,16 @@ exports.getAllRequestsByPropertyIdAndGuestId = async (req, res) => {
       return res.status(400).send({ success: false, message: "Property ID and Guest ID are required." });
     }
 
-    const requests = await RequestsModel.find({
+    const request = await Request.findOne({
       propertyId: propertyId,
       guestId: guestId
     });
 
-    if (requests.length === 0) {
-      return res.status(404).send({ success: false, message: "No requests found with the provided property ID and guest ID." });
+    if(!request){
+      return res.status(404).json({ success: false, message: 'Request not found' });
     }
 
-    return res.status(200).send({ success: true, requests });
+    return res.status(200).send({ success: true, request });
   } catch (error) {
     console.error("Failed to retrieve requests:", error);
     return res.status(500).send({ success: false, message: "Failed to retrieve requests due to an internal error." });
@@ -26,7 +26,7 @@ exports.getAllRequestsByPropertyIdAndGuestId = async (req, res) => {
 
 exports.getAllRequestByPropertyId = async (req, res) => {
   try {
-    const requests = await RequestModel.find({ propertyId: req.params.propertyId });
+    const requests = await Request.find({ propertyId: req.params.propertyId });
     res.status(200).json({ success: true, requests });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -35,7 +35,7 @@ exports.getAllRequestByPropertyId = async (req, res) => {
 
 exports.getAllRequestByOwnerId = async (req, res) => {
   try {
-    const requests = await RequestModel.find({ ownerId: req.params.ownerId });
+    const requests = await Request.find({ ownerId: req.params.ownerId });
     res.status(200).json({ success: true, requests });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -44,7 +44,7 @@ exports.getAllRequestByOwnerId = async (req, res) => {
 
 exports.getAllRequestByGuestId = async (req, res) => {
   try {
-    const requests = await RequestModel.find({ guestId: req.params.guestId });
+    const requests = await Request.find({ guestId: req.params.guestId });
     res.status(200).json({ success: true, requests });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -53,7 +53,7 @@ exports.getAllRequestByGuestId = async (req, res) => {
 
 exports.updateStatus = async (req, res) => {
   try {
-    const request = await RequestModel.findByIdAndUpdate(req.params.requestId, { status: req.body.status }, { new: true });
+    const request = await Request.findByIdAndUpdate(req.params.requestId, { status: req.body.status }, { new: true });
     if (!request) {
       return res.status(404).json({ success: false, message: 'Request not found' });
     }
@@ -65,7 +65,7 @@ exports.updateStatus = async (req, res) => {
 
 exports.createRequest = async (req, res) => {
   try {
-    const newRequest = new RequestModel(req.body);
+    const newRequest = new Request(req.body);
     const savedRequest = await newRequest.save();
     res.status(201).json({ success: true, message: "Request send successfully.", savedRequest });
   } catch (error) {
