@@ -7,7 +7,7 @@ class AppColors {
   static const Color secondaryLight = Color.fromARGB(255, 214, 214, 218);
   static const Color subtitleColor = Color.fromARGB(255, 128, 128, 134);
   static const Color propertyContainer = Color.fromARGB(255, 234, 237, 243);
-  static const Color whiteShade = Color(0xFFE4E2E2);
+  static const Color whiteShade = Color.fromARGB(255, 241, 240, 240);
   static const Color background = Color(0xFFFFFFFF);
   static const Color card = Color(0xFFFFFFFF);
   static const Color fontTitle = Color(0xFF202020);

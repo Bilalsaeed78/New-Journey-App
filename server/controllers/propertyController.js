@@ -97,3 +97,24 @@ exports.getPropertiesByOwnerId = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
+
+exports.updateIsOccupied = async (req, res) => {
+    try {
+        const { isOccupied } = req.body; 
+
+        if (isOccupied === undefined) {
+            return res.status(400).json({ success: false, message: 'isOccupied must be provided and be a boolean' });
+        }
+
+        const property = await Property.findByIdAndUpdate(req.params.id, { isOccupied }, { new: true });
+
+        if (!property) {
+            return res.status(404).json({ success: false, message: 'Property not found' });
+        }
+
+        res.status(200).json({ success: true, message: 'Property occupancy status updated successfully', property });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:new_journey_app/views/owner_history_screen.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
@@ -46,7 +47,12 @@ class OwnerDrawer extends StatelessWidget {
                 user: user,
               ));
             }),
-            buildDrawerTile("History", Icons.history, () {}),
+            buildDrawerTile("History", Icons.history, () {
+              Get.offAll(OwnerHistoryScreen(
+                user: user,
+                authController: controller,
+              ));
+            }),
             buildDrawerTile("Logout", Icons.logout, () {
               Get.dialog(
                 AlertDialog(
