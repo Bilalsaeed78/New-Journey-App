@@ -4,30 +4,6 @@ const Apartment = require('../models/apartmentModel');
 const Office = require('../models/officeModel');
 const Geopoint = require('geopoint');
 
-// const categorizeProperties = (properties) => {
-//     const roomList = [];
-//     const officeList = [];
-//     const apartmentList = [];
-
-//     properties.forEach(property => {
-//         switch (property.type) {
-//             case 'room':
-//                 roomList.push(property);
-//                 break;
-//             case 'office':
-//                 officeList.push(property);
-//                 break;
-//             case 'apartment':
-//                 apartmentList.push(property);
-//                 break;
-//             default:
-//                 break;
-//         }
-//     });
-
-//     return { roomList, officeList, apartmentList };
-// };
-
 const filterPropertiesByDistance = async (req, res) => {
     try {
         const { location } = req.body;
