@@ -54,4 +54,28 @@ class HistoryController extends GetxController with LocalStorage {
       toggleLoading();
     }
   }
+
+  Future<void> getPropertyRequests(String propertyId) async {
+    try {
+      toggleLoading();
+      _myPropertyRequests.value.clear();
+      final url =
+          Uri.parse('${AppStrings.BASE_URL}/request/byProperty/$propertyId');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        final reqJson = jsonResponse['requests'] as List<dynamic>;
+        List<RequestModel> requests =
+            reqJson.map((req) => RequestModel.fromJson(req)).toList();
+        _myPropertyRequests.value.addAll(requests);
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        "Failed to load data.",
+      );
+    } finally {
+      toggleLoading();
+    }
+  }
 }
