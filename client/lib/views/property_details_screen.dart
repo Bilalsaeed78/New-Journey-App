@@ -578,7 +578,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                 color: AppColors.primary,
                                 hasInfiniteWidth: true,
                                 onPressed: () {
-                                  Get.to(const AddRatingScreen());
+                                  Get.to(AddRatingScreen());
                                 },
                                 text: "Add Ratings",
                                 textColor: AppColors.secondary,
