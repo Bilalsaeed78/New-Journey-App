@@ -13,6 +13,7 @@ import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/user_profile_dialog.dart';
+import 'add_rating_screen.dart';
 import 'requests_screen.dart';
 
 class PropertyDetailsScreem extends StatefulWidget {
@@ -23,7 +24,8 @@ class PropertyDetailsScreem extends StatefulWidget {
       required this.propertyController,
       required this.propertyId,
       required this.isGuest,
-      required this.isHistoryRoutes});
+      required this.isHistoryRoutes,
+      this.prevStatus});
 
   final PropertyController propertyController;
   final Map<String, dynamic> propertyData;
@@ -31,6 +33,7 @@ class PropertyDetailsScreem extends StatefulWidget {
   final String propertyId;
   final bool isGuest;
   final bool isHistoryRoutes;
+  final String? prevStatus;
 
   @override
   State<PropertyDetailsScreem> createState() => _PropertyDetailsScreemState();
@@ -568,7 +571,20 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                     ),
                   if (widget.isGuest)
                     widget.isHistoryRoutes
-                        ? const SizedBox.shrink()
+                        ? ((widget.prevStatus != null &&
+                                widget.prevStatus != "" &&
+                                widget.prevStatus == 'accepted')
+                            ? CustomButton(
+                                color: AppColors.primary,
+                                hasInfiniteWidth: true,
+                                onPressed: () {
+                                  Get.to(const AddRatingScreen());
+                                },
+                                text: "Add Ratings",
+                                textColor: AppColors.secondary,
+                                buttonType: ButtonType.loading,
+                              )
+                            : const SizedBox.shrink())
                         : Obx(
                             () => requestController.isLoading.value
                                 ? const Center(

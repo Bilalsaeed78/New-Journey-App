@@ -105,13 +105,14 @@ class _HistoryCardState extends State<HistoryCard> {
                       propertyId: widget.property.id!,
                       isGuest: true,
                       isHistoryRoutes: true,
+                      prevStatus: status,
                     ))
                   : Get.to(RentersListingScreen(
                       propertyId: widget.property.id!,
                     ));
             },
             child: Container(
-              height: Get.height * 0.32,
+              height: Get.height * 0.1,
               width: double.infinity,
               margin: const EdgeInsets.symmetric(
                 vertical: MarginManager.marginM,
@@ -123,91 +124,80 @@ class _HistoryCardState extends State<HistoryCard> {
                   RadiusManager.buttonRadius,
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 180,
-                    width: double.infinity,
-                    child: Image.network(
-                      propertyData['images'][0],
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: MarginManager.marginM,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: MarginManager.marginM,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              width: Get.width * 0.5,
-                              child: Txt(
-                                text: widget.property.type == 'room'
-                                    ? propertyData['room_number']
-                                    : (widget.property.type == 'apartment'
-                                        ? propertyData['apartment_number']
-                                        : propertyData['office_address']),
-                                textAlign: TextAlign.start,
-                                useOverflow: true,
-                                color: Colors.black,
-                                fontSize: FontSize.textFontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              width: Get.width * 0.5,
-                              child: Txt(
-                                textAlign: TextAlign.start,
-                                useOverflow: true,
-                                text: propertyData['address'],
-                                color: Colors.black,
-                                fontSize: FontSize.subTitleFontSize,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 10,
                         ),
-                        const Spacer(),
-                        if (widget.isGuestRoutes && status != "")
-                          Chip(
-                            side: BorderSide.none,
-                            backgroundColor: AppColors.primaryLight,
-                            labelPadding: const EdgeInsets.all(0),
-                            label: Txt(
-                              text: status.capitalizeFirst,
-                              color: AppColors.secondary,
-                              useOverflow: true,
-                              fontSize: FontSize.subTitleFontSize,
-                            ),
+                        SizedBox(
+                          width: Get.width * 0.5,
+                          child: Txt(
+                            text: widget.property.type == 'room'
+                                ? propertyData['room_number']
+                                : (widget.property.type == 'apartment'
+                                    ? propertyData['apartment_number']
+                                    : propertyData['office_address']),
+                            textAlign: TextAlign.start,
+                            useOverflow: true,
+                            color: Colors.black,
+                            fontSize: FontSize.textFontSize,
+                            fontWeight: FontWeight.bold,
                           ),
-                        if (!widget.isGuestRoutes)
-                          Chip(
-                            side: BorderSide.none,
-                            backgroundColor: AppColors.primaryLight,
-                            labelPadding: const EdgeInsets.all(0),
-                            label: Txt(
-                              text: widget.property.isOccupied
-                                  ? "Occupied"
-                                  : "Vacant",
-                              color: AppColors.secondary,
-                              useOverflow: true,
-                              fontSize: FontSize.subTitleFontSize,
-                            ),
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.5,
+                          child: Txt(
+                            textAlign: TextAlign.start,
+                            useOverflow: true,
+                            text: propertyData['address'],
+                            color: Colors.black,
+                            fontSize: FontSize.subTitleFontSize,
+                            fontWeight: FontWeight.normal,
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    if (widget.isGuestRoutes && status != "")
+                      Chip(
+                        side: BorderSide.none,
+                        backgroundColor: AppColors.primaryLight,
+                        labelPadding: const EdgeInsets.all(0),
+                        label: Txt(
+                          text: status.capitalizeFirst,
+                          color: AppColors.secondary,
+                          useOverflow: true,
+                          fontSize: FontSize.subTitleFontSize,
+                        ),
+                      ),
+                    if (!widget.isGuestRoutes)
+                      Chip(
+                        side: BorderSide.none,
+                        backgroundColor: AppColors.primaryLight,
+                        labelPadding: const EdgeInsets.all(0),
+                        label: Txt(
+                          text: widget.property.isOccupied
+                              ? "Occupied"
+                              : "Vacant",
+                          color: AppColors.secondary,
+                          useOverflow: true,
+                          fontSize: FontSize.subTitleFontSize,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           );
