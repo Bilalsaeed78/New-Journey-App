@@ -14,6 +14,7 @@ import '../constants/value_manager.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/user_profile_dialog.dart';
 import 'add_rating_screen.dart';
+import 'property_reviews_screen.dart';
 import 'requests_screen.dart';
 
 class PropertyDetailsScreem extends StatefulWidget {
@@ -578,7 +579,12 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                 color: AppColors.primary,
                                 hasInfiniteWidth: true,
                                 onPressed: () {
-                                  Get.to(AddRatingScreen());
+                                  Get.to(AddRatingScreen(
+                                    propertyId: widget.propertyId,
+                                    guestId:
+                                        widget.propertyController.getUserId()!,
+                                    type: widget.type,
+                                  ));
                                 },
                                 text: "Add Ratings",
                                 textColor: AppColors.secondary,
@@ -631,6 +637,23 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                     ),
                                   ),
                           ),
+                  const SizedBox(
+                    height: SizeManager.sizeS,
+                  ),
+                  CustomButton(
+                    buttonType: ButtonType.outlineWithImage,
+                    image:
+                        const Icon(Icons.reviews, color: AppColors.secondary),
+                    textColor: AppColors.secondary,
+                    color: AppColors.background,
+                    text: "View Ratings",
+                    onPressed: () {
+                      Get.to(PropertyReviewsScreen(
+                        propertyId: widget.propertyId,
+                      ));
+                    },
+                    hasInfiniteWidth: true,
+                  ),
                   const SizedBox(
                     height: SizeManager.sizeL,
                   ),

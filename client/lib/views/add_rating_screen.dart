@@ -9,9 +9,16 @@ import '../controllers/rating_controller.dart';
 import '../widgets/custom_button.dart';
 
 class AddRatingScreen extends StatelessWidget {
-  AddRatingScreen({super.key});
+  AddRatingScreen(
+      {super.key,
+      required this.propertyId,
+      required this.guestId,
+      required this.type});
 
   final ratingController = Get.put(RatingController());
+  final String propertyId;
+  final String guestId;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +96,9 @@ class AddRatingScreen extends StatelessWidget {
                         ),
                       )
                     : null,
-                onPressed: () {},
+                onPressed: () async {
+                  await ratingController.addRatings(propertyId, guestId, type);
+                },
                 text: "Add Ratings",
                 textColor: AppColors.background,
                 buttonType: ButtonType.loading,

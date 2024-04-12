@@ -45,7 +45,7 @@ exports.getReviewById = async (req, res) => {
 exports.getReviewsOfSpecificProperty = async (req, res) => {
     try {
         const { property_id } = req.params;
-        const reviews = await Review.find({ property_id });
+        const reviews = await Review.find({ property_id }).populate('user_id');
         res.status(200).json({ success: true, count: reviews.length, reviews });
     } catch (error) {
         console.error(error.message);
