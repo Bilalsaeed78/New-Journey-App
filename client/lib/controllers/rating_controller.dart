@@ -78,19 +78,21 @@ class RatingController extends GetxController {
           propertyId: propertyId,
           type: type,
           rating: rating.value,
-          comments: reviewController.text.trim());
+          comments:
+              reviewController.text == "" ? "" : reviewController.text.trim());
       final url = Uri.parse("${AppStrings.BASE_URL}/review/");
       final response = await http.post(
         url,
         body: review.toJson(),
       );
-      print(jsonDecode(response.body));
-      clearFields();
-      Get.back();
-      Get.snackbar(
-        'Success!',
-        "Review added successfully.",
-      );
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        clearFields();
+        Get.back();
+        Get.snackbar(
+          'Success!',
+          "Review added successfully.",
+        );
+      }
     } catch (e) {
       Get.snackbar(
         'Error!',

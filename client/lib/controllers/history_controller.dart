@@ -35,14 +35,15 @@ class HistoryController extends GetxController with LocalStorage {
       final url = Uri.parse(
           "${AppStrings.BASE_URL}/request/byGuestApplication/${getUserId()}");
       final resp = await http.get(url);
+      if (resp.statusCode == 200) {
+        final jsonResponse = jsonDecode(resp.body);
+        final propertiesJson = jsonResponse['properties'] as List<dynamic>;
+        List<Property> properties = propertiesJson
+            .map((propertyJson) => Property.fromJson(propertyJson))
+            .toList();
 
-      final jsonResponse = jsonDecode(resp.body);
-      final propertiesJson = jsonResponse['properties'] as List<dynamic>;
-      List<Property> properties = propertiesJson
-          .map((propertyJson) => Property.fromJson(propertyJson))
-          .toList();
-
-      _guestAppliedProperties.value.addAll(properties);
+        _guestAppliedProperties.value.addAll(properties);
+      }
     } catch (e) {
       Get.snackbar(
         'Error!',

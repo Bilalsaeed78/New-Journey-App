@@ -22,7 +22,7 @@ class Review {
       propertyId: json['property_id'],
       type: json['type'],
       rating: (json['rating'] as num).toDouble(),
-      comments: json['comments'],
+      comments: json['comments'] ?? "",
     );
   }
 
