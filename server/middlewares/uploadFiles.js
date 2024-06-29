@@ -18,12 +18,15 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, UPLOADS_DIR);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 }, 
+    limits: { fileSize: 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedMimes = ['image/jpeg', 'image/png', 'image/jpg'];
         if (allowedMimes.includes(file.mimetype)) {
@@ -34,7 +37,32 @@ const upload = multer({
     }
 });
 
-const uploadToCloudinary = (req, res, next) => {
+const uploadSingleToCloudinary = (req, res, next) => {
+    upload.single('profilePic')(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ success: false, message: "Failed to upload image" });
+        }
+
+        try {
+            if (!req.file) {
+                return res.status(400).json({ success: false, message: "No file uploaded" });
+            }
+
+            const { path } = req.file;
+            const result = await cloudinary.uploader.upload(path, { folder: "Profiles" });
+
+            fs.unlinkSync(path);
+
+            req.uploadedImage = { url: result.secure_url, id: result.public_id };
+            next();
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({ success: false, message: "Server Error" });
+        }
+    });
+};
+
+const uploadMultipleToCloudinary = (req, res, next) => {
     upload.array('files')(req, res, async (err) => {
         if (err) {
             return res.status(400).json({ success: false, message: "Failed to upload images" });
@@ -59,4 +87,4 @@ const uploadToCloudinary = (req, res, next) => {
     });
 };
 
-module.exports = uploadToCloudinary;
+module.exports = { uploadSingleToCloudinary, uploadMultipleToCloudinary };

@@ -3,7 +3,7 @@ const router = express.Router();
 const apartmentController = require('../controllers/apartmentController');
 const uploadToCloudinary = require('../middlewares/uploadFiles');
 
-router.post('/', uploadToCloudinary, apartmentController.createApartment);
+router.post('/', uploadToCloudinary.uploadMultipleToCloudinary, apartmentController.createApartment);
 router.get('/', apartmentController.getAllApartments);
 router.get('/:id', apartmentController.getApartmentById);
 router.put('/:id', apartmentController.updateApartment);

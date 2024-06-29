@@ -3,7 +3,7 @@ const router = express.Router();
 const officeController = require('../controllers/officeController');
 const uploadToCloudinary = require('../middlewares/uploadFiles');
 
-router.post('/', uploadToCloudinary, officeController.createOffice);
+router.post('/', uploadToCloudinary.uploadMultipleToCloudinary, officeController.createOffice);
 router.get('/', officeController.getAllOffices);
 router.get('/:id', officeController.getOfficeById);
 router.put('/:id', officeController.updateOffice);
