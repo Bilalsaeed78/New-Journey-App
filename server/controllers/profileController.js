@@ -33,9 +33,11 @@ exports.updateProfilePicUrl = [
             if (!updatedUser) {
                 return res.status(404).json({ success: false, message: 'User not found' });
             }
-
+            console.log(userId);
+            console.log(newUrl);
             updatedUser.profilePic = newUrl;
             await updatedUser.save();
+            console.log(updatedUser);
 
             res.status(200).json({ success: true, message: 'Profile pic updated successfully', user: updatedUser });
         } catch (error) {

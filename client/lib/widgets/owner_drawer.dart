@@ -7,6 +7,7 @@ import '../constants/themes/app_colors.dart';
 import '../controllers/auth_controller.dart';
 import '../models/user_model.dart';
 import '../views/owner_dashboard.dart';
+import '../views/profile_screen.dart';
 import 'custom_text.dart';
 
 class OwnerDrawer extends StatelessWidget {
@@ -41,7 +42,12 @@ class OwnerDrawer extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Divider(),
-            buildDrawerTile("Profile", Icons.person, () {}),
+            buildDrawerTile("Profile", Icons.person, () {
+              Get.offAll(ProfileScreen(
+                user: user,
+                authController: controller,
+              ));
+            }),
             buildDrawerTile("Dashboard", Icons.home, () {
               Get.offAll(OwnerDashboard(
                 user: user,

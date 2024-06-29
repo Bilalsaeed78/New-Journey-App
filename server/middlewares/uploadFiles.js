@@ -28,8 +28,10 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        const allowedMimes = ['image/jpeg', 'image/png', 'image/jpg'];
-        if (allowedMimes.includes(file.mimetype)) {
+        const allowedExtensions = ['.jpeg', '.jpg', '.png', 'image/jpeg', 'image/png', 'image/jpg'];
+        const fileExtension = path.extname(file.originalname).toLowerCase();
+        
+        if (allowedExtensions.includes(fileExtension)) {
             cb(null, true);
         } else {
             cb(new Error("Unsupported file format"), false);
@@ -39,6 +41,7 @@ const upload = multer({
 
 const uploadSingleToCloudinary = (req, res, next) => {
     upload.single('profilePic')(req, res, async (err) => {
+        console.log(err);
         if (err) {
             return res.status(400).json({ success: false, message: "Failed to upload image" });
         }
