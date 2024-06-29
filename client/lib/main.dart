@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'constants/themes/themes.dart';
 import 'views/splash_screen.dart';
+import 'widgets/dismiss_keyboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,13 +23,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'New Journey',
-      debugShowCheckedModeBanner: false,
-      theme: themeLight(context),
-      darkTheme: themeDark(context),
-      themeMode: ThemeMode.light,
-      home: const SplashScreen(),
+    return DismissKeyboard(
+      child: GetMaterialApp(
+        title: 'New Journey',
+        debugShowCheckedModeBanner: false,
+        theme: themeLight(context),
+        darkTheme: themeDark(context),
+        themeMode: ThemeMode.light,
+        home: const SplashScreen(),
+      ),
     );
   }
 }

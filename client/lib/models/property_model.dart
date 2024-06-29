@@ -20,7 +20,7 @@ class Property {
       'propertyId': propertyId,
       'type': type,
       'ownerId': ownerId,
-      'isOccupied': isOccupied,
+      'isOccupied': isOccupied.toString(),
     };
 
     if (id != null && id!.isNotEmpty) {

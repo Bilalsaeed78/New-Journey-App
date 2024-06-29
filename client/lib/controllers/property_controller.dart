@@ -208,6 +208,7 @@ class PropertyController extends GetxController with LocalStorage {
             'Empty Field',
             'Please provide images by adding them.',
           );
+          isLoading.value = false;
           return;
         }
 
@@ -216,6 +217,7 @@ class PropertyController extends GetxController with LocalStorage {
             'Empty Field',
             'Please pick your property location.',
           );
+          isLoading.value = false;
           return;
         }
 
@@ -227,7 +229,7 @@ class PropertyController extends GetxController with LocalStorage {
           'overview': overviewController.text.trim(),
           'rental_price': double.parse(rentalPriceController.text),
           'max_capacity': int.parse(maxCapacityController.text),
-          'wifiAvailable': wifiAvailable,
+          'wifiAvailable': wifiAvailable.toString(),
           'contact_number': contactController.text.trim(),
           'owner': getUserId(),
           'location': jsonEncode({'coordinates': location.toList()}),

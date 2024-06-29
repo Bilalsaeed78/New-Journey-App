@@ -44,7 +44,7 @@ class CustomButton extends StatelessWidget {
   }
 
   getButtonWidget(BuildContext context) {
-    TextStyle textStyle = Theme.of(context).textTheme.subtitle1!.copyWith(
+    TextStyle textStyle = Theme.of(context).textTheme.titleMedium!.copyWith(
           color: textColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1,
@@ -135,7 +135,7 @@ class CustomButton extends StatelessWidget {
   }) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        primary: color,
+        foregroundColor: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(RadiusManager.buttonRadius),
         ),

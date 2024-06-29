@@ -82,7 +82,7 @@ class _PropertyCardState extends State<PropertyCard> {
         ));
       },
       child: Container(
-        height: Get.height * 0.37,
+        height: Get.height * 0.4,
         width: double.infinity,
         margin: const EdgeInsets.symmetric(
           vertical: MarginManager.marginM,

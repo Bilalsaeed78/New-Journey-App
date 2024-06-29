@@ -98,7 +98,7 @@ class _RadioButtonGroupState extends State<RadioButtonGroup> {
       Radio rb = Radio(
         visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
         activeColor:
-            widget.activeColor ?? Theme.of(context).toggleableActiveColor,
+            widget.activeColor ?? Theme.of(context).toggleButtonsTheme.color,
         groupValue: widget.labels.indexOf(_selected),
         value: i,
 
