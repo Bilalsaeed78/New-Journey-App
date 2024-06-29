@@ -9,6 +9,7 @@ const bookingRoutes = require('../routes/bookingRoutes');
 const reviewRoutes = require('../routes/reviewRoutes');
 const locationFilterRoutes = require('../routes/locationFilterRoutes');
 const requestRoutes = require('../routes/requestRoutes');
+const profileRoutes = require('../routes/profileRoutes');
 
 module.exports = function (app){
     app.use(express.json());
@@ -21,4 +22,5 @@ module.exports = function (app){
     app.use("/api/review", reviewRoutes);
     app.use("/api/filter", locationFilterRoutes);
     app.use("/api/request", requestRoutes);
+    app.use("/api/profile", profileRoutes);
 }
