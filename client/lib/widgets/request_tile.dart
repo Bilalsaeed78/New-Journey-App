@@ -78,7 +78,9 @@ class _RequestTileState extends State<RequestTile> {
         iconColor: AppColors.primary,
         tileColor: widget.requestModel.status == 'accepted'
             ? AppColors.success.withOpacity(0.4)
-            : AppColors.whiteShade,
+            : widget.requestModel.status == 'rejected'
+                ? AppColors.error.withOpacity(0.3)
+                : AppColors.whiteShade,
         leading: InkWell(
           onTap: () {
             showDialog(
@@ -106,29 +108,40 @@ class _RequestTileState extends State<RequestTile> {
           useOverflow: true,
         ),
         subtitle: Txt(
-            text: widget.requestModel.status == 'accepted'
-                ? 'Accepted'
-                : "Bid: ${widget.requestModel.bid} Rs"),
+          text: widget.requestModel.status == 'accepted'
+              ? 'Accepted'
+              : widget.requestModel.status == 'rejected'
+                  ? 'Rejected'
+                  : "Bid: ${widget.requestModel.bid} Rs",
+        ),
         trailing: widget.isHistoryRoute
-            ? (widget.requestModel.status != 'accepted'
+            ? (widget.requestModel.status == 'pending'
                 ? const Icon(
                     Icons.error,
                     color: Colors.amber,
                     size: 30,
                   )
-                : const Icon(
-                    Icons.check_box,
-                    color: AppColors.success,
-                    size: 30,
-                  ))
+                : widget.requestModel.status == 'rejected'
+                    ? const Icon(
+                        Icons.cancel,
+                        color: AppColors.error,
+                        size: 30,
+                      )
+                    : const Icon(
+                        Icons.check_box,
+                        color: AppColors.success,
+                        size: 30,
+                      ))
             : SizedBox(
                 width: Get.width * 0.27,
                 child: Row(
                   children: [
                     IconButton(
                       onPressed: () async {
-                        await widget.requestController.updateRequestStatus(
-                            widget.requestModel.id!, 'accepted', widget.type);
+                        if (widget.requestModel.status != 'accepted') {
+                          await widget.requestController.updateRequestStatus(
+                              widget.requestModel.id!, 'accepted', widget.type);
+                        }
                       },
                       icon: const Icon(
                         Icons.check_box,
@@ -139,8 +152,10 @@ class _RequestTileState extends State<RequestTile> {
                     const Spacer(),
                     IconButton(
                       onPressed: () async {
-                        await widget.requestController.updateRequestStatus(
-                            widget.requestModel.id!, 'rejected', widget.type);
+                        if (widget.requestModel.status != 'rejected') {
+                          await widget.requestController.updateRequestStatus(
+                              widget.requestModel.id!, 'rejected', widget.type);
+                        }
                       },
                       icon: const Icon(
                         Icons.cancel,

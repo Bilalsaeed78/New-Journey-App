@@ -39,7 +39,6 @@ class ProfileController extends GetxController with LocalStorage {
       if (response.statusCode == 201) {
         final res = jsonDecode(response.body);
         user.value = User.fromJson(res['user']);
-        print(user.value.toJson());
       } else {
         Get.snackbar(
           'Error',

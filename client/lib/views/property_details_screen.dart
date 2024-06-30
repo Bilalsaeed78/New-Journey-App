@@ -206,8 +206,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                   width: 8,
                                 ),
                                 Txt(
-                                  text:
-                                      "${widget.propertyData['max_capacity']} Persons",
+                                  text: widget.propertyData['max_capacity'] == 0
+                                      ? 'Capacity Full'
+                                      : "${widget.propertyData['max_capacity']} Persons",
                                   color: AppColors.secondary,
                                   fontSize: FontSize.subTitleFontSize,
                                   fontWeight: FontWeight.normal,
