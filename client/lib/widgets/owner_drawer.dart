@@ -56,7 +56,8 @@ class _OwnerDrawerState extends State<OwnerDrawer> {
                   const SizedBox(height: 20),
                   CircleAvatar(
                     radius: 70,
-                    backgroundImage: user.profilePic != ''
+                    backgroundImage: user.profilePic != null &&
+                            user.profilePic!.isNotEmpty
                         ? NetworkImage(user.profilePic!)
                         : const NetworkImage(
                             'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
@@ -75,6 +76,7 @@ class _OwnerDrawerState extends State<OwnerDrawer> {
                     Get.offAll(ProfileScreen(
                       user: user,
                       authController: widget.controller,
+                      isOwner: true,
                     ));
                   }),
                   buildDrawerTile("Dashboard", Icons.home, () {

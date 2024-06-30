@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:new_journey_app/views/guest_dashboard.dart';
 import 'package:new_journey_app/views/guest_history_screen.dart';
+import 'package:new_journey_app/views/profile_screen.dart';
 
 import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
@@ -9,96 +10,144 @@ import '../controllers/auth_controller.dart';
 import '../models/user_model.dart';
 import 'custom_text.dart';
 
-class GuestDrawer extends StatelessWidget {
-  const GuestDrawer({super.key, required this.user, required this.controller});
+class GuestDrawer extends StatefulWidget {
+  const GuestDrawer({super.key, required this.controller});
 
-  final User user;
   final AuthController controller;
+
+  @override
+  State<GuestDrawer> createState() => _GuestDrawerState();
+}
+
+class _GuestDrawerState extends State<GuestDrawer> {
+  bool isLoading = true;
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUser();
+  }
+
+  Future<void> fetchUser() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final fetchedUser = await widget.controller
+          .getCurrentUserInfo(widget.controller.getUserId()!);
+      if (mounted) {
+        setState(() {
+          user = fetchedUser!;
+          isLoading = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const CircleAvatar(
-              backgroundColor: AppColors.secondaryLight,
-              backgroundImage: NetworkImage(
-                  'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
-              radius: 70,
-            ),
-            const SizedBox(height: 10),
-            Txt(
-              text: user.fullname,
-              color: AppColors.secondary,
-              fontSize: FontSize.titleFontSize,
-              fontWeight: FontWeight.bold,
-            ),
-            const SizedBox(height: 10),
-            const Divider(),
-            buildDrawerTile("Profile", Icons.person, () {}),
-            buildDrawerTile("Dashboard", Icons.home, () {
-              Get.offAll(GuestDashbaord(
-                user: user,
-              ));
-            }),
-            buildDrawerTile("History", Icons.history, () {
-              Get.offAll(GuestHistoryScreen(
-                user: user,
-                authController: controller,
-              ));
-            }),
-            buildDrawerTile("Logout", Icons.logout, () {
-              Get.dialog(
-                AlertDialog(
-                  backgroundColor: AppColors.background,
-                  title: const Txt(
-                    text: "Confirm Logout",
-                    color: Colors.black,
-                    fontSize: FontSize.textFontSize,
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.background,
+                backgroundColor: AppColors.primary,
+              ),
+            )
+          : SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  CircleAvatar(
+                    radius: 70,
+                    backgroundImage: user.profilePic != null &&
+                            user.profilePic!.isNotEmpty
+                        ? NetworkImage(user.profilePic!)
+                        : const NetworkImage(
+                            'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
+                    backgroundColor: AppColors.card,
+                  ),
+                  const SizedBox(height: 10),
+                  Txt(
+                    text: user.fullname,
+                    color: AppColors.secondary,
+                    fontSize: FontSize.titleFontSize,
                     fontWeight: FontWeight.bold,
                   ),
-                  content: const Txt(
-                    text: "Are you sure you want to logout?",
-                    color: Colors.black,
-                    fontSize: FontSize.subTitleFontSize,
-                    fontWeight: FontWeight.normal,
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        buildDrawerTile("Profile", Icons.person, () {
+                          Get.offAll(ProfileScreen(
+                            user: user,
+                            authController: widget.controller,
+                            isOwner: false,
+                          ));
+                        }),
+                        buildDrawerTile("Dashboard", Icons.home, () {
+                          Get.offAll(GuestDashbaord(
+                            user: user,
+                          ));
+                        }),
+                        buildDrawerTile("History", Icons.history, () {
+                          Get.offAll(GuestHistoryScreen(
+                            user: user,
+                            authController: widget.controller,
+                          ));
+                        }),
+                        buildDrawerTile("Logout", Icons.logout, () {
+                          Get.dialog(
+                            AlertDialog(
+                              backgroundColor: AppColors.background,
+                              title: const Txt(
+                                text: "Confirm Logout",
+                                color: Colors.black,
+                                fontSize: FontSize.textFontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              content: const Txt(
+                                text: "Are you sure you want to logout?",
+                                color: Colors.black,
+                                fontSize: FontSize.subTitleFontSize,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: const Txt(
+                                    text: "No",
+                                    color: Colors.black,
+                                    fontSize: FontSize.subTitleFontSize,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: WidgetStateProperty.all(
+                                    AppColors.primary,
+                                  )),
+                                  onPressed: () {
+                                    widget.controller.logout();
+                                  },
+                                  child: const Txt(
+                                    text: "Yes",
+                                    color: Colors.black,
+                                    fontSize: FontSize.subTitleFontSize,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: const Txt(
-                        text: "No",
-                        color: Colors.black,
-                        fontSize: FontSize.subTitleFontSize,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                        AppColors.primary,
-                      )),
-                      onPressed: () {
-                        controller.logout();
-                      },
-                      child: const Txt(
-                        text: "Yes",
-                        color: Colors.black,
-                        fontSize: FontSize.subTitleFontSize,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
+                ],
+              ),
+            ),
     );
   }
 

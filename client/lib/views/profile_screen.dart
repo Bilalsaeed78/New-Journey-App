@@ -5,16 +5,22 @@ import 'package:new_journey_app/controllers/auth_controller.dart';
 import 'package:new_journey_app/controllers/profile_controller.dart';
 import 'package:new_journey_app/extensions/string_extensions.dart';
 import 'package:new_journey_app/widgets/custom_text.dart';
+import 'package:new_journey_app/widgets/guest_drawer.dart';
 
 import '../models/user_model.dart';
 import '../widgets/owner_drawer.dart';
 import 'update_user_details_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key, required this.user, required this.authController});
+  ProfileScreen(
+      {super.key,
+      required this.user,
+      required this.authController,
+      required this.isOwner});
 
   final User user;
   final AuthController authController;
+  final bool isOwner;
 
   final profileController = Get.put(ProfileController());
 
@@ -22,9 +28,13 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      drawer: OwnerDrawer(
-        controller: authController,
-      ),
+      drawer: isOwner
+          ? OwnerDrawer(
+              controller: authController,
+            )
+          : GuestDrawer(
+              controller: authController,
+            ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.background,
@@ -60,8 +70,10 @@ class ProfileScreen extends StatelessWidget {
                                       null
                                   ? Image.file(profileController.profilePhoto!)
                                       .image
-                                  : profileController.user.value.profilePic !=
-                                          ""
+                                  : (profileController.user.value.profilePic !=
+                                              null &&
+                                          profileController.user.value
+                                              .profilePic!.isNotEmpty)
                                       ? NetworkImage(profileController
                                           .user.value.profilePic!)
                                       : const NetworkImage(

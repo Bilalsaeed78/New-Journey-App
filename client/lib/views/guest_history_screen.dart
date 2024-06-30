@@ -28,7 +28,7 @@ class GuestHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      drawer: GuestDrawer(user: user, controller: authController),
+      drawer: GuestDrawer(controller: authController),
       appBar: AppBar(
         backgroundColor: AppColors.background,
         surfaceTintColor: Colors.transparent,

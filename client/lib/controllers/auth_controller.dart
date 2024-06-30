@@ -52,29 +52,21 @@ class AuthController extends GetxController with LocalStorage {
     }
   }
 
-  Future<User?>? getCurrentUserInfo(String id) async {
+  Future<User?> getCurrentUserInfo(String id) async {
     try {
       toggleLoading();
       final url = Uri.parse("${AppStrings.BASE_URL}/user/current/$id");
-      final response = await http.get(
-        url,
-      );
+      final response = await http.get(url);
       if (response.statusCode == 201) {
         final res = jsonDecode(response.body);
         final user = User.fromJson(res['user']);
         return user;
       } else {
-        Get.snackbar(
-          'Error',
-          'Failed to fetch user information.',
-        );
+        Get.snackbar('Error', 'Failed to fetch user information.');
         return null;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString(),
-      );
+      Get.snackbar('Error', e.toString());
       return null;
     } finally {
       toggleLoading();

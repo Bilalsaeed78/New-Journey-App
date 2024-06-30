@@ -34,7 +34,8 @@ class OwnerDashboard extends StatelessWidget {
         actions: [
           CircleAvatar(
             radius: 34,
-            backgroundImage: user.profilePic != ''
+            backgroundImage: user.profilePic != null &&
+                    user.profilePic!.isNotEmpty
                 ? NetworkImage(user.profilePic!)
                 : const NetworkImage(
                     'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),

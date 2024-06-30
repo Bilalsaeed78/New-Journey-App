@@ -111,7 +111,6 @@ class ProfileController extends GetxController with LocalStorage {
             'contact_no': phoneController.text,
           }),
         );
-
         if (response.statusCode == 200) {
           user.value = User.fromJson(jsonDecode(response.body)['user']);
           update();

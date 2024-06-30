@@ -32,22 +32,21 @@ class GuestDashbaord extends StatelessWidget {
       backgroundColor: AppColors.background,
       drawer: GuestDrawer(
         controller: authController,
-        user: user,
       ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.background,
-        actions: const [
+        actions: [
           CircleAvatar(
-            maxRadius: 25,
-            backgroundColor: AppColors.secondary,
-            child: Icon(
-              Icons.person,
-              size: 32,
-              color: AppColors.primary,
-            ),
+            radius: 34,
+            backgroundImage: user.profilePic != null &&
+                    user.profilePic!.isNotEmpty
+                ? NetworkImage(user.profilePic!)
+                : const NetworkImage(
+                    'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
+            backgroundColor: AppColors.card,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],
