@@ -205,7 +205,7 @@ class _PropertyCardState extends State<PropertyCard> {
                                 text: widget.property.type.capitalizeFirst,
                                 color: AppColors.secondary,
                                 useOverflow: true,
-                                fontSize: FontSize.subTitleFontSize,
+                                fontSize: FontSize.subTitleFontSize - 2,
                               ),
                             ),
                           ],
@@ -250,8 +250,7 @@ class _PropertyCardState extends State<PropertyCard> {
                                   width: 8,
                                 ),
                                 Txt(
-                                  text:
-                                      "${propertyData['rental_price']} RS / Month",
+                                  text: "${propertyData['rental_price']} RS",
                                   color: AppColors.secondary,
                                   fontSize: FontSize.subTitleFontSize,
                                   fontWeight: FontWeight.normal,

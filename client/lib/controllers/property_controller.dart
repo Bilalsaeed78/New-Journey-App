@@ -610,4 +610,12 @@ class PropertyController extends GetxController with LocalStorage {
       toggleLoading();
     }
   }
+
+  // CHIPS LOGICS HERE
+  List<String> filters = ['All', 'Room', 'Office', 'Apartment'];
+  var selectedFilter = 'All'.obs;
+
+  void selectFilter(String filter) {
+    selectedFilter.value = filter;
+  }
 }

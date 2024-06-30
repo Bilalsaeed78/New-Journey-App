@@ -17,17 +17,24 @@ import '../widgets/guest_drawer.dart';
 import '../widgets/property_card.dart';
 import 'search_location_screen.dart';
 
-class GuestDashbaord extends StatelessWidget {
-  const GuestDashbaord({super.key, required this.user});
+class GuestDashbaord extends StatefulWidget {
+  GuestDashbaord({super.key, required this.user});
 
   final User user;
 
   @override
-  Widget build(BuildContext context) {
-    final authController = Get.find<AuthController>();
-    final propertyController = Get.put(PropertyController());
-    final searchController = Get.put(SearchFilterController());
+  State<GuestDashbaord> createState() => _GuestDashbaordState();
+}
 
+class _GuestDashbaordState extends State<GuestDashbaord> {
+  final authController = Get.find<AuthController>();
+
+  final propertyController = Get.put(PropertyController());
+
+  final searchController = Get.put(SearchFilterController());
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
       drawer: GuestDrawer(
@@ -39,9 +46,9 @@ class GuestDashbaord extends StatelessWidget {
         actions: [
           CircleAvatar(
             radius: 34,
-            backgroundImage: user.profilePic != null &&
-                    user.profilePic!.isNotEmpty
-                ? NetworkImage(user.profilePic!)
+            backgroundImage: widget.user.profilePic != null &&
+                    widget.user.profilePic!.isNotEmpty
+                ? NetworkImage(widget.user.profilePic!)
                 : const NetworkImage(
                     'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
             backgroundColor: AppColors.card,
@@ -76,7 +83,7 @@ class GuestDashbaord extends StatelessWidget {
                       fontWeight: FontWeightManager.medium,
                     ),
                     Txt(
-                      text: "${user.fullname!.split(" ").first}.",
+                      text: "${widget.user.fullname!.split(" ").first}.",
                       fontSize: FontSize.titleFontSize,
                       color: AppColors.primary,
                       fontWeight: FontWeightManager.bold,
@@ -269,6 +276,34 @@ class GuestDashbaord extends StatelessWidget {
                     );
                   },
                 ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: propertyController.filters.map((filter) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            top: 14.0, bottom: 4.0, right: 8.0),
+                        child: Obx(() {
+                          bool isSelected =
+                              filter == propertyController.selectedFilter.value;
+                          return FilterChip(
+                            label: Text(filter),
+                            selected: isSelected,
+                            onSelected: (bool selected) {
+                              if (selected) {
+                                propertyController.selectFilter(filter);
+                                setState(() {});
+                              }
+                            },
+                            selectedColor: AppColors.primary,
+                            backgroundColor:
+                                isSelected ? AppColors.primaryLight : null,
+                          );
+                        }),
+                      );
+                    }).toList(),
+                  ),
+                ),
                 Obx(
                   () {
                     if (propertyController.isLoading.value ||
@@ -320,7 +355,13 @@ class GuestDashbaord extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var data =
                                 searchController.searchedProperties[index];
-                            return data.isOccupied
+                            bool toShow =
+                                propertyController.selectedFilter.value ==
+                                        'All' ||
+                                    propertyController.selectedFilter.value
+                                            .toLowerCase() ==
+                                        data.type.toLowerCase();
+                            return data.isOccupied || !toShow
                                 ? const SizedBox.shrink()
                                 : PropertyCard(
                                     propertyController: propertyController,
@@ -343,7 +384,14 @@ class GuestDashbaord extends StatelessWidget {
                             itemBuilder: (context, index) {
                               var data =
                                   propertyController.allProperties[index];
-                              return data.isOccupied
+
+                              bool toShow =
+                                  propertyController.selectedFilter.value ==
+                                          'All' ||
+                                      propertyController.selectedFilter.value
+                                              .toLowerCase() ==
+                                          data.type.toLowerCase();
+                              return data.isOccupied || !toShow
                                   ? const SizedBox.shrink()
                                   : PropertyCard(
                                       propertyController: propertyController,
