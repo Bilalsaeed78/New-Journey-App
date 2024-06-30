@@ -11,6 +11,7 @@ import 'package:map_launcher/map_launcher.dart';
 import '../constants/font_manager.dart';
 import '../constants/themes/app_colors.dart';
 import '../constants/value_manager.dart';
+import '../widgets/bid_dialog.dart';
 import '../widgets/custom_text.dart';
 import '../widgets/user_profile_dialog.dart';
 import 'add_rating_screen.dart';
@@ -476,7 +477,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                     ElevatedButton(
                                       style: ButtonStyle(
                                           backgroundColor:
-                                              MaterialStateProperty.all(
+                                              WidgetStateProperty.all(
                                         AppColors.primary,
                                       )),
                                       onPressed: () async {
@@ -614,24 +615,36 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                           : null,
                                       onPressed: () async {
                                         if (!isRequested) {
-                                          final request = RequestModel(
-                                            ownerId:
-                                                widget.propertyData['owner'],
-                                            propertyId: widget.propertyId,
-                                            guestId: widget.propertyController
-                                                .getUserId()!,
-                                            status: "pending",
+                                          final int? bidPrice =
+                                              await showDialog<int>(
+                                            context: context,
+                                            builder: (context) => BidDialog(
+                                              requestController:
+                                                  requestController,
+                                              basePrice: widget
+                                                  .propertyData['rental_price'],
+                                            ),
                                           );
-                                          await requestController
-                                              .sendAccommodationRequest(
-                                                  request);
-                                        } else {
-                                          null;
+
+                                          if (bidPrice != null) {
+                                            final request = RequestModel(
+                                              ownerId:
+                                                  widget.propertyData['owner'],
+                                              propertyId: widget.propertyId,
+                                              guestId: widget.propertyController
+                                                  .getUserId()!,
+                                              status: "pending",
+                                              bid: bidPrice,
+                                            );
+                                            await requestController
+                                                .requestAccommodationWithBid(
+                                                    request);
+                                          }
                                         }
                                       },
                                       text: isRequested
                                           ? "Status is ${status!.capitalizeFirst!}"
-                                          : "Request for accomodation",
+                                          : "Request for accommodation",
                                       textColor: AppColors.secondary,
                                       buttonType: ButtonType.loading,
                                     ),

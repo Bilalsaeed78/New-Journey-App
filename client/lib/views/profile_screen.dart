@@ -150,7 +150,7 @@ class ProfileScreen extends StatelessWidget {
                           profileController: profileController,
                         ));
                       },
-                      tileColor: AppColors.primaryLight.withOpacity(0.6),
+                      tileColor: AppColors.primaryLight.withOpacity(0.3),
                       leading: const Icon(
                         Icons.person,
                         color: AppColors.secondary,
@@ -173,7 +173,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     ListTile(
                       onTap: () {},
-                      tileColor: AppColors.primaryLight.withOpacity(0.6),
+                      tileColor: AppColors.primaryLight.withOpacity(0.3),
                       leading: const Icon(
                         Icons.lock,
                         color: AppColors.secondary,

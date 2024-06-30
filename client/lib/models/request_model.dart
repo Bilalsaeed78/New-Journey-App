@@ -4,6 +4,7 @@ class RequestModel {
   String propertyId;
   String guestId;
   String status;
+  int bid;
 
   RequestModel({
     this.id,
@@ -11,6 +12,7 @@ class RequestModel {
     required this.propertyId,
     required this.guestId,
     required this.status,
+    required this.bid,
   });
 
   factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
@@ -19,6 +21,7 @@ class RequestModel {
         propertyId: json['propertyId'],
         guestId: json['guestId'],
         status: json['status'],
+        bid: json['bid'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,5 +30,6 @@ class RequestModel {
         'propertyId': propertyId,
         'guestId': guestId,
         'status': status,
+        'bid': bid,
       };
 }

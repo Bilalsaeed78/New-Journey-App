@@ -20,6 +20,10 @@ const requestSchema = new mongoose.Schema({
     type: String,
     enum: ['pending', 'accepted', 'declined'],
     default: 'pending'
+  },
+  bid: {
+    type: Number,
+    required: true
   }
 }, { timestamps: true }); 
 

@@ -61,21 +61,15 @@ class UserProfileDialog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                user.profilePic == null || user.profilePic!.isEmpty
-                    ? const CircleAvatar(
-                        maxRadius: 50,
-                        backgroundColor: AppColors.secondary,
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
-                          color: AppColors.primary,
-                        ),
-                      )
-                    : CircleAvatar(
-                        maxRadius: 50,
-                        backgroundImage: NetworkImage(user.profilePic!),
-                        radius: 50,
-                      ),
+                CircleAvatar(
+                  radius: 34,
+                  backgroundImage: user.profilePic != null &&
+                          user.profilePic!.isNotEmpty
+                      ? NetworkImage(user.profilePic!)
+                      : const NetworkImage(
+                          'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
+                  backgroundColor: AppColors.card,
+                ),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,

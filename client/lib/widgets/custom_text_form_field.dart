@@ -65,6 +65,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       cursorColor: AppColors.secondary,
       decoration: InputDecoration(
+        errorMaxLines: 2,
         contentPadding: const EdgeInsets.all(0.0),
         labelText: labelText,
         hintText: hintText,

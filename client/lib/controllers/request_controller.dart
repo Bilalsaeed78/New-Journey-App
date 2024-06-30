@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_journey_app/constants/string_manager.dart';
@@ -150,7 +151,38 @@ class RequestController extends GetxController with LocalStorage {
     }
   }
 
-  Future<void> sendAccommodationRequest(RequestModel requestModel) async {
+  // Future<void> sendAccommodationRequest(RequestModel requestModel) async {
+  //   try {
+  //     toggleLoading();
+  //     final requestBody = json.encode(requestModel.toJson());
+  //     final url = Uri.parse("${AppStrings.BASE_URL}/request/");
+  //     final response = await http.post(
+  //       url,
+  //       headers: {"Content-Type": "application/json"},
+  //       body: requestBody,
+  //     );
+  //     if (response.statusCode == 201) {
+  //       Get.back();
+  //       Get.snackbar(
+  //         'Success',
+  //         "Request send successfully.",
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       'Error',
+  //       "Failed to send request.",
+  //     );
+  //   } finally {
+  //     toggleLoading();
+  //   }
+  // }
+
+  // New Adds ons
+  final bidFormKey = GlobalKey<FormState>();
+  final TextEditingController bidController = TextEditingController();
+
+  Future<void> requestAccommodationWithBid(RequestModel requestModel) async {
     try {
       toggleLoading();
       final requestBody = json.encode(requestModel.toJson());
