@@ -77,7 +77,7 @@ class GuestDashbaord extends StatelessWidget {
                       fontWeight: FontWeightManager.medium,
                     ),
                     Txt(
-                      text: "${user.fullname.split(" ").first}.",
+                      text: "${user.fullname!.split(" ").first}.",
                       fontSize: FontSize.titleFontSize,
                       color: AppColors.primary,
                       fontWeight: FontWeightManager.bold,

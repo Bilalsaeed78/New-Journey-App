@@ -2,5 +2,5 @@
 
 class AppStrings {
   static const String BASE_URL =
-      "https://754f-39-34-149-125.ngrok-free.app/api";
+      "https://f28e-39-34-144-190.ngrok-free.app/api";
 }

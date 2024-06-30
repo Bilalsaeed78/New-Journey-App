@@ -31,7 +31,7 @@ class OwnerHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      drawer: OwnerDrawer(user: user, controller: authController),
+      drawer: OwnerDrawer(controller: authController),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: AppColors.secondary),
         backgroundColor: AppColors.background,

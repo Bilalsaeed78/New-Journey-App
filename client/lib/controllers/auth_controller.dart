@@ -150,7 +150,7 @@ class AuthController extends GetxController with LocalStorage {
         if (response.statusCode == 201) {
           final user = User.fromJson(res['user']);
           setUserId(user.uid!);
-          setUserType(user.role);
+          setUserType(user.role!);
           if (user.role == 'owner') {
             Get.offAll(OwnerDashboard(
               user: user,

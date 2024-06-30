@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:new_journey_app/constants/themes/app_colors.dart';
 import 'package:new_journey_app/controllers/auth_controller.dart';
 import 'package:new_journey_app/controllers/profile_controller.dart';
+import 'package:new_journey_app/extensions/string_extensions.dart';
 import 'package:new_journey_app/widgets/custom_text.dart';
 
 import '../models/user_model.dart';
 import '../widgets/owner_drawer.dart';
+import 'update_user_details_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key, required this.user, required this.authController});
@@ -22,7 +24,6 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       drawer: OwnerDrawer(
         controller: authController,
-        user: user,
       ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -34,7 +35,7 @@ class ProfileScreen extends StatelessWidget {
         () => profileController.isLoading.value
             ? const Center(
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: AppColors.background,
                   backgroundColor: AppColors.primary,
                 ),
               )
@@ -59,12 +60,13 @@ class ProfileScreen extends StatelessWidget {
                                       null
                                   ? Image.file(profileController.profilePhoto!)
                                       .image
-                                  : profileController.user.profilePic != ""
-                                      ? NetworkImage(
-                                          profileController.user.profilePic!)
+                                  : profileController.user.value.profilePic !=
+                                          ""
+                                      ? NetworkImage(profileController
+                                          .user.value.profilePic!)
                                       : const NetworkImage(
                                           'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
-                              backgroundColor: AppColors.background,
+                              backgroundColor: AppColors.card,
                             ),
                           ),
                           Positioned(
@@ -100,22 +102,22 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(
                       height: 14,
                     ),
-                    Txt(
-                      textAlign: TextAlign.center,
-                      // text: profileController.userName == ""
-                      //     ? profileController.jobseeker.fullname.capitalizeFirstOfEach
-                      //     : profileController.userName.capitalizeFirstOfEach,
-                      text: profileController.user.fullname.capitalizeFirst,
-                      color: AppColors.secondary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                    Obx(
+                      () => Txt(
+                        textAlign: TextAlign.center,
+                        text: profileController
+                            .user.value.fullname!.capitalizeFirstOfEach,
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                     const SizedBox(
                       height: 4,
                     ),
                     Txt(
                       textAlign: TextAlign.center,
-                      text: profileController.user.email,
+                      text: profileController.user.value.email,
                       color: AppColors.secondary,
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -131,7 +133,11 @@ class ProfileScreen extends StatelessWidget {
                       height: 14,
                     ),
                     ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(UpdateUserDetailsScreen(
+                          profileController: profileController,
+                        ));
+                      },
                       tileColor: AppColors.primaryLight.withOpacity(0.6),
                       leading: const Icon(
                         Icons.person,
@@ -157,7 +163,7 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () {},
                       tileColor: AppColors.primaryLight.withOpacity(0.6),
                       leading: const Icon(
-                        Icons.person,
+                        Icons.lock,
                         color: AppColors.secondary,
                       ),
                       trailing: const Icon(
@@ -182,7 +188,7 @@ class ProfileScreen extends StatelessWidget {
                       fontWeight: FontWeight.normal,
                     ),
                     const SizedBox(
-                      height: 14,
+                      height: 2,
                     ),
                   ],
                 ),

@@ -48,7 +48,7 @@ class CustomButton extends StatelessWidget {
           color: textColor,
           fontWeight: FontWeight.w600,
           letterSpacing: 1,
-          fontSize: 14,
+          fontSize: 16,
           fontFamily: "Work Sans",
         );
     switch (buttonType) {

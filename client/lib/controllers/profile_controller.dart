@@ -18,13 +18,14 @@ class ProfileController extends GetxController with LocalStorage {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
 
-  late User user;
+  late Rx<User> user;
 
   GlobalKey<FormState> editProfileFormKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
     super.onInit();
+    user = User().obs;
     getCurrentUserInfo(getUserId()!);
   }
 
@@ -37,7 +38,8 @@ class ProfileController extends GetxController with LocalStorage {
       );
       if (response.statusCode == 201) {
         final res = jsonDecode(response.body);
-        user = User.fromJson(res['user']);
+        user.value = User.fromJson(res['user']);
+        print(user.value.toJson());
       } else {
         Get.snackbar(
           'Error',
@@ -95,21 +97,34 @@ class ProfileController extends GetxController with LocalStorage {
   }
 
   Future<void> updateProfile() async {
-    String id = getUserId()!;
-    var url = Uri.parse('${AppStrings.BASE_URL}/profile/update/$id');
-    var response = await http.put(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        'fullname': nameController.text,
-        'contact_no': phoneController.text,
-      }),
-    );
+    if (editProfileFormKey.currentState!.validate()) {
+      try {
+        toggleLoading();
 
-    if (response.statusCode == 200) {
-      Get.snackbar('Success!', 'Profile updated successfully');
-    } else {
-      Get.snackbar('Error!', 'Failed to update profile');
+        String id = getUserId()!;
+        var url = Uri.parse('${AppStrings.BASE_URL}/profile/update/$id');
+        var response = await http.put(
+          url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            'fullname': nameController.text,
+            'contact_no': phoneController.text,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          user.value = User.fromJson(jsonDecode(response.body)['user']);
+          update();
+          Get.back();
+          Get.snackbar('Success!', 'Profile updated successfully');
+        } else {
+          Get.snackbar('Error!', 'Failed to update profile');
+        }
+      } catch (e) {
+        Get.snackbar('Error!', e.toString());
+      } finally {
+        toggleLoading();
+      }
     }
   }
 
