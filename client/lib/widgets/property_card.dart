@@ -229,8 +229,9 @@ class _PropertyCardState extends State<PropertyCard> {
                                   width: 8,
                                 ),
                                 Txt(
-                                  text:
-                                      "${propertyData['max_capacity']} Persons",
+                                  text: propertyData['max_capacity'] == 0
+                                      ? "Capacity Full"
+                                      : "${propertyData['max_capacity']} Persons",
                                   color: AppColors.secondary,
                                   fontSize: FontSize.subTitleFontSize,
                                   fontWeight: FontWeight.normal,

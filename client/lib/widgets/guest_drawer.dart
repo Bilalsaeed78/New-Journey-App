@@ -9,6 +9,7 @@ import '../constants/themes/app_colors.dart';
 import '../controllers/auth_controller.dart';
 import '../models/user_model.dart';
 import 'custom_text.dart';
+import 'theme_mode_switch.dart';
 
 class GuestDrawer extends StatefulWidget {
   const GuestDrawer({super.key, required this.controller});
@@ -145,6 +146,9 @@ class _GuestDrawerState extends State<GuestDrawer> {
                       ],
                     ),
                   ),
+                  const Spacer(),
+                  const ThemeModeSwitch(),
+                  const SizedBox(height: 18),
                 ],
               ),
             ),

@@ -9,6 +9,7 @@ import '../models/user_model.dart';
 import '../views/owner_dashboard.dart';
 import '../views/profile_screen.dart';
 import 'custom_text.dart';
+import 'theme_mode_switch.dart';
 
 class OwnerDrawer extends StatefulWidget {
   const OwnerDrawer({
@@ -137,6 +138,9 @@ class _OwnerDrawerState extends State<OwnerDrawer> {
                       ),
                     );
                   }),
+                  const Spacer(),
+                  const ThemeModeSwitch(),
+                  const SizedBox(height: 18),
                 ],
               ),
             ),

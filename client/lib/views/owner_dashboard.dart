@@ -142,7 +142,7 @@ class OwnerDashboard extends StatelessWidget {
                 }
               },
             ),
-            const SizedBox(height: SizeManager.sizeXL * 3),
+            const SizedBox(height: SizeManager.sizeXL),
           ],
         ),
       ),
