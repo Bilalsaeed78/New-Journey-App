@@ -15,11 +15,13 @@ class RequestTile extends StatefulWidget {
     required this.requestModel,
     required this.requestController,
     required this.isHistoryRoute,
+    required this.type,
   });
 
   final RequestModel requestModel;
   final RequestController requestController;
   final bool isHistoryRoute;
+  final String type;
 
   @override
   State<RequestTile> createState() => _RequestTileState();
@@ -74,7 +76,9 @@ class _RequestTileState extends State<RequestTile> {
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
         iconColor: AppColors.primary,
-        tileColor: AppColors.whiteShade,
+        tileColor: widget.requestModel.status == 'accepted'
+            ? AppColors.success.withOpacity(0.4)
+            : AppColors.whiteShade,
         leading: InkWell(
           onTap: () {
             showDialog(
@@ -82,27 +86,34 @@ class _RequestTileState extends State<RequestTile> {
               builder: (context) {
                 return UserProfileDialog(
                   ownerId: user.uid!,
+                  bid: widget.requestModel.bid,
                 );
               },
             );
           },
-          child: const CircleAvatar(
-              backgroundColor: AppColors.secondary,
-              child: Icon(
-                Icons.person,
-                color: AppColors.primary,
-              )),
+          child: CircleAvatar(
+            radius: 24,
+            backgroundImage: user.profilePic != null &&
+                    user.profilePic!.isNotEmpty
+                ? NetworkImage(user.profilePic!)
+                : const NetworkImage(
+                    'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
+            backgroundColor: AppColors.card,
+          ),
         ),
         title: Txt(
-          text: user.fullname,
+          text: user.fullname!.split(' ').first.capitalize,
           useOverflow: true,
         ),
-        subtitle: Txt(text: widget.requestModel.status.capitalizeFirst),
+        subtitle: Txt(
+            text: widget.requestModel.status == 'accepted'
+                ? 'Accepted'
+                : "Bid: ${widget.requestModel.bid} Rs"),
         trailing: widget.isHistoryRoute
             ? (widget.requestModel.status != 'accepted'
                 ? const Icon(
-                    Icons.disabled_by_default,
-                    color: AppColors.error,
+                    Icons.error,
+                    color: Colors.amber,
                     size: 30,
                   )
                 : const Icon(
@@ -117,7 +128,7 @@ class _RequestTileState extends State<RequestTile> {
                     IconButton(
                       onPressed: () async {
                         await widget.requestController.updateRequestStatus(
-                            widget.requestModel.id!, 'accepted');
+                            widget.requestModel.id!, 'accepted', widget.type);
                       },
                       icon: const Icon(
                         Icons.check_box,
@@ -129,7 +140,7 @@ class _RequestTileState extends State<RequestTile> {
                     IconButton(
                       onPressed: () async {
                         await widget.requestController.updateRequestStatus(
-                            widget.requestModel.id!, 'rejected');
+                            widget.requestModel.id!, 'rejected', widget.type);
                       },
                       icon: const Icon(
                         Icons.cancel,

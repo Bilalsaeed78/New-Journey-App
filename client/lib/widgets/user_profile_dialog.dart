@@ -9,9 +9,11 @@ import '../constants/themes/app_colors.dart';
 import 'custom_text.dart';
 
 class UserProfileDialog extends StatelessWidget {
-  const UserProfileDialog({Key? key, required this.ownerId}) : super(key: key);
+  const UserProfileDialog({Key? key, required this.ownerId, this.bid})
+      : super(key: key);
 
   final String ownerId;
+  final int? bid;
 
   Future<User?>? getCurrentUserInfo(String id) async {
     final url = Uri.parse("${AppStrings.BASE_URL}/user/current/$id");
@@ -70,6 +72,20 @@ class UserProfileDialog extends StatelessWidget {
                           'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
                   backgroundColor: AppColors.card,
                 ),
+                const SizedBox(height: 10),
+                bid != null
+                    ? Container(
+                        color: AppColors.primaryLight,
+                        width: double.infinity,
+                        child: Txt(
+                          textAlign: TextAlign.center,
+                          text: "Bid: ${bid.toString()} Rs",
+                          color: Colors.black,
+                          fontSize: FontSize.textFontSize,
+                          fontWeight: FontWeightManager.bold,
+                        ),
+                      )
+                    : Container(),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,

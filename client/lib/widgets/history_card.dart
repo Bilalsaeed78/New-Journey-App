@@ -109,6 +109,7 @@ class _HistoryCardState extends State<HistoryCard> {
                     ))
                   : Get.to(RentersListingScreen(
                       propertyId: widget.property.id!,
+                      type: widget.property.type,
                     ));
             },
             child: Container(

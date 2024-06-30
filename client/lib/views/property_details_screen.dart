@@ -565,6 +565,7 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                           requestController: requestController,
                           propertyId: widget.propertyId,
                           propertyController: widget.propertyController,
+                          type: widget.type,
                         ));
                       },
                       text: "See Requests",

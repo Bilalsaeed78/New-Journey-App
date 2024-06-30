@@ -10,8 +10,10 @@ import '../widgets/custom_text.dart';
 import '../widgets/request_tile.dart';
 
 class RentersListingScreen extends StatefulWidget {
-  const RentersListingScreen({super.key, required this.propertyId});
+  const RentersListingScreen(
+      {super.key, required this.propertyId, required this.type});
   final String propertyId;
+  final String type;
 
   @override
   State<RentersListingScreen> createState() => _RentersListingScreenState();
@@ -99,6 +101,7 @@ class _RentersListingScreenState extends State<RentersListingScreen> {
                   requestController: requestController,
                   requestModel: data,
                   isHistoryRoute: true,
+                  type: widget.type,
                 );
               },
             ),

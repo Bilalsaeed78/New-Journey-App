@@ -1,4 +1,8 @@
 const Property = require('../models/propertyModel');
+const Room = require('../models/roomModel');
+const Apartment = require('../models/apartmentModel');
+const Office = require('../models/officeModel');
+const mongoose = require('mongoose');
 
 exports.createProperty = async (req, res) => {
     try {
@@ -7,12 +11,12 @@ exports.createProperty = async (req, res) => {
         if (!ownerId || !propertyId || !type) {
             return res.status(400).json({ success: false, message: 'All required fields must be provided' });
         }
-        
+
         const existingProperty = await Property.findOne({ propertyId });
         if (existingProperty) {
             return res.status(400).json({ success: false, message: 'Property ID already exists' });
         }
-        
+
         const property = new Property({
             ownerId,
             propertyId,
@@ -36,7 +40,7 @@ exports.deleteProperty = async (req, res) => {
         }
 
         await property.deleteOne();
-        
+
         res.status(200).json({ success: true, message: 'Property deleted successfully' });
     } catch (error) {
         console.error(error.message);
@@ -99,21 +103,76 @@ exports.getPropertiesByOwnerId = async (req, res) => {
 };
 
 exports.updateIsOccupied = async (req, res) => {
-    try {
-        const { isOccupied } = req.body; 
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-        if (isOccupied === undefined) {
-            return res.status(400).json({ success: false, message: 'isOccupied must be provided and be a boolean' });
+    try {
+        const { isOccupied, propertyType } = req.body;
+
+        if (isOccupied === undefined || !propertyType) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(400).json({ success: false, message: 'isOccupied and propertyType must be provided and valid' });
         }
 
-        const property = await Property.findByIdAndUpdate(req.params.id, { isOccupied }, { new: true });
-
+        const property = await Property.findById(req.params.id).session(session);
         if (!property) {
+            await session.abortTransaction();
+            session.endSession();
             return res.status(404).json({ success: false, message: 'Property not found' });
         }
 
+        let propertyDetails;
+        switch (propertyType.toLowerCase()) {
+            case 'room':
+                propertyDetails = await Room.findById(property.propertyId).session(session);
+                break;
+            case 'office':
+                propertyDetails = await Office.findById(property.propertyId).session(session);
+                break;
+            case 'apartment':
+                propertyDetails = await Apartment.findById(property.propertyId).session(session);
+                break;
+            default:
+                await session.abortTransaction();
+                session.endSession();
+                return res.status(400).json({ success: false, message: 'Invalid property type' });
+        }
+
+        if (!propertyDetails) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({ success: false, message: 'Property details not found' });
+        }
+
+        if (isOccupied) {
+            if (propertyDetails.max_capacity <= 0) {
+                await session.abortTransaction();
+                session.endSession();
+                return res.status(400).json({ success: false, message: 'Property is out of space' });
+            }
+            propertyDetails.max_capacity -= 1;
+        } else {
+            propertyDetails.max_capacity += 1;            
+        }
+        
+
+        if (propertyDetails.max_capacity <= 0) {
+            property.isOccupied = true;
+        } else {
+            property.isOccupied = false;
+        }
+
+        await propertyDetails.save({ session });
+        await property.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+
         res.status(200).json({ success: true, message: 'Property occupancy status updated successfully', property });
     } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
         console.error(error.message);
         res.status(500).json({ success: false, message: 'Server Error' });
     }

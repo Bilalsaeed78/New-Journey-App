@@ -19,7 +19,8 @@ class RequestController extends GetxController with LocalStorage {
   final Rx<List<RequestModel>> _myPropertyRequests = Rx<List<RequestModel>>([]);
   List<RequestModel> get myPropertyRequests => _myPropertyRequests.value;
 
-  Future<void> updateRequestStatus(String requestId, String newStatus) async {
+  Future<void> updateRequestStatus(
+      String requestId, String newStatus, String type) async {
     try {
       toggleLoading();
 
@@ -46,13 +47,24 @@ class RequestController extends GetxController with LocalStorage {
             if (newStatus == 'accepted') {
               isOccupied = true;
             }
-            await http.put(
+            final response2 = await http.put(
               url2,
               headers: {"Content-Type": "application/json"},
-              body: json.encode({'isOccupied': isOccupied}),
+              body: json.encode({
+                'isOccupied': isOccupied,
+                'propertyType': type.toLowerCase(),
+              }),
             );
-            myPropertyRequests[index] = updatedRequest;
-            _myPropertyRequests.refresh();
+
+            if (response2.statusCode == 200) {
+              myPropertyRequests[index] = updatedRequest;
+              _myPropertyRequests.refresh();
+            } else {
+              Get.snackbar(
+                'Error',
+                'Failed to update property occupancy status.',
+              );
+            }
           }
         } else {
           Get.snackbar(

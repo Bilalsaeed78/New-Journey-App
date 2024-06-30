@@ -15,11 +15,13 @@ class RequestScreen extends StatefulWidget {
       {super.key,
       required this.requestController,
       required this.propertyId,
-      required this.propertyController});
+      required this.propertyController,
+      required this.type});
 
   final RequestController requestController;
   final String propertyId;
   final PropertyController propertyController;
+  final String type;
 
   @override
   State<RequestScreen> createState() => _RequestScreenState();
@@ -118,6 +120,7 @@ class _RequestScreenState extends State<RequestScreen> {
                   requestController: widget.requestController,
                   requestModel: data,
                   isHistoryRoute: false,
+                  type: widget.type,
                 );
               },
             ),
