@@ -45,11 +45,16 @@ class _GuestDrawerState extends State<GuestDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Drawer(
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       child: isLoading
-          ? const Center(
+          ? Center(
               child: CircularProgressIndicator(
-                color: AppColors.background,
+                color: isDarkMode
+                    ? DarkModeColors.backgroundColor
+                    : AppColors.background,
                 backgroundColor: AppColors.primary,
               ),
             )
@@ -69,7 +74,9 @@ class _GuestDrawerState extends State<GuestDrawer> {
                   const SizedBox(height: 10),
                   Txt(
                     text: user.fullname,
-                    color: AppColors.secondary,
+                    color: isDarkMode
+                        ? DarkModeColors.whiteGreyColor
+                        : AppColors.secondary,
                     fontSize: FontSize.titleFontSize,
                     fontWeight: FontWeight.bold,
                   ),
@@ -78,37 +85,43 @@ class _GuestDrawerState extends State<GuestDrawer> {
                   Expanded(
                     child: ListView(
                       children: [
-                        buildDrawerTile("Profile", Icons.person, () {
+                        buildDrawerTile(context, "Profile", Icons.person, () {
                           Get.offAll(ProfileScreen(
                             user: user,
                             authController: widget.controller,
                             isOwner: false,
                           ));
                         }),
-                        buildDrawerTile("Dashboard", Icons.home, () {
+                        buildDrawerTile(context, "Dashboard", Icons.home, () {
                           Get.offAll(GuestDashbaord(
                             user: user,
                           ));
                         }),
-                        buildDrawerTile("History", Icons.history, () {
+                        buildDrawerTile(context, "History", Icons.history, () {
                           Get.offAll(GuestHistoryScreen(
                             user: user,
                             authController: widget.controller,
                           ));
                         }),
-                        buildDrawerTile("Logout", Icons.logout, () {
+                        buildDrawerTile(context, "Logout", Icons.logout, () {
                           Get.dialog(
                             AlertDialog(
-                              backgroundColor: AppColors.background,
-                              title: const Txt(
+                              backgroundColor: isDarkMode
+                                  ? DarkModeColors.containerColor
+                                  : AppColors.background,
+                              title: Txt(
                                 text: "Confirm Logout",
-                                color: Colors.black,
+                                color: isDarkMode
+                                    ? DarkModeColors.whiteColor
+                                    : Colors.black,
                                 fontSize: FontSize.textFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
-                              content: const Txt(
+                              content: Txt(
                                 text: "Are you sure you want to logout?",
-                                color: Colors.black,
+                                color: isDarkMode
+                                    ? DarkModeColors.whiteColor
+                                    : Colors.black,
                                 fontSize: FontSize.subTitleFontSize,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -117,9 +130,11 @@ class _GuestDrawerState extends State<GuestDrawer> {
                                   onPressed: () {
                                     Get.back();
                                   },
-                                  child: const Txt(
+                                  child: Txt(
                                     text: "No",
-                                    color: Colors.black,
+                                    color: isDarkMode
+                                        ? DarkModeColors.whiteColor
+                                        : Colors.black,
                                     fontSize: FontSize.subTitleFontSize,
                                     fontWeight: FontWeight.normal,
                                   ),
@@ -155,11 +170,13 @@ class _GuestDrawerState extends State<GuestDrawer> {
     );
   }
 
-  ListTile buildDrawerTile(String text, IconData icon, Function onPressed) {
+  ListTile buildDrawerTile(
+      BuildContext context, String text, IconData icon, Function onPressed) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       title: Txt(
         text: text,
-        color: AppColors.secondary,
+        color: isDarkMode ? DarkModeColors.whiteGreyColor : AppColors.secondary,
         fontSize: FontSize.subTitleFontSize,
         fontWeight: FontWeight.normal,
       ),
