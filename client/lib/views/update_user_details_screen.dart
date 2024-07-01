@@ -31,11 +31,16 @@ class _UpdateUserDetailsScreenState extends State<UpdateUserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        title: const Txt(
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
+        title: Txt(
           text: "Update Profile Details",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
           fontSize: FontSize.textFontSize,
           fontWeight: FontWeightManager.medium,
         ),
@@ -91,9 +96,11 @@ class _UpdateUserDetailsScreenState extends State<UpdateUserDetailsScreen> {
                   color: AppColors.primary,
                   hasInfiniteWidth: true,
                   loadingWidget: widget.profileController.isLoading.value
-                      ? const Center(
+                      ? Center(
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: isDarkMode
+                                ? DarkModeColors.backgroundColor
+                                : AppColors.background,
                             backgroundColor: AppColors.primary,
                           ),
                         )
@@ -103,7 +110,9 @@ class _UpdateUserDetailsScreenState extends State<UpdateUserDetailsScreen> {
                     await widget.profileController.updateProfile();
                   },
                   text: "Submit",
-                  textColor: AppColors.background,
+                  textColor: isDarkMode
+                      ? DarkModeColors.backgroundColor
+                      : AppColors.background,
                   buttonType: ButtonType.loading,
                 ),
               ),

@@ -26,8 +26,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       drawer: isOwner
           ? OwnerDrawer(
               controller: authController,
@@ -37,15 +39,18 @@ class ProfileScreen extends StatelessWidget {
             ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         title: const Txt(text: 'Profile'),
         centerTitle: true,
       ),
       body: Obx(
         () => profileController.isLoading.value
-            ? const Center(
+            ? Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.background,
+                  color: isDarkMode
+                      ? DarkModeColors.backgroundColor
+                      : AppColors.background,
                   backgroundColor: AppColors.primary,
                 ),
               )
@@ -119,7 +124,9 @@ class ProfileScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         text: profileController
                             .user.value.fullname!.capitalizeFirstOfEach,
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -130,7 +137,9 @@ class ProfileScreen extends StatelessWidget {
                     Txt(
                       textAlign: TextAlign.center,
                       text: profileController.user.value.email,
-                      color: AppColors.secondary,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteColor
+                          : AppColors.secondary,
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                     ),
@@ -150,20 +159,27 @@ class ProfileScreen extends StatelessWidget {
                           profileController: profileController,
                         ));
                       },
-                      tileColor: AppColors.primaryLight.withOpacity(0.3),
-                      leading: const Icon(
+                      tileColor: AppColors.primaryLight
+                          .withOpacity(isDarkMode ? 0.5 : 0.3),
+                      leading: Icon(
                         Icons.person,
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                       ),
-                      trailing: const Icon(
+                      trailing: Icon(
                         Icons.arrow_forward_ios_outlined,
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                         size: 16,
                       ),
-                      title: const Txt(
+                      title: Txt(
                         textAlign: TextAlign.start,
                         text: 'Update User Details',
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
                       ),
@@ -173,29 +189,38 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     ListTile(
                       onTap: () {},
-                      tileColor: AppColors.primaryLight.withOpacity(0.3),
-                      leading: const Icon(
+                      tileColor: AppColors.primaryLight
+                          .withOpacity(isDarkMode ? 0.5 : 0.3),
+                      leading: Icon(
                         Icons.lock,
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                       ),
-                      trailing: const Icon(
+                      trailing: Icon(
                         Icons.arrow_forward_ios_outlined,
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                         size: 16,
                       ),
-                      title: const Txt(
+                      title: Txt(
                         textAlign: TextAlign.start,
                         text: 'Change Password',
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteColor
+                            : AppColors.secondary,
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
                     const Spacer(),
-                    const Txt(
+                    Txt(
                       textAlign: TextAlign.start,
                       text: 'Powered By New Journey ©',
-                      color: AppColors.secondary,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteColor
+                          : AppColors.secondary,
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                     ),
