@@ -38,15 +38,20 @@ class _PropertyReviewsScreenState extends State<PropertyReviewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.background,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
-        title: const Txt(
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        title: Txt(
           text: "Property Reviews",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Container(
@@ -87,10 +92,12 @@ class _PropertyReviewsScreenState extends State<PropertyReviewsScreen> {
                         const SizedBox(
                           height: 30,
                         ),
-                        const Center(
+                        Center(
                           child: Txt(
                             text: "No reviews available!",
-                            color: AppColors.secondary,
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : AppColors.secondary,
                             fontSize: FontSize.subTitleFontSize,
                           ),
                         ),
@@ -115,7 +122,9 @@ class _PropertyReviewsScreenState extends State<PropertyReviewsScreen> {
                     },
                     children: [
                       ExpansionPanel(
-                        backgroundColor: AppColors.whiteShade,
+                        backgroundColor: isDarkMode
+                            ? DarkModeColors.cardBackgroundColor
+                            : AppColors.whiteShade,
                         body: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 10),
@@ -156,12 +165,14 @@ class _PropertyReviewsScreenState extends State<PropertyReviewsScreen> {
                         headerBuilder: (BuildContext context, bool isExpanded) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
+                                vertical: 10, horizontal: 10),
                             child: Txt(
                               text: user.fullname,
                               useOverflow: true,
                               fontSize: FontSize.textFontSize + 2,
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               fontWeight: FontWeightManager.bold,
                             ),
                           );

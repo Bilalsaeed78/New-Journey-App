@@ -47,12 +47,17 @@ class _RequestScreenState extends State<RequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
         leading: IconButton(
           onPressed: () async {
             widget.propertyController.clearFields();
@@ -63,11 +68,10 @@ class _RequestScreenState extends State<RequestScreen> {
           icon: const Icon(
             Icons.arrow_back,
           ),
-          color: AppColors.secondary,
         ),
-        title: const Txt(
+        title: Txt(
           text: "Renters Request",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Obx(() {
@@ -94,10 +98,12 @@ class _RequestScreenState extends State<RequestScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  const Center(
+                  Center(
                     child: Txt(
                       text: "No request available.",
-                      color: AppColors.secondary,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteGreyColor
+                          : AppColors.secondary,
                       fontSize: FontSize.subTitleFontSize,
                     ),
                   ),

@@ -56,13 +56,15 @@ class _RequestTileState extends State<RequestTile> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? _buildShimmerEffect() : _buildTileContent();
+    return isLoading ? _buildShimmerEffect(context) : _buildTileContent();
   }
 
-  Widget _buildShimmerEffect() {
+  Widget _buildShimmerEffect(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: isDarkMode ? DarkModeColors.darkGreyColor : Colors.grey[300]!,
+      highlightColor:
+          isDarkMode ? DarkModeColors.lightGreyColor : Colors.grey[100]!,
       child: ListTile(
         leading: const CircleAvatar(backgroundColor: Colors.white),
         title: Container(color: Colors.white, height: 20.0, width: 100.0),
