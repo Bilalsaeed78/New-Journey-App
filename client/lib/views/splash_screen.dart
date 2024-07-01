@@ -25,20 +25,29 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/icons/logos_svg/full.svg',
-                height: 300,
-                width: 300,
-                fit: BoxFit.scaleDown,
-              ),
+              child: isDarkMode
+                  ? Image.asset(
+                      'assets/icons/logos_png/logo_dark.png',
+                      height: 300,
+                      width: 300,
+                      fit: BoxFit.scaleDown,
+                    )
+                  : SvgPicture.asset(
+                      'assets/icons/logos_svg/full.svg',
+                      height: 300,
+                      width: 300,
+                      fit: BoxFit.scaleDown,
+                    ),
             ),
           ],
         ),

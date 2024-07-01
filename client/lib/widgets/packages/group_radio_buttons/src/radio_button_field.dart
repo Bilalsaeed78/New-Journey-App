@@ -41,6 +41,7 @@ class _RadioButtonFormFieldState extends State<RadioButtonFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final InputDecoration effectiveDecoration = widget.decoration.applyDefaults(
       Theme.of(context).inputDecorationTheme,
     );
@@ -54,7 +55,8 @@ class _RadioButtonFormFieldState extends State<RadioButtonFormField> {
       child: RadioButtonGroup(
         labels: widget.labels,
         picked: widget.labels[currentIndex],
-        activeColor: AppColors.secondary,
+        activeColor:
+            isDarkMode ? DarkModeColors.whiteGreyColor : AppColors.secondary,
         alignment: MainAxisAlignment.center,
         orientation: GroupedButtonsOrientation.horizontal,
         direction: GroupedButtonsOrientation.horizontal,

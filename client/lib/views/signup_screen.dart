@@ -19,9 +19,11 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AuthController());
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -37,25 +39,31 @@ class SignupScreen extends StatelessWidget {
                       width: 150,
                       alignment: Alignment.center,
                       child: Image.asset(
-                        'assets/icons/logos_png/logo.png',
+                        isDarkMode
+                            ? 'assets/icons/logos_png/logo_dark.png'
+                            : 'assets/icons/logos_png/logo.png',
                       ),
                     ),
                     Container(
                       alignment: Alignment.center,
-                      child: const Txt(
+                      child: Txt(
                         text: "Create your Account",
                         textAlign: TextAlign.center,
-                        color: AppColors.secondary,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteGreyColor
+                            : AppColors.secondary,
                         fontWeight: FontWeight.bold,
                         fontSize: FontSize.titleFontSize,
                       ),
                     ),
                     Container(
                       alignment: Alignment.center,
-                      child: const Txt(
+                      child: Txt(
                         text: "Sign up now to get started with an account",
                         textAlign: TextAlign.center,
-                        color: AppColors.subtitleColor,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteGreyColor
+                            : AppColors.subtitleColor,
                         fontWeight: FontWeight.normal,
                         fontSize: FontSize.subTitleFontSize,
                       ),
@@ -148,18 +156,24 @@ class SignupScreen extends StatelessWidget {
                         labelText: 'User Type',
                         alignLabelWithHint: true,
                         contentPadding: const EdgeInsets.all(0.0),
-                        labelStyle: const TextStyle(
-                          color: AppColors.secondary,
+                        labelStyle: TextStyle(
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.secondary,
                           fontSize: FontSize.textFontSize,
                           fontWeight: FontWeight.w400,
                         ),
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
+                        hintStyle: TextStyle(
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : Colors.grey,
                           fontSize: FontSize.textFontSize,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: AppColors.secondary,
+                          borderSide: BorderSide(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : AppColors.secondary,
                             width: 1,
                           ),
                           borderRadius:
@@ -209,9 +223,11 @@ class SignupScreen extends StatelessWidget {
                         color: AppColors.primary,
                         hasInfiniteWidth: true,
                         loadingWidget: controller.isLoading.value
-                            ? const Center(
+                            ? Center(
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: isDarkMode
+                                      ? DarkModeColors.backgroundColor
+                                      : Colors.white,
                                   backgroundColor: AppColors.primary,
                                 ),
                               )
@@ -227,7 +243,9 @@ class SignupScreen extends StatelessWidget {
                           );
                         },
                         text: "Register",
-                        textColor: AppColors.background,
+                        textColor: isDarkMode
+                            ? DarkModeColors.backgroundColor
+                            : AppColors.background,
                         buttonType: ButtonType.loading,
                       ),
                     ),
@@ -237,10 +255,12 @@ class SignupScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Txt(
+                        Txt(
                           text: "Already have an account? ",
                           fontSize: FontSize.subTitleFontSize,
-                          color: AppColors.subtitleColor,
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.subtitleColor,
                         ),
                         InkWell(
                           onTap: () {
@@ -250,7 +270,7 @@ class SignupScreen extends StatelessWidget {
                           child: const Txt(
                             text: "Login",
                             fontSize: FontSize.subTitleFontSize,
-                            color: AppColors.secondary,
+                            color: AppColors.primary,
                             fontWeight: FontWeightManager.semibold,
                           ),
                         ),

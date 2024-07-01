@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'constants/themes/themes.dart';
 import 'controllers/theme_controller.dart';
 import 'views/splash_screen.dart';
 import 'widgets/dismiss_keyboard.dart';
@@ -30,8 +29,8 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'New Journey',
         debugShowCheckedModeBanner: false,
-        theme: themeLight(context),
-        darkTheme: themeDark(context),
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         themeMode: themeController.themeMode,
         home: const SplashScreen(),
       ),

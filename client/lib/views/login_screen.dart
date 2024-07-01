@@ -17,10 +17,12 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final controller = Get.find<AuthController>();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -36,15 +38,19 @@ class LoginScreen extends StatelessWidget {
                       width: 300,
                       alignment: Alignment.center,
                       child: Image.asset(
-                        'assets/icons/logos_png/full.png',
+                        isDarkMode
+                            ? 'assets/icons/logos_png/full_dark.png'
+                            : 'assets/icons/logos_png/full.png',
                       ),
                     ),
                     Container(
                       alignment: Alignment.center,
-                      child: const Txt(
+                      child: Txt(
                         text: "Welcome back, please enter your details",
                         textAlign: TextAlign.center,
-                        color: AppColors.subtitleColor,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteGreyColor
+                            : AppColors.subtitleColor,
                         fontWeight: FontWeight.normal,
                         fontSize: FontSize.subTitleFontSize + 2,
                       ),
@@ -105,9 +111,11 @@ class LoginScreen extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         alignment: Alignment.bottomRight,
-                        child: const Txt(
+                        child: Txt(
                           text: "Forgot password?",
-                          color: AppColors.secondary,
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.secondary,
                           fontSize: FontSize.subTitleFontSize,
                           fontWeight: FontWeightManager.medium,
                         ),
@@ -121,9 +129,11 @@ class LoginScreen extends StatelessWidget {
                         color: AppColors.primary,
                         hasInfiniteWidth: true,
                         loadingWidget: controller.isLoading.value
-                            ? const Center(
+                            ? Center(
                                 child: CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: isDarkMode
+                                      ? DarkModeColors.backgroundColor
+                                      : Colors.white,
                                   backgroundColor: AppColors.primary,
                                 ),
                               )
@@ -135,7 +145,9 @@ class LoginScreen extends StatelessWidget {
                           );
                         },
                         text: "Login",
-                        textColor: AppColors.background,
+                        textColor: isDarkMode
+                            ? DarkModeColors.backgroundColor
+                            : AppColors.background,
                         buttonType: ButtonType.loading,
                       ),
                     ),
@@ -145,10 +157,12 @@ class LoginScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Txt(
+                        Txt(
                           text: "Don't have an account? ",
                           fontSize: FontSize.subTitleFontSize,
-                          color: AppColors.subtitleColor,
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.subtitleColor,
                         ),
                         InkWell(
                           onTap: () {
@@ -158,7 +172,7 @@ class LoginScreen extends StatelessWidget {
                           child: const Txt(
                             text: "Sign Up",
                             fontSize: FontSize.subTitleFontSize,
-                            color: AppColors.secondary,
+                            color: AppColors.primary,
                             fontWeight: FontWeightManager.semibold,
                           ),
                         ),
