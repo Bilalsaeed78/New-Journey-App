@@ -81,17 +81,29 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              Get.back();
+            },
+            icon: const Icon(Icons.arrow_back)),
         title: Txt(
           text: widget.isEdit
               ? "Edit ${widget.type.capitalizeFirst!}"
               : "Add ${widget.type.capitalizeFirst!}",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: SingleChildScrollView(
@@ -267,18 +279,24 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           labelText: 'Lift Available',
                           alignLabelWithHint: true,
                           contentPadding: const EdgeInsets.all(0.0),
-                          labelStyle: const TextStyle(
-                            color: AppColors.secondary,
+                          labelStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : AppColors.secondary,
                             fontSize: FontSize.textFontSize,
                             fontWeight: FontWeight.w400,
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
+                          hintStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : Colors.grey,
                             fontSize: FontSize.textFontSize,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: AppColors.secondary,
+                            borderSide: BorderSide(
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteGreyColor
+                                  : AppColors.secondary,
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(
@@ -321,18 +339,24 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           labelText: 'AC Available',
                           alignLabelWithHint: true,
                           contentPadding: const EdgeInsets.all(0.0),
-                          labelStyle: const TextStyle(
-                            color: AppColors.secondary,
+                          labelStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : AppColors.secondary,
                             fontSize: FontSize.textFontSize,
                             fontWeight: FontWeight.w400,
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
+                          hintStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : Colors.grey,
                             fontSize: FontSize.textFontSize,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: AppColors.secondary,
+                            borderSide: BorderSide(
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteGreyColor
+                                  : AppColors.secondary,
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(
@@ -366,18 +390,24 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           labelText: 'Wifi Available',
                           alignLabelWithHint: true,
                           contentPadding: const EdgeInsets.all(0.0),
-                          labelStyle: const TextStyle(
-                            color: AppColors.secondary,
+                          labelStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : AppColors.secondary,
                             fontSize: FontSize.textFontSize,
                             fontWeight: FontWeight.w400,
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
+                          hintStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : Colors.grey,
                             fontSize: FontSize.textFontSize,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: AppColors.secondary,
+                            borderSide: BorderSide(
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteGreyColor
+                                  : AppColors.secondary,
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(
@@ -439,18 +469,24 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           labelText: 'Lift Available',
                           alignLabelWithHint: true,
                           contentPadding: const EdgeInsets.all(0.0),
-                          labelStyle: const TextStyle(
-                            color: AppColors.secondary,
+                          labelStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : AppColors.secondary,
                             fontSize: FontSize.textFontSize,
                             fontWeight: FontWeight.w400,
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
+                          hintStyle: TextStyle(
+                            color: isDarkMode
+                                ? DarkModeColors.whiteGreyColor
+                                : Colors.grey,
                             fontSize: FontSize.textFontSize,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: AppColors.secondary,
+                            borderSide: BorderSide(
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteGreyColor
+                                  : AppColors.secondary,
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(
@@ -482,19 +518,25 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   RadiusManager.buttonRadius),
-                              color: AppColors.propertyContainer,
+                              color: isDarkMode
+                                  ? DarkModeColors.cardBackgroundColor
+                                  : AppColors.propertyContainer,
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.image,
-                                  color: AppColors.secondary,
+                                  color: isDarkMode
+                                      ? DarkModeColors.whiteGreyColor
+                                      : AppColors.secondary,
                                 ),
                                 Txt(
                                   text:
                                       "Add ${widget.type.capitalizeFirst!} Images",
-                                  color: AppColors.secondary,
+                                  color: isDarkMode
+                                      ? DarkModeColors.whiteColor
+                                      : AppColors.secondary,
                                   fontWeight: FontWeightManager.medium,
                                 ),
                               ],
@@ -529,7 +571,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       width: double.infinity,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: AppColors.propertyContainer,
+                        color: isDarkMode
+                            ? DarkModeColors.cardBackgroundColor
+                            : AppColors.propertyContainer,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Row(
@@ -537,7 +581,10 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           const SizedBox(
                             width: 10,
                           ),
-                          const Icon(Icons.map, color: AppColors.secondary),
+                          Icon(Icons.map,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteGreyColor
+                                  : AppColors.secondary),
                           const SizedBox(
                             width: 12,
                           ),
@@ -567,9 +614,11 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                     color: AppColors.primary,
                     hasInfiniteWidth: true,
                     loadingWidget: widget.propertyController.isLoading.value
-                        ? const Center(
+                        ? Center(
                             child: CircularProgressIndicator(
-                              color: Colors.white,
+                              color: isDarkMode
+                                  ? DarkModeColors.backgroundColor
+                                  : Colors.white,
                               backgroundColor: AppColors.primary,
                             ),
                           )
@@ -597,7 +646,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       }
                     },
                     text: widget.isEdit ? "Edit" : "Add",
-                    textColor: AppColors.background,
+                    textColor: isDarkMode
+                        ? DarkModeColors.backgroundColor
+                        : AppColors.background,
                     buttonType: ButtonType.loading,
                   ),
                 ),

@@ -292,7 +292,7 @@ class PropertyController extends GetxController with LocalStorage {
         colorText: Colors.white,
       );
     } finally {
-      toggleLoading();
+      isLoading.value = false;
     }
   }
 
@@ -392,7 +392,7 @@ class PropertyController extends GetxController with LocalStorage {
         colorText: Colors.white,
       );
     } finally {
-      toggleLoading();
+      isLoading.value = false;
     }
   }
 
@@ -494,7 +494,7 @@ class PropertyController extends GetxController with LocalStorage {
         colorText: Colors.white,
       );
     } finally {
-      toggleLoading();
+      isLoading.value = false;
     }
   }
 
@@ -531,7 +531,7 @@ class PropertyController extends GetxController with LocalStorage {
         colorText: Colors.white,
       );
     } finally {
-      toggleLoading();
+      isLoading.value = false;
     }
   }
 
@@ -569,7 +569,7 @@ class PropertyController extends GetxController with LocalStorage {
         colorText: Colors.white,
       );
     } finally {
-      toggleLoading();
+      isLoading.value = false;
     }
   }
 
@@ -607,7 +607,7 @@ class PropertyController extends GetxController with LocalStorage {
         colorText: Colors.white,
       );
     } finally {
-      toggleLoading();
+      isLoading.value = false;
     }
   }
 

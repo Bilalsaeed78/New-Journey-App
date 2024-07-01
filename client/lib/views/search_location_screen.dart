@@ -75,19 +75,24 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.background,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
         elevation: 0,
-        title: const Txt(
+        title: Txt(
           text: "Pick Location",
           textAlign: TextAlign.start,
           fontWeight: FontWeight.normal,
           fontSize: FontSize.textFontSize,
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Column(
@@ -106,10 +111,12 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
               },
             ),
           ),
-          const Divider(
+          Divider(
             height: 4,
             thickness: 4,
-            color: AppColors.divider,
+            color: isDarkMode
+                ? DarkModeColors.whiteColor.withOpacity(0.4)
+                : AppColors.divider,
           ),
           Expanded(
             child: ListView.builder(

@@ -17,107 +17,126 @@ class PropertyTypeSelectorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () {
             propertyController.clearFields();
             Get.back();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: AppColors.secondary,
+            color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
           ),
         ),
         surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.symmetric(
-                horizontal: MarginManager.marginL,
-                vertical: MarginManager.marginM),
-            child: Column(
-              children: [
-                Container(
-                  height: 200,
-                  width: 200,
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/icons/logos_png/logo.png',
-                  ),
+      body: Center(
+        child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.symmetric(
+              horizontal: MarginManager.marginL,
+              vertical: MarginManager.marginM),
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: SizeManager.sizeXXL * 0.8,
+              ),
+              Container(
+                height: isDarkMode ? 150 : 200,
+                width: 200,
+                alignment: Alignment.center,
+                child: Image.asset(
+                  isDarkMode
+                      ? 'assets/icons/logos_png/logo_dark.png'
+                      : 'assets/icons/logos_png/logo.png',
                 ),
-                const Txt(
-                  textAlign: TextAlign.start,
-                  text: "Property Type?",
-                  fontSize: FontSize.textFontSize,
-                  color: AppColors.secondary,
-                  fontWeight: FontWeightManager.bold,
-                ),
-                const Txt(
-                  textAlign: TextAlign.start,
-                  text: "Please select your type to add property.",
-                  fontSize: FontSize.subTitleFontSize + 2,
-                  color: AppColors.secondary,
-                  fontWeight: FontWeightManager.medium,
-                ),
-                const SizedBox(
-                  height: SizeManager.sizeXL,
-                ),
-                CustomButton(
-                  color: AppColors.primary,
-                  textColor: AppColors.secondary,
-                  text: "Room",
-                  onPressed: () {
-                    propertyController.clearFields();
-                    Get.to(AddPropertyScreen(
-                      propertyController: propertyController,
-                      type: "room",
-                      isEdit: false,
-                    ));
-                  },
-                  hasInfiniteWidth: true,
-                ),
-                const SizedBox(
-                  height: SizeManager.sizeL,
-                ),
-                CustomButton(
-                  color: AppColors.primary,
-                  textColor: AppColors.secondary,
-                  text: "Office",
-                  onPressed: () {
-                    propertyController.clearFields();
-                    Get.to(AddPropertyScreen(
-                      propertyController: propertyController,
-                      type: "office",
-                      isEdit: false,
-                    ));
-                  },
-                  hasInfiniteWidth: true,
-                ),
-                const SizedBox(
-                  height: SizeManager.sizeL,
-                ),
-                CustomButton(
-                  color: AppColors.primary,
-                  textColor: AppColors.secondary,
-                  text: "Apartment",
-                  onPressed: () {
-                    propertyController.clearFields();
-                    Get.to(AddPropertyScreen(
-                      propertyController: propertyController,
-                      type: "apartment",
-                      isEdit: false,
-                    ));
-                  },
-                  hasInfiniteWidth: true,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: SizeManager.sizeL,
+              ),
+              Txt(
+                textAlign: TextAlign.center,
+                text: "Property Type?",
+                fontSize: FontSize.textFontSize,
+                color: isDarkMode
+                    ? DarkModeColors.whiteColor
+                    : AppColors.secondary,
+                fontWeight: FontWeightManager.bold,
+              ),
+              Txt(
+                textAlign: TextAlign.center,
+                text: "Please select your type to add property.",
+                fontSize: FontSize.subTitleFontSize + 2,
+                color: isDarkMode
+                    ? DarkModeColors.whiteColor
+                    : AppColors.secondary,
+                fontWeight: FontWeightManager.medium,
+              ),
+              const SizedBox(
+                height: SizeManager.sizeXL,
+              ),
+              CustomButton(
+                color: AppColors.primary,
+                textColor: AppColors.secondary,
+                text: "Room",
+                onPressed: () {
+                  propertyController.clearFields();
+                  Get.to(AddPropertyScreen(
+                    propertyController: propertyController,
+                    type: "room",
+                    isEdit: false,
+                  ));
+                },
+                hasInfiniteWidth: true,
+              ),
+              const SizedBox(
+                height: SizeManager.sizeL,
+              ),
+              CustomButton(
+                color: AppColors.primary,
+                textColor: AppColors.secondary,
+                text: "Office",
+                onPressed: () {
+                  propertyController.clearFields();
+                  Get.to(AddPropertyScreen(
+                    propertyController: propertyController,
+                    type: "office",
+                    isEdit: false,
+                  ));
+                },
+                hasInfiniteWidth: true,
+              ),
+              const SizedBox(
+                height: SizeManager.sizeL,
+              ),
+              CustomButton(
+                color: AppColors.primary,
+                textColor: AppColors.secondary,
+                text: "Apartment",
+                onPressed: () {
+                  propertyController.clearFields();
+                  Get.to(AddPropertyScreen(
+                    propertyController: propertyController,
+                    type: "apartment",
+                    isEdit: false,
+                  ));
+                },
+                hasInfiniteWidth: true,
+              ),
+              const SizedBox(
+                height: SizeManager.sizeXL,
+              ),
+            ],
           ),
         ),
       ),

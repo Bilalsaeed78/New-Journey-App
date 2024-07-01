@@ -15,15 +15,15 @@ class LocationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         ListTile(
           onTap: press,
           horizontalTitleGap: 0,
-          leading: const Icon(
-            Icons.location_on,
-            color: AppColors.secondary,
-          ),
+          leading: Icon(Icons.location_on,
+              color:
+                  isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
           minLeadingWidth: 40,
           title: Txt(
             text: location,
@@ -32,10 +32,12 @@ class LocationListTile extends StatelessWidget {
             fontSize: 14,
           ),
         ),
-        const Divider(
+        Divider(
           height: 2,
           thickness: 1,
-          color: AppColors.divider,
+          color: isDarkMode
+              ? DarkModeColors.whiteColor.withOpacity(0.4)
+              : AppColors.divider,
         ),
       ],
     );

@@ -15,12 +15,17 @@ class ImageViewerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
@@ -29,13 +34,14 @@ class ImageViewerScreen extends StatelessWidget {
                   : propertyController.isImagePicked.value = true;
               Get.back();
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
-              color: AppColors.secondary,
+              color:
+                  isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
             )),
-        title: const Txt(
+        title: Txt(
           text: "Add Images",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Container(
@@ -60,30 +66,40 @@ class ImageViewerScreen extends StatelessWidget {
               closeButtonPadding: const EdgeInsets.all(3),
             );
           },
-          initialWidget: const DefaultInitialWidget(
+          initialWidget: DefaultInitialWidget(
             centerWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.image,
-                  color: AppColors.secondary,
+                  color: isDarkMode
+                      ? DarkModeColors.whiteColor
+                      : AppColors.secondary,
                 ),
                 Txt(
                   text: "Add Images",
-                  color: AppColors.secondary,
+                  color: isDarkMode
+                      ? DarkModeColors.whiteColor
+                      : AppColors.secondary,
                   fontWeight: FontWeightManager.medium,
                 ),
               ],
             ),
-            backgroundColor: AppColors.propertyContainer,
+            backgroundColor: isDarkMode
+                ? DarkModeColors.cardBackgroundColor
+                : AppColors.propertyContainer,
             margin: EdgeInsets.zero,
           ),
-          addMoreButton: const DefaultAddMoreWidget(
+          addMoreButton: DefaultAddMoreWidget(
               icon: Icon(
                 Icons.add,
-                color: AppColors.secondary,
+                color: isDarkMode
+                    ? DarkModeColors.whiteColor
+                    : AppColors.secondary,
               ),
-              backgroundColor: AppColors.propertyContainer),
+              backgroundColor: isDarkMode
+                  ? DarkModeColors.cardBackgroundColor
+                  : AppColors.propertyContainer),
         ),
       ),
     );
