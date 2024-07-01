@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/themes/app_colors.dart';
+
 class CustomCarouselSlider extends StatefulWidget {
   const CustomCarouselSlider({super.key, required this.imagesUrls});
 
@@ -32,7 +34,10 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       body: Column(
         children: [
           CarouselSlider(

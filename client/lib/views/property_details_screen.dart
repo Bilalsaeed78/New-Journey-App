@@ -64,15 +64,20 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.background,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
-        title: const Txt(
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        title: Txt(
           text: "Property Details",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: SingleChildScrollView(
@@ -109,7 +114,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                             .propertyData['apartment_number']
                                         : widget
                                             .propertyData['office_address']),
-                                color: Colors.black,
+                                color: isDarkMode
+                                    ? DarkModeColors.whiteColor
+                                    : Colors.black,
                                 fontSize: FontSize.textFontSize,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -119,7 +126,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                               child: Txt(
                                 textAlign: TextAlign.start,
                                 text: widget.propertyData['address'],
-                                color: Colors.black,
+                                color: isDarkMode
+                                    ? DarkModeColors.whiteColor
+                                    : Colors.black,
                                 fontSize: FontSize.subTitleFontSize,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -133,7 +142,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                         labelPadding: const EdgeInsets.all(0),
                         label: Txt(
                           text: widget.type.capitalizeFirst,
-                          color: AppColors.secondary,
+                          color: isDarkMode
+                              ? DarkModeColors.backgroundColor
+                              : AppColors.secondary,
                           useOverflow: true,
                           fontSize: FontSize.subTitleFontSize,
                         ),
@@ -148,7 +159,8 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                     child: Txt(
                       textAlign: TextAlign.start,
                       text: widget.propertyData['overview'],
-                      color: Colors.black,
+                      color:
+                          isDarkMode ? DarkModeColors.whiteColor : Colors.black,
                       fontSize: FontSize.subTitleFontSize - 2,
                       fontWeight: FontWeight.normal,
                     ),
@@ -158,8 +170,12 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                   ),
                   CustomButton(
                     buttonType: ButtonType.outline,
-                    textColor: AppColors.secondary,
-                    color: AppColors.background,
+                    textColor: isDarkMode
+                        ? DarkModeColors.whiteGreyColor
+                        : AppColors.secondary,
+                    color: isDarkMode
+                        ? DarkModeColors.cardBackgroundColor
+                        : AppColors.background,
                     text: "See Owner Details",
                     onPressed: () {
                       showDialog(
@@ -298,9 +314,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                     ),
                   ),
                   if (widget.type != 'room')
-                    const Column(
+                    Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: SizeManager.sizeM,
                         ),
                         SizedBox(
@@ -308,12 +324,14 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                           child: Txt(
                             textAlign: TextAlign.start,
                             text: "Additional Services",
-                            color: Colors.black,
+                            color: isDarkMode
+                                ? DarkModeColors.whiteColor
+                                : Colors.black,
                             fontSize: FontSize.textFontSize,
                             fontWeight: FontWeightManager.semibold,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: SizeManager.sizeM,
                         ),
                       ],
@@ -324,9 +342,11 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       if (widget.type == 'office')
                         Row(
                           children: [
-                            const CircleAvatar(
-                              backgroundColor: AppColors.secondary,
-                              child: Icon(
+                            CircleAvatar(
+                              backgroundColor: isDarkMode
+                                  ? DarkModeColors.lightGreyColor
+                                  : AppColors.secondary,
+                              child: const Icon(
                                 Icons.ac_unit,
                                 color: AppColors.primaryLight,
                               ),
@@ -338,7 +358,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                               text: widget.propertyData['acAvailable']
                                   ? "AC Available"
                                   : "AC Not Available",
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               fontSize: FontSize.subTitleFontSize,
                               fontWeight: FontWeight.normal,
                             ),
@@ -347,9 +369,11 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       if (widget.type == 'office')
                         Row(
                           children: [
-                            const CircleAvatar(
-                              backgroundColor: AppColors.secondary,
-                              child: Icon(
+                            CircleAvatar(
+                              backgroundColor: isDarkMode
+                                  ? DarkModeColors.lightGreyColor
+                                  : AppColors.secondary,
+                              child: const Icon(
                                 Icons.keyboard,
                                 color: AppColors.primaryLight,
                               ),
@@ -360,7 +384,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                             Txt(
                               text:
                                   "${widget.propertyData['cabinsAvailable'].toString()} Cabins",
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               fontSize: FontSize.subTitleFontSize,
                               fontWeight: FontWeight.normal,
                             ),
@@ -369,9 +395,11 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       if (widget.type == 'apartment')
                         Row(
                           children: [
-                            const CircleAvatar(
-                              backgroundColor: AppColors.secondary,
-                              child: Icon(
+                            CircleAvatar(
+                              backgroundColor: isDarkMode
+                                  ? DarkModeColors.lightGreyColor
+                                  : AppColors.secondary,
+                              child: const Icon(
                                 Icons.door_back_door,
                                 color: AppColors.primaryLight,
                               ),
@@ -382,7 +410,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                             Txt(
                               text:
                                   "${widget.propertyData['rooms'].toString()} Rooms",
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               fontSize: FontSize.subTitleFontSize,
                               fontWeight: FontWeight.normal,
                             ),
@@ -391,9 +421,11 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                       if (widget.type == 'apartment')
                         Row(
                           children: [
-                            const CircleAvatar(
-                              backgroundColor: AppColors.secondary,
-                              child: Icon(
+                            CircleAvatar(
+                              backgroundColor: isDarkMode
+                                  ? DarkModeColors.lightGreyColor
+                                  : AppColors.secondary,
+                              child: const Icon(
                                 Icons.stairs,
                                 color: AppColors.primaryLight,
                               ),
@@ -404,7 +436,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                             Txt(
                               text:
                                   "${widget.propertyData['floor'].toString()} Floors",
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               fontSize: FontSize.subTitleFontSize,
                               fontWeight: FontWeight.normal,
                             ),
@@ -417,12 +451,18 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                   ),
                   CustomButton(
                     buttonType: ButtonType.textWithImage,
-                    textColor: AppColors.secondary,
-                    color: AppColors.divider,
+                    textColor: isDarkMode
+                        ? DarkModeColors.whiteColor
+                        : AppColors.secondary,
+                    color: isDarkMode
+                        ? DarkModeColors.cardBackgroundColor
+                        : AppColors.divider,
                     text: "Show location on map",
-                    image: const Icon(
+                    image: Icon(
                       Icons.pin_drop,
-                      color: AppColors.secondary,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteColor
+                          : AppColors.secondary,
                     ),
                     onPressed: () async {
                       final availableMaps = await MapLauncher.installedMaps;
@@ -444,22 +484,30 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                         Expanded(
                           child: CustomButton(
                             buttonType: ButtonType.outline,
-                            textColor: AppColors.secondary,
+                            textColor: isDarkMode
+                                ? DarkModeColors.whiteColor
+                                : AppColors.secondary,
                             color: AppColors.divider,
                             text: "Delete",
                             onPressed: () {
                               Get.dialog(
                                 AlertDialog(
-                                  backgroundColor: AppColors.background,
-                                  title: const Txt(
+                                  backgroundColor: isDarkMode
+                                      ? DarkModeColors.containerColor
+                                      : AppColors.background,
+                                  title: Txt(
                                     text: "Confirm Delete Property",
-                                    color: Colors.black,
+                                    color: isDarkMode
+                                        ? DarkModeColors.whiteColor
+                                        : Colors.black,
                                     fontSize: FontSize.textFontSize,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  content: const Txt(
+                                  content: Txt(
                                     text: "Are you sure you want to delete?",
-                                    color: Colors.black,
+                                    color: isDarkMode
+                                        ? DarkModeColors.whiteColor
+                                        : Colors.black,
                                     fontSize: FontSize.subTitleFontSize,
                                     fontWeight: FontWeight.normal,
                                   ),
@@ -468,9 +516,11 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                       onPressed: () {
                                         Get.back();
                                       },
-                                      child: const Txt(
+                                      child: Txt(
                                         text: "Cancel",
-                                        color: Colors.black,
+                                        color: isDarkMode
+                                            ? DarkModeColors.whiteColor
+                                            : Colors.black,
                                         fontSize: FontSize.subTitleFontSize,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -607,9 +657,12 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                       hasInfiniteWidth: true,
                                       loadingWidget: requestController
                                               .isLoading.value
-                                          ? const Center(
+                                          ? Center(
                                               child: CircularProgressIndicator(
-                                                color: Colors.white,
+                                                color: isDarkMode
+                                                    ? DarkModeColors
+                                                        .backgroundColor
+                                                    : Colors.white,
                                                 backgroundColor:
                                                     AppColors.primary,
                                               ),
@@ -647,7 +700,9 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                                       text: isRequested
                                           ? "Status is ${status!.capitalizeFirst!}"
                                           : "Request for accommodation",
-                                      textColor: AppColors.secondary,
+                                      textColor: isDarkMode
+                                          ? DarkModeColors.backgroundColor
+                                          : AppColors.secondary,
                                       buttonType: ButtonType.loading,
                                     ),
                                   ),
@@ -657,9 +712,13 @@ class _PropertyDetailsScreemState extends State<PropertyDetailsScreem> {
                   ),
                   CustomButton(
                     buttonType: ButtonType.outlineWithImage,
-                    image:
-                        const Icon(Icons.reviews, color: AppColors.secondary),
-                    textColor: AppColors.secondary,
+                    image: Icon(Icons.reviews,
+                        color: isDarkMode
+                            ? DarkModeColors.whiteGreyColor
+                            : AppColors.secondary),
+                    textColor: isDarkMode
+                        ? DarkModeColors.whiteGreyColor
+                        : AppColors.secondary,
                     color: AppColors.background,
                     text: "View Ratings",
                     onPressed: () {

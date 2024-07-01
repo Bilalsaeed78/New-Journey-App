@@ -31,6 +31,7 @@ class UserProfileDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return FutureBuilder<User?>(
       future: getCurrentUserInfo(ownerId),
       builder: (context, snapshot) {
@@ -47,13 +48,15 @@ class UserProfileDialog extends StatelessWidget {
         } else {
           final user = snapshot.data!;
           return AlertDialog(
-            backgroundColor: AppColors.background,
-            title: const SizedBox(
+            backgroundColor: isDarkMode
+                ? DarkModeColors.containerColor
+                : AppColors.background,
+            title: SizedBox(
               width: double.infinity,
               child: Txt(
                 textAlign: TextAlign.center,
                 text: "Personal Details",
-                color: Colors.black,
+                color: isDarkMode ? DarkModeColors.whiteColor : Colors.black,
                 fontSize: FontSize.textFontSize,
                 fontWeight: FontWeightManager.semibold,
               ),
@@ -92,7 +95,8 @@ class UserProfileDialog extends StatelessWidget {
                   child: Txt(
                     textAlign: TextAlign.center,
                     text: user.fullname,
-                    color: Colors.black,
+                    color:
+                        isDarkMode ? DarkModeColors.whiteColor : Colors.black,
                     fontSize: FontSize.subTitleFontSize,
                     fontWeight: FontWeightManager.regular,
                   ),
@@ -102,7 +106,8 @@ class UserProfileDialog extends StatelessWidget {
                   child: Txt(
                     textAlign: TextAlign.center,
                     text: user.contactNo,
-                    color: Colors.black,
+                    color:
+                        isDarkMode ? DarkModeColors.whiteColor : Colors.black,
                     fontSize: FontSize.subTitleFontSize,
                     fontWeight: FontWeightManager.regular,
                   ),
@@ -112,7 +117,8 @@ class UserProfileDialog extends StatelessWidget {
                   child: Txt(
                     textAlign: TextAlign.center,
                     text: user.email,
-                    color: Colors.black,
+                    color:
+                        isDarkMode ? DarkModeColors.whiteColor : Colors.black,
                     fontSize: FontSize.subTitleFontSize,
                     fontWeight: FontWeightManager.regular,
                   ),
