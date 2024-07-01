@@ -185,9 +185,7 @@ class _HistoryCardState extends State<HistoryCard> {
                         labelPadding: const EdgeInsets.all(0),
                         label: Txt(
                           text: status.capitalizeFirst,
-                          color: isDarkMode
-                              ? DarkModeColors.whiteGreyColor
-                              : AppColors.secondary,
+                          color: AppColors.secondary,
                           useOverflow: true,
                           fontSize: FontSize.subTitleFontSize,
                         ),

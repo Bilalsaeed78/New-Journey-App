@@ -26,16 +26,21 @@ class GuestHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       drawer: GuestDrawer(controller: authController),
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
-        title: const Txt(
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        title: Txt(
           text: "Requests History",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Obx(
@@ -71,10 +76,12 @@ class GuestHistoryScreen extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      const Center(
+                      Center(
                         child: Txt(
                           text: "No request submitted!",
-                          color: AppColors.secondary,
+                          color: isDarkMode
+                              ? DarkModeColors.whiteColor
+                              : AppColors.secondary,
                           fontSize: FontSize.subTitleFontSize,
                         ),
                       ),

@@ -18,7 +18,7 @@ import '../widgets/property_card.dart';
 import 'search_location_screen.dart';
 
 class GuestDashbaord extends StatefulWidget {
-  GuestDashbaord({super.key, required this.user});
+  const GuestDashbaord({super.key, required this.user});
 
   final User user;
 
@@ -35,14 +35,17 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       drawer: GuestDrawer(
         controller: authController,
       ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         actions: [
           CircleAvatar(
             radius: 34,
@@ -76,10 +79,12 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
               children: [
                 Row(
                   children: [
-                    const Txt(
+                    Txt(
                       text: "Hello, ",
                       fontSize: FontSize.titleFontSize,
-                      color: AppColors.secondary,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteColor
+                          : AppColors.secondary,
                       fontWeight: FontWeightManager.medium,
                     ),
                     Txt(
@@ -90,12 +95,14 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                     ),
                   ],
                 ),
-                const SizedBox(
+                SizedBox(
                   width: double.infinity,
                   child: Txt(
                     text: "Find the best properties to rent.",
                     fontSize: FontSize.textFontSize - 1,
-                    color: AppColors.secondary,
+                    color: isDarkMode
+                        ? DarkModeColors.whiteColor
+                        : AppColors.secondary,
                     fontWeight: FontWeightManager.medium,
                   ),
                 ),
@@ -117,9 +124,11 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                           child: Container(
                             width: double.infinity,
                             height: Get.height * 0.42,
-                            decoration: const BoxDecoration(
-                              color: AppColors.background,
-                              borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                              color: isDarkMode
+                                  ? DarkModeColors.backgroundColor
+                                  : AppColors.background,
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(12),
                                 topRight: Radius.circular(12),
                               ),
@@ -130,12 +139,14 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                               children: [
                                 Column(
                                   children: [
-                                    const SizedBox(
+                                    SizedBox(
                                       width: double.infinity,
                                       child: Txt(
                                         text: "Filter Properties",
                                         fontSize: FontSize.textFontSize + 2,
-                                        color: Colors.black,
+                                        color: isDarkMode
+                                            ? DarkModeColors.whiteColor
+                                            : Colors.black,
                                         fontWeight: FontWeightManager.bold,
                                       ),
                                     ),
@@ -185,7 +196,9 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                                         width: double.infinity,
                                         height: 50,
                                         decoration: BoxDecoration(
-                                          color: AppColors.propertyContainer,
+                                          color: isDarkMode
+                                              ? DarkModeColors.containerColor
+                                              : AppColors.propertyContainer,
                                           borderRadius:
                                               BorderRadius.circular(4),
                                         ),
@@ -194,8 +207,10 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                                             const SizedBox(
                                               width: 10,
                                             ),
-                                            const Icon(Icons.map,
-                                                color: AppColors.secondary),
+                                            Icon(Icons.map,
+                                                color: isDarkMode
+                                                    ? DarkModeColors.whiteColor
+                                                    : AppColors.secondary),
                                             const SizedBox(
                                               width: 12,
                                             ),
@@ -227,7 +242,9 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                                         Expanded(
                                           child: CustomButton(
                                             buttonType: ButtonType.outline,
-                                            textColor: AppColors.secondary,
+                                            textColor: isDarkMode
+                                                ? DarkModeColors.whiteGreyColor
+                                                : AppColors.secondary,
                                             color: AppColors.divider,
                                             text: "Clear",
                                             onPressed: () async {
@@ -287,7 +304,9 @@ class _GuestDashbaordState extends State<GuestDashbaord> {
                           bool isSelected =
                               filter == propertyController.selectedFilter.value;
                           return FilterChip(
-                            label: Text(filter),
+                            label: Text(
+                              filter,
+                            ),
                             selected: isSelected,
                             onSelected: (bool selected) {
                               if (selected) {

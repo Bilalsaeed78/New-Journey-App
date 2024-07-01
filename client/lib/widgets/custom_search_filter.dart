@@ -15,11 +15,13 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.grey[200],
+        color:
+            isDarkMode ? DarkModeColors.cardBackgroundColor : Colors.grey[200],
       ),
       child: Row(
         children: [
@@ -27,12 +29,15 @@ class CustomSearchBar extends StatelessWidget {
             child: TextField(
               controller: controller,
               onChanged: onChanged,
-              cursorColor: AppColors.secondary,
-              decoration: const InputDecoration(
+              cursorColor:
+                  isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
+              decoration: InputDecoration(
                 hintText: 'Search...',
                 hintStyle: TextStyle(
                     fontFamily: "Work Sans",
-                    color: AppColors.secondary,
+                    color: isDarkMode
+                        ? DarkModeColors.whiteColor
+                        : AppColors.secondary,
                     fontWeight: FontWeight.normal),
                 border: InputBorder.none,
               ),

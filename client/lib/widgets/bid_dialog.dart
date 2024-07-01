@@ -19,12 +19,15 @@ class BidDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Form(
       key: requestController.bidFormKey,
       child: AlertDialog(
-        title: const Txt(
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
+        title: Txt(
           text: "Enter Bid Price",
-          color: Colors.black,
+          color: isDarkMode ? DarkModeColors.whiteColor : Colors.black,
           fontSize: FontSize.textFontSize,
           fontWeight: FontWeight.bold,
         ),
@@ -38,10 +41,8 @@ class BidDialog extends StatelessWidget {
             if (value!.isEmpty) {
               return "Bid price cannot be empty.";
             }
-
             int bidPrice = int.tryParse(value)!;
             int minBid = (basePrice * 0.8).floor();
-
             if (bidPrice < minBid) {
               return "Bid price must be more or equal to $minBid Rs.";
             }
@@ -53,9 +54,9 @@ class BidDialog extends StatelessWidget {
             onPressed: () {
               Get.back(result: null);
             },
-            child: const Txt(
+            child: Txt(
               text: "Cancel",
-              color: Colors.black,
+              color: isDarkMode ? DarkModeColors.whiteColor : Colors.black,
               fontSize: FontSize.subTitleFontSize,
               fontWeight: FontWeight.normal,
             ),

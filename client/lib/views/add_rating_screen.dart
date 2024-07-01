@@ -22,15 +22,20 @@ class AddRatingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppColors.secondary),
-        title: const Txt(
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        title: Txt(
           text: "Add Ratings",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Container(
@@ -62,20 +67,39 @@ class AddRatingScreen extends StatelessWidget {
             TextField(
               controller: ratingController.reviewController,
               autofocus: false,
+              cursorColor: isDarkMode
+                  ? DarkModeColors.whiteGreyColor
+                  : AppColors.secondary,
               keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.secondary)),
+                      borderSide: BorderSide(
+                    color: isDarkMode
+                        ? DarkModeColors.whiteGreyColor
+                        : AppColors.secondary,
+                  )),
                   label: Txt(
                     text: "Review",
+                    color: isDarkMode
+                        ? DarkModeColors.whiteGreyColor
+                        : AppColors.secondary,
                   ),
-                  labelStyle:
-                      TextStyle(fontSize: 16, color: AppColors.secondary),
-                  floatingLabelStyle:
-                      TextStyle(fontSize: 16, color: AppColors.secondary),
+                  labelStyle: TextStyle(
+                      fontSize: 16,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteGreyColor
+                          : AppColors.secondary),
+                  floatingLabelStyle: TextStyle(
+                      fontSize: 16,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteGreyColor
+                          : AppColors.secondary),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.secondary)),
-                  prefixIcon: Icon(
+                      borderSide: BorderSide(
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.secondary)),
+                  prefixIcon: const Icon(
                     Icons.reviews,
                     color: AppColors.primary,
                   ),
@@ -89,9 +113,11 @@ class AddRatingScreen extends StatelessWidget {
                 color: AppColors.primary,
                 hasInfiniteWidth: true,
                 loadingWidget: ratingController.isLoading.value
-                    ? const Center(
+                    ? Center(
                         child: CircularProgressIndicator(
-                          color: Colors.white,
+                          color: isDarkMode
+                              ? DarkModeColors.backgroundColor
+                              : AppColors.background,
                           backgroundColor: AppColors.primary,
                         ),
                       )
@@ -100,7 +126,9 @@ class AddRatingScreen extends StatelessWidget {
                   await ratingController.addRatings(propertyId, guestId, type);
                 },
                 text: "Add Ratings",
-                textColor: AppColors.background,
+                textColor: isDarkMode
+                    ? DarkModeColors.backgroundColor
+                    : AppColors.background,
                 buttonType: ButtonType.loading,
               ),
             ),
