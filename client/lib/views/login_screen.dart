@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 300,
+                      height: isDarkMode ? 220 : 300,
                       width: 300,
                       alignment: Alignment.center,
                       child: Image.asset(
@@ -42,6 +42,9 @@ class LoginScreen extends StatelessWidget {
                             ? 'assets/icons/logos_png/full_dark.png'
                             : 'assets/icons/logos_png/full.png',
                       ),
+                    ),
+                    SizedBox(
+                      height: isDarkMode ? SizeManager.sizeXL : 0,
                     ),
                     Container(
                       alignment: Alignment.center,

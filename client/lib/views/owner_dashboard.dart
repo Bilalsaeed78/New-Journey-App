@@ -22,15 +22,18 @@ class OwnerDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
     final propertyController = Get.put(PropertyController());
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       drawer: OwnerDrawer(
         controller: authController,
       ),
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.background,
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         actions: [
           CircleAvatar(
             radius: 34,
@@ -54,10 +57,12 @@ class OwnerDashboard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Txt(
+                Txt(
                   text: "Welcome, ",
                   fontSize: FontSize.titleFontSize,
-                  color: AppColors.secondary,
+                  color: isDarkMode
+                      ? DarkModeColors.whiteColor
+                      : AppColors.secondary,
                   fontWeight: FontWeightManager.medium,
                 ),
                 Txt(
@@ -69,13 +74,15 @@ class OwnerDashboard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: SizeManager.sizeXS),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
               child: Txt(
                 textAlign: TextAlign.start,
                 text: "Find all your added properties here",
                 fontSize: FontSize.subTitleFontSize + 2,
-                color: AppColors.secondary,
+                color: isDarkMode
+                    ? DarkModeColors.whiteColor
+                    : AppColors.secondary,
                 fontWeight: FontWeightManager.medium,
               ),
             ),
@@ -109,10 +116,12 @@ class OwnerDashboard extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            const Center(
+                            Center(
                               child: Txt(
                                 text: "No properties are added yet!",
-                                color: AppColors.secondary,
+                                color: isDarkMode
+                                    ? DarkModeColors.whiteColor
+                                    : AppColors.secondary,
                                 fontSize: FontSize.subTitleFontSize,
                               ),
                             ),

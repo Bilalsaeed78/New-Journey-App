@@ -36,10 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
             Container(
               alignment: Alignment.center,
               child: isDarkMode
-                  ? Image.asset(
-                      'assets/icons/logos_png/logo_dark.png',
-                      height: 300,
-                      width: 300,
+                  ? SvgPicture.asset(
+                      'assets/icons/logos_svg/full_dark.svg',
+                      height: 350,
+                      width: 350,
                       fit: BoxFit.scaleDown,
                     )
                   : SvgPicture.asset(

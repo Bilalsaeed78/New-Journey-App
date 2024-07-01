@@ -70,6 +70,7 @@ class _PropertyCardState extends State<PropertyCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         Get.to(PropertyDetailsScreem(
@@ -88,7 +89,9 @@ class _PropertyCardState extends State<PropertyCard> {
           vertical: MarginManager.marginM,
         ),
         decoration: BoxDecoration(
-          color: AppColors.propertyContainer,
+          color: isDarkMode
+              ? DarkModeColors.cardBackgroundColor
+              : AppColors.propertyContainer,
           borderRadius: BorderRadius.circular(
             RadiusManager.buttonRadius,
           ),
@@ -118,13 +121,17 @@ class _PropertyCardState extends State<PropertyCard> {
                           top: 5,
                           child: Chip(
                             side: BorderSide.none,
-                            backgroundColor: AppColors.background,
+                            backgroundColor: isDarkMode
+                                ? DarkModeColors.backgroundColor
+                                : AppColors.background,
                             labelPadding: const EdgeInsets.all(0),
                             label: Txt(
                               text: widget.property.isOccupied
                                   ? "Occupied"
                                   : "Vacant",
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               useOverflow: true,
                               fontSize: FontSize.subTitleFontSize,
                             ),
@@ -136,12 +143,16 @@ class _PropertyCardState extends State<PropertyCard> {
                           top: 5,
                           child: Chip(
                             side: BorderSide.none,
-                            backgroundColor: AppColors.background,
+                            backgroundColor: isDarkMode
+                                ? DarkModeColors.backgroundColor
+                                : AppColors.background,
                             labelPadding: const EdgeInsets.all(0),
                             label: Txt(
                               text:
                                   "${widget.property.distance!.toStringAsFixed(2)} KMs away",
-                              color: AppColors.secondary,
+                              color: isDarkMode
+                                  ? DarkModeColors.whiteColor
+                                  : AppColors.secondary,
                               useOverflow: true,
                               fontSize: FontSize.subTitleFontSize,
                             ),
@@ -178,7 +189,9 @@ class _PropertyCardState extends State<PropertyCard> {
                                               ? propertyData['apartment_number']
                                               : propertyData['office_address']),
                                       useOverflow: true,
-                                      color: Colors.black,
+                                      color: isDarkMode
+                                          ? DarkModeColors.whiteColor
+                                          : Colors.black,
                                       fontSize: FontSize.textFontSize,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -189,7 +202,9 @@ class _PropertyCardState extends State<PropertyCard> {
                                       textAlign: TextAlign.start,
                                       useOverflow: true,
                                       text: propertyData['address'],
-                                      color: Colors.black,
+                                      color: isDarkMode
+                                          ? DarkModeColors.whiteColor
+                                          : Colors.black,
                                       fontSize: FontSize.subTitleFontSize,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -203,7 +218,9 @@ class _PropertyCardState extends State<PropertyCard> {
                               labelPadding: const EdgeInsets.all(0),
                               label: Txt(
                                 text: widget.property.type.capitalizeFirst,
-                                color: AppColors.secondary,
+                                color: isDarkMode
+                                    ? DarkModeColors.backgroundColor
+                                    : AppColors.secondary,
                                 useOverflow: true,
                                 fontSize: FontSize.subTitleFontSize - 2,
                               ),
@@ -232,7 +249,9 @@ class _PropertyCardState extends State<PropertyCard> {
                                   text: propertyData['max_capacity'] == 0
                                       ? "Capacity Full"
                                       : "${propertyData['max_capacity']} Persons",
-                                  color: AppColors.secondary,
+                                  color: isDarkMode
+                                      ? DarkModeColors.whiteColor
+                                      : AppColors.secondary,
                                   fontSize: FontSize.subTitleFontSize,
                                   fontWeight: FontWeight.normal,
                                 ),
@@ -252,7 +271,9 @@ class _PropertyCardState extends State<PropertyCard> {
                                 ),
                                 Txt(
                                   text: "${propertyData['rental_price']} RS",
-                                  color: AppColors.secondary,
+                                  color: isDarkMode
+                                      ? DarkModeColors.whiteColor
+                                      : AppColors.secondary,
                                   fontSize: FontSize.subTitleFontSize,
                                   fontWeight: FontWeight.normal,
                                 ),

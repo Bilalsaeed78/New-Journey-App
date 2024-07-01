@@ -35,7 +35,7 @@ class SignupScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 150,
+                      height: isDarkMode ? 120 : 150,
                       width: 150,
                       alignment: Alignment.center,
                       child: Image.asset(
@@ -43,6 +43,9 @@ class SignupScreen extends StatelessWidget {
                             ? 'assets/icons/logos_png/logo_dark.png'
                             : 'assets/icons/logos_png/logo.png',
                       ),
+                    ),
+                    SizedBox(
+                      height: isDarkMode ? SizeManager.sizeXL : 0,
                     ),
                     Container(
                       alignment: Alignment.center,
