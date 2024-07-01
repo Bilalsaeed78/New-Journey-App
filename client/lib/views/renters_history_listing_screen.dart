@@ -40,15 +40,20 @@ class _RentersListingScreenState extends State<RentersListingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: AppColors.secondary),
-        backgroundColor: AppColors.background,
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        title: const Txt(
+        title: Txt(
           text: "Renter Requests List",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Obx(() {
@@ -75,10 +80,12 @@ class _RentersListingScreenState extends State<RentersListingScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  const Center(
+                  Center(
                     child: Txt(
                       text: "No request available.",
-                      color: AppColors.secondary,
+                      color: isDarkMode
+                          ? DarkModeColors.whiteGreyColor
+                          : AppColors.secondary,
                       fontSize: FontSize.subTitleFontSize,
                     ),
                   ),

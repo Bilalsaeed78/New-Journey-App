@@ -85,6 +85,7 @@ class _HistoryCardState extends State<HistoryCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return isLoading
         ? SizedBox(
             width: double.infinity,
@@ -120,7 +121,9 @@ class _HistoryCardState extends State<HistoryCard> {
                 horizontal: MarginManager.marginL,
               ),
               decoration: BoxDecoration(
-                color: AppColors.propertyContainer,
+                color: isDarkMode
+                    ? DarkModeColors.cardBackgroundColor
+                    : AppColors.propertyContainer,
                 borderRadius: BorderRadius.circular(
                   RadiusManager.buttonRadius,
                 ),
@@ -149,7 +152,9 @@ class _HistoryCardState extends State<HistoryCard> {
                                     : propertyData['office_address']),
                             textAlign: TextAlign.start,
                             useOverflow: true,
-                            color: Colors.black,
+                            color: isDarkMode
+                                ? DarkModeColors.whiteColor
+                                : Colors.black,
                             fontSize: FontSize.textFontSize,
                             fontWeight: FontWeight.bold,
                           ),
@@ -160,7 +165,9 @@ class _HistoryCardState extends State<HistoryCard> {
                             textAlign: TextAlign.start,
                             useOverflow: true,
                             text: propertyData['address'],
-                            color: Colors.black,
+                            color: isDarkMode
+                                ? DarkModeColors.whiteColor
+                                : Colors.black,
                             fontSize: FontSize.subTitleFontSize,
                             fontWeight: FontWeight.normal,
                           ),
@@ -178,7 +185,9 @@ class _HistoryCardState extends State<HistoryCard> {
                         labelPadding: const EdgeInsets.all(0),
                         label: Txt(
                           text: status.capitalizeFirst,
-                          color: AppColors.secondary,
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.secondary,
                           useOverflow: true,
                           fontSize: FontSize.subTitleFontSize,
                         ),

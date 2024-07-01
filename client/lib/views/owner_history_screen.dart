@@ -29,16 +29,21 @@ class OwnerHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:
+          isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
       drawer: OwnerDrawer(controller: authController),
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: AppColors.secondary),
-        backgroundColor: AppColors.background,
+        iconTheme: IconThemeData(
+            color:
+                isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary),
+        backgroundColor:
+            isDarkMode ? DarkModeColors.backgroundColor : AppColors.background,
         surfaceTintColor: Colors.transparent,
-        title: const Txt(
+        title: Txt(
           text: "Renting History",
-          color: AppColors.secondary,
+          color: isDarkMode ? DarkModeColors.whiteColor : AppColors.secondary,
         ),
       ),
       body: Obx(
@@ -74,10 +79,12 @@ class OwnerHistoryScreen extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      const Center(
+                      Center(
                         child: Txt(
                           text: "No requests available!",
-                          color: AppColors.secondary,
+                          color: isDarkMode
+                              ? DarkModeColors.whiteGreyColor
+                              : AppColors.secondary,
                           fontSize: FontSize.subTitleFontSize,
                         ),
                       ),
