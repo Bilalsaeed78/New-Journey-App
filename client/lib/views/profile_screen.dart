@@ -184,36 +184,36 @@ class ProfileScreen extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      tileColor: AppColors.primaryLight
-                          .withOpacity(isDarkMode ? 0.5 : 0.3),
-                      leading: Icon(
-                        Icons.lock,
-                        color: isDarkMode
-                            ? DarkModeColors.whiteColor
-                            : AppColors.secondary,
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: isDarkMode
-                            ? DarkModeColors.whiteColor
-                            : AppColors.secondary,
-                        size: 16,
-                      ),
-                      title: Txt(
-                        textAlign: TextAlign.start,
-                        text: 'Change Password',
-                        color: isDarkMode
-                            ? DarkModeColors.whiteColor
-                            : AppColors.secondary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
+                    // const SizedBox(
+                    //   height: 14,
+                    // ),
+                    // ListTile(
+                    //   onTap: () {},
+                    //   tileColor: AppColors.primaryLight
+                    //       .withOpacity(isDarkMode ? 0.5 : 0.3),
+                    //   leading: Icon(
+                    //     Icons.lock,
+                    //     color: isDarkMode
+                    //         ? DarkModeColors.whiteColor
+                    //         : AppColors.secondary,
+                    //   ),
+                    //   trailing: Icon(
+                    //     Icons.arrow_forward_ios_outlined,
+                    //     color: isDarkMode
+                    //         ? DarkModeColors.whiteColor
+                    //         : AppColors.secondary,
+                    //     size: 16,
+                    //   ),
+                    //   title: Txt(
+                    //     textAlign: TextAlign.start,
+                    //     text: 'Change Password',
+                    //     color: isDarkMode
+                    //         ? DarkModeColors.whiteColor
+                    //         : AppColors.secondary,
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.normal,
+                    //   ),
+                    // ),
                     const Spacer(),
                     Txt(
                       textAlign: TextAlign.start,

@@ -42,7 +42,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     Uri uri = Uri.https(
         "maps.googleapis.com",
         'maps/api/place/autocomplete/json',
-        {"input": query, "key": 'AIzaSyAC41qD4CKnJGwlWAXs46TPoBvxwLwc5e4'});
+        {"input": query, "key": 'API_KEY'});
     String? response = await fetchUrl(uri);
     if (response != null) {
       PlaceAutocompleteResponse result =
@@ -58,7 +58,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
   Future<void> getPlaceDetails(String placeId) async {
     Uri uri = Uri.https("maps.googleapis.com", 'maps/api/place/details/json', {
       "place_id": placeId,
-      "key": 'AIzaSyAC41qD4CKnJGwlWAXs46TPoBvxwLwc5e4',
+      "key": 'API_KEY',
     });
 
     String? response = await fetchUrl(uri);
